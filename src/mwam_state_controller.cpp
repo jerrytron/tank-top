@@ -25,7 +25,8 @@ StateController::StateController() {
 }
 
 void StateController::initialize() {
-	changeState(STATE_BOOTING);
+	_state = STATE_BOOTING;
+	initState(_state);
 }
 
 GameState StateController::getState() {
@@ -86,7 +87,7 @@ void StateController::initState(GameState aState) {
 void StateController::loopState(GameState aState) {
 	// Handle special case where user sets up WiFi credentials
 	// while firmware is running, so gameplay isn't disrupted.
-	if (!_dataManager->metadata()->flags.offline &&
+	/*if (!_dataManager->metadata()->flags.offline &&
 	    !_dataManager->hasCredentials &&
 	    WiFi.hasCredentials() &&
 	    (aState != STATE_BOOTING)) {
@@ -94,11 +95,11 @@ void StateController::loopState(GameState aState) {
 		if (!Spark.connected()) {
 			Spark.connect();
 		}
-	}
+	}*/
 
 	if (aState == STATE_BOOTING) {
 		// Have ! to not connect by default, remove it to connect by default.
-		if (_hardwareManager->button()->pressed()) {
+		/*if (_hardwareManager->button()->pressed()) {
 			_dataManager->metadata()->flags.offline = !_dataManager->metadata()->flags.offline;
 		}
 		if (!_dataManager->metadata()->flags.offline) {
@@ -109,7 +110,7 @@ void StateController::loopState(GameState aState) {
 					Spark.connect();
 				}
 			}
-		}
+		}*/
 		changeState(STATE_INIT);
 	} else if (aState == STATE_INIT) {
 		changeState(STATE_WAITING);

@@ -24,11 +24,9 @@ void GameManager::initialize(StateController *aStateController) {
 }
 
 void GameManager::reset() {
-	DEBUG("RESET");
 	_hardwareManager->button()->resetButton();
-	//_hardwareManager->ledSet()->resetLeds();
-	DEBUG("Done reset");
-	delay(1000);
+	_hardwareManager->ledSet()->resetLeds();
+
 	_fireStormAnimStep = 0;
 }
 
@@ -46,7 +44,6 @@ void GameManager::updateGameOver(bool aWonGame) {
 
 
 void GameManager::playLedTest() {
-	DEBUG("hi");
 	/*Animation a = Animation();
 	a.startColor = Color(0, 0, 0);
 	a.endColor = Color(0, 0, 127);
@@ -59,6 +56,10 @@ void GameManager::playLedTest() {
 
 	for (int16_t i = 0; i < _hardwareManager->ledSet()->ledCount(); ++i) {
 		_hardwareManager->ledSet()->setColor(i, Color(0, 0, 127));
+	}
+	delay(4000);
+	for (int16_t i = 0; i < _hardwareManager->ledSet()->ledCount(); i+=2) {
+		_hardwareManager->ledSet()->setColor(i, Color(127, 0, 0));
 	}
 	/*Animation b = Animation();
 	b.startColor = Color(0, 0, 0);
