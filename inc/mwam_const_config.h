@@ -5,7 +5,9 @@ namespace mwam
 {
 
 	// Total count of LEDs.
-	const uint16_t kLedCount = 240;
+	const uint8_t kLedCount = 240;
+	// LEDs per ring in the spiral.
+	const uint8_t kLedsPerRing = 21;
 	// LED pin.
 	const uint8_t kLedPin = A7;
 	// LED type.
