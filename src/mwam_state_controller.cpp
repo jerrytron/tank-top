@@ -27,6 +27,8 @@ StateController::StateController() {
 void StateController::initialize() {
 	_state = STATE_BOOTING;
 	initState(_state);
+
+	_toneTests = new ToneTests();
 }
 
 GameState StateController::getState() {
@@ -66,6 +68,7 @@ void StateController::initState(GameState aState) {
 			Spark.syncTime();
 		}
 	} else if (aState == STATE_WAITING) {
+		_toneTests->startTestMario();
 		//_gameManager->playLedTest();
 		//_gameManager->playFireStormAnim();
 	} else if (aState == STATE_TUTORIAL) {
@@ -115,7 +118,7 @@ void StateController::loopState(GameState aState) {
 	} else if (aState == STATE_INIT) {
 		changeState(STATE_WAITING);
 	} else if (aState == STATE_WAITING) {
-		_gameManager->updateAnimations();
+		//_gameManager->updateAnimations();
 
 	} else if (aState == STATE_TUTORIAL) {
 

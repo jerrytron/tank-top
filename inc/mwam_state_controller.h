@@ -3,6 +3,8 @@
 
 #include "mwam_constants.h"
 
+#include "tone_tests.h"
+
 namespace mwam
 {
 
@@ -55,6 +57,8 @@ private:
 	HardwareManager* _hardwareManager;
 	GameState _state;
 	uint32_t _seed;
+
+	ToneTests* _toneTests;
 };
 
 }

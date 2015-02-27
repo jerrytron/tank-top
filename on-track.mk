@@ -7,6 +7,7 @@ INCLUDE_DIRS += applications/on-track/lib/AdafruitNeopixel/inc
 INCLUDE_DIRS += applications/on-track/lib/ElapsedTime/inc
 INCLUDE_DIRS += applications/on-track/lib/Flashee/inc
 INCLUDE_DIRS += applications/on-track/lib/SparkButton/inc
+INCLUDE_DIRS += applications/on-track/lib/Tone/inc
 
 # C source files included in this build.
 CSRC +=
