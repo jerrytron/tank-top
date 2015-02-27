@@ -14,6 +14,10 @@ class Piezo
 		void initialize();
 
 		/* Public Variables */
+		void updateState();
+
+		/* Public Variables */
+		bool active;
 
 	private:
 		/* Private Methods */

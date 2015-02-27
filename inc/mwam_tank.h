@@ -11,14 +11,19 @@ class Tank
 	public:
 		/* Public Methods */
 		Tank();
-		void initialize();
+		void initialize(uint32_t aUpdateFreq);
+		void updateState();
 
 		/* Public Variables */
+		bool active;
 
 	private:
 		/* Private Methods */
 
 		/* Private Variables */
+		ElapsedMillis _timeElapsed;
+		uint32_t _updateFreq;
+
 
 };
 
