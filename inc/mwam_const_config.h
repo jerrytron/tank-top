@@ -26,6 +26,15 @@ namespace mwam
 	const uint8_t kButtonPin = D4;
 	const uint8_t kButtonLedPin = D3;
 
+	// Timeout to input a serial command.
+	const uint16_t kTimeoutSerialMillis = 8000;
+	// How often to check for serial communication.
+	const uint16_t kIntervalSerialMillis = 500;
+	// How often to update the Led set state.
+	const uint16_t kIntervalLedSetMillis = 10;
+	// How often to update the button state.
+	const uint16_t kIntervalButtonMillis = 10;
+
 }
 
 #endif

@@ -14,12 +14,9 @@ struct GameStateStr_t {
 	{ STATE_WAITING, "waiting" },
 	{ STATE_TUTORIAL, "tutorial" },
 	{ STATE_INTRO, "intro" },
-	{ STATE_SETUP_WAVE, "setup_wave" },
 	{ STATE_PLAY, "play" },
-	{ STATE_END_WAVE, "end_wave" },
 	{ STATE_GAME_OVER, "game_over" },
-	{ STATE_GAME_WON, "game_won" },
-	{ STATE_HIGH_SCORE, "high_score" }
+	{ STATE_GAME_WON, "game_won" }
 };
 
 /* Public Methods */
@@ -63,42 +60,22 @@ void StateController::initState(GameState aState) {
 			_hardwareManager = Manager::getInstance().hardwareManager;
 		}
 	} else if (aState == STATE_INIT) {
-		_dataManager->logScoreData();
 		_gameManager->reset();
 		if (Spark.connected()) {
 			Spark.syncTime();
 		}
 	} else if (aState == STATE_WAITING) {
-		// Start looping text "Hit Bomb To Play".
-		_hardwareManager->bubbleDisplay()->setScrollStyle(SCROLL_LEFT_WRAP, 1, kBubbleDisplayScrollFreq, kMsgWaitingToStartLen);
-		_hardwareManager->bubbleDisplay()->setData(kMsgWaitingToStart, kMsgWaitingToStartLen);
-		_hardwareManager->bubbleDisplay()->startScrolling();
-
-		// Start looping button light blink.
 
 	} else if (aState == STATE_TUTORIAL) {
 
 	} else if (aState == STATE_INTRO) {
 		_seed = millis();
 		randomSeed(_seed);
-	} else if (aState == STATE_SETUP_WAVE) {
-		_hardwareManager->bubbleDisplay()->resetDisplays();
-		_hardwareManager->bubbleDisplay()->setData("WAVE ", 5);
-		_hardwareManager->bubbleDisplay()->setInteger(_gameManager->currentWave());
-		_hardwareManager->bubbleDisplay()->setCursorPos(8);
-		_hardwareManager->bubbleDisplay()->setData(" BEGIN  ", 8);
-		_hardwareManager->bubbleDisplay()->setScrollStyle(SCROLL_LEFT, 8, 750, 16);
-		_hardwareManager->bubbleDisplay()->startScrolling();
-		DEBUG("Wave %d", _gameManager->currentWave());
 	} else if (aState == STATE_PLAY) {
-		_gameManager->displayScore();
-	} else if (aState == STATE_END_WAVE) {
 
 	} else if (aState == STATE_GAME_OVER) {
 
 	} else if (aState == STATE_GAME_WON) {
-
-	} else if (aState == STATE_HIGH_SCORE) {
 
 	} else if (aState == STATE_ERROR) {
 		ERROR("*** ERROR STATE ***");
@@ -136,52 +113,17 @@ void StateController::loopState(GameState aState) {
 	} else if (aState == STATE_INIT) {
 		changeState(STATE_WAITING);
 	} else if (aState == STATE_WAITING) {
-		// Player must hit the bomb button to start a new game.
-		if (_hardwareManager->button()->wasClicked()) {
-			changeState(STATE_INTRO);
-		} else if (_hardwareManager->rotary()->newDialEvent()) {
-			uint8_t dialValue = _hardwareManager->rotary()->lastDialed();
-			if (dialValue == kRadarDialValue) {
-				changeState(STATE_TUTORIAL);
-			}
-		}
+
 	} else if (aState == STATE_TUTORIAL) {
-		_gameManager->updateTutorial();
+
 	} else if (aState == STATE_INTRO) {
-		/*if (_hardwareManager->button()->wasClicked()) {
-			_gameManager->nextIntroStep();
-		}*/
-		_gameManager->updateIntro();
-	} else if (aState == STATE_SETUP_WAVE) {
-		if (!_hardwareManager->bubbleDisplay()->scrolling()) {
-			_hardwareManager->bubbleDisplay()->resetDisplays();
-			_hardwareManager->button()->resetButton();
-			_hardwareManager->rotary()->resetRotary();
-			changeState(STATE_PLAY);
-		}
+
 	} else if (aState == STATE_PLAY) {
-		if (_hardwareManager->rotary()->newDialEvent()) {
-			uint8_t dialValue = _hardwareManager->rotary()->lastDialed();
-			if (dialValue == kRadarDialValue) {
-				_gameManager->playRadarAnim();
-			} else {
-				_gameManager->fireWeapon(dialValue);
-			}
-		}
-		if (_hardwareManager->button()->wasClicked()) {
-			_gameManager->detonateBomb();
-		}
-		_gameManager->updatePlay();
-	} else if (aState == STATE_END_WAVE) {
-		if (_hardwareManager->ledSet()->allAnimsDone()) {
-			_gameManager->endWave();
-		}
+
 	} else if (aState == STATE_GAME_OVER) {
-		_gameManager->updateGameOver(false);
+
 	} else if (aState == STATE_GAME_WON) {
-		_gameManager->updateGameOver(true);
-	} else if (aState == STATE_HIGH_SCORE) {
-		_gameManager->updateHighScore();
+
 	} else if (aState == STATE_ERROR) {
 
 	}
@@ -203,17 +145,11 @@ void StateController::endState(GameState aState) {
 
 	} else if (aState == STATE_INTRO) {
 
-	} else if (aState == STATE_SETUP_WAVE) {
-
 	} else if (aState == STATE_PLAY) {
-
-	} else if (aState == STATE_END_WAVE) {
 
 	} else if (aState == STATE_GAME_OVER) {
 
 	} else if (aState == STATE_GAME_WON) {
-
-	} else if (aState == STATE_HIGH_SCORE) {
 
 	}*/
 }

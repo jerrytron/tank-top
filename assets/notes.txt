@@ -1,0 +1,1 @@
+make PRODUCT_FIRMWARE_VERSION=100 APP=on-track TARGET_DIR=applications/on-track/build DEBUG_BUILD=y

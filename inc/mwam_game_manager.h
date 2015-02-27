@@ -62,39 +62,6 @@ typedef struct Bogey_t {
 		: type(aType), deployDelay(aDeployDelay), movement(aMovement), movementInterval(aMovementInterval) {health = BogeySpecs[aType].maxHealth;}
 } Bogey;
 
-
-	// Default Constructor
-	/*Bogey_t() {}
-	Bogey_t(BogeyType aType, uint16_t aHealth)
-		: type(aType), health(aHealth) {}
-	Bogey_t(BogeyType aType, uint16_t aHealth, uint16_t aDeployDelay)
-		: type(aType), health(aHealth), deployDelay(aDeployDelay) {}
-	Bogey_t(BogeyType aType, uint16_t aHealth, uint16_t aDeployDelay, uint8_t aMovement, uint16_t aMovementInterval)
-		: type(aType), health(aHealth), deployDelay(aDeployDelay), movement(aMovement), movementInterval(aMovementInterval) {}
-maxHealth(B_LIGHT)*/
-	//uint16_t timeToArrive = 0;
-	//uint8_t health = 1;
-	//uint8_t width = 1;
-/*struct T {
-   static const unsigned int array[10];
-};
-
-const unsigned int T::array[10] = {0,1,2,3,4,5,6,7,8,9};*/
-
-
-/*static Bogey wave[10][3][] = {
-	{ // Wave 1
-		{ // Set 1
-			Bogey(BOGEY_LIGHT, EXPLICIT, 6, 0)
-		},
-		{
-			Bogey(BOGEY_LIGHT, EXPLICIT, 6, 0), Bogey(BOGEY_LIGHT, EXPLICIT, 6, 0) },
-	},
-	{ // Wave 1
-
-	}
-};*/
-
 class GameManager
 {
 	public:
@@ -102,111 +69,30 @@ class GameManager
 		GameManager();
 		void initialize(StateController *aStateController);
 		void reset();
-		void scoreDataStart();
-		void scoreDataEnd(bool aGameWon);
 
 		//void updateState();
 		void updateIntro();
 		void updateTutorial();
 		void updatePlay();
 		void updateGameOver(bool aWonGame);
-		void updateHighScore();
-		//void updateGameWon();
-
-		//void nextIntroStep();
-		uint8_t dialToIndex(uint8_t aDialed);
-		uint8_t indexToDial(uint8_t aLedIndex);
-		uint16_t currentWave();
-		uint8_t currentSet();
-
-		void refreshRadar();
-		bool radarOff();
-		void displayScore();
-		uint8_t bogeyCount();
-		void resetBogeys();
-		bool fireWeapon(int8_t aDialValue);
-		void detonateBomb();
-		void setupNextSet();
-		void endWave();
-
-		void playRadarAnim();
-		void playMissAnim(uint16_t aLedIndex);
-		void playHitAnim(uint16_t aLedIndex);
-		void playDestroyAnim(uint16_t aLedIndex);
-		void playBombAnim();
-		void playPlayerHitAnim();
-		void playPlayerDeathAnim();
-		void playRadarDisruptor();
 
 		/* Animation Accessors */
-		Animation sweepGrnAnim();
-		Animation sweepRedAnim();
-		//Animation* bombAnimSeries();
 
 		/* Public Variables */
 
 	private:
 		/* Private Methods */
-		bool setupWaveOne(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveTwo(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveThree(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveFour(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveFive(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveSix(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveSeven(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveEight(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveNine(uint8_t aSet, uint8_t aIteration);
-		bool setupWaveTen(uint8_t aSet, uint8_t aIteration);
-		void incrementKills(BogeyType aBogeyType);
-		uint16_t maxHealth(BogeyType aType);
-		uint16_t timeToArrive(BogeyType aType);
-		uint16_t weaponRefresh(BogeyType aType);
-		uint16_t randomPosition();
-		uint16_t randomPosition(uint16_t aLower, uint16_t aHigher);
-		//void initAnimations();
 
 		/* Private Variables */
 		StateController* _stateController;
 		DataManager* _dataManager;
 		HardwareManager* _hardwareManager;
-		ScoreData _playerScore;
-		char* _initialsBuffer;
-		uint8_t _initialDialed;
-		uint8_t _initialIndex;
-		char _initialChar;
-		uint8_t _charOffset;
-		//uint8_t _playerStanding;
-		uint8_t _introStep;
-		uint8_t _tutorialStep;
-		uint8_t _gameOverStep;
-		uint8_t _highScoreStep;
-		//uint8_t _gameWonStep;
 
-		uint8_t _playerHealth;
-		uint16_t _currentWave;
-		uint8_t _currentSet;
-		uint8_t _bogeysLeft;
-		uint8_t _bombs;
-		bool _bombing;
-		bool _setOver;
-		bool _takingHit;
-		bool _disruptorHit;
-		ElapsedMillis _disruptorElapsed;
-		Bogey _bogeys[9];
-
-		//uint8_t _radarBrightness;
-		//ElapsedMillis _radarElapsed;
-
-		// Animation Presets
-		//Animation _sweepGrnAnim;
-		//Animation _sweepRedAnim;
-		//Animation _bossShipAnim;
-		//Animation _missAnim;
-		//Animation _hitAnim;
-		Animation _playerHitAnimSeries[kPlayHitAnimLength];
+		Animation _testAnim[5];
+		/*Animation _playerHitAnimSeries[kPlayHitAnimLength];
 		Animation _disruptorAnimSeries[kDisruptorAnimLength];
 		Animation _destroyAnimSeries[kDestroyAnimLength];
-		Animation _bombAnimSeries[kBombAnimLength];
+		Animation _bombAnimSeries[kBombAnimLength];*/
 
 };
 
