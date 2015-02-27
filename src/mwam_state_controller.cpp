@@ -65,7 +65,8 @@ void StateController::initState(GameState aState) {
 			Spark.syncTime();
 		}
 	} else if (aState == STATE_WAITING) {
-
+		_gameManager->playLedTest();
+		//_gameManager->playFireStormAnim();
 	} else if (aState == STATE_TUTORIAL) {
 
 	} else if (aState == STATE_INTRO) {

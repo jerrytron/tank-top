@@ -21,7 +21,7 @@ void LedSet::initialize(uint16_t aLedCount, uint8_t aLedPin, uint8_t aLedType, u
 	_ledSet->show();
 
 	// Setup persistent storage for LED state information.
-	_leds = new Led[aLedCount]();
+	//_leds = new Led[aLedCount]();
 
 	_doneEvent = EVENT_NONE;
 	_updateFreq = aUpdateFreq;
@@ -32,7 +32,7 @@ void LedSet::initialize(uint16_t aLedCount, uint8_t aLedPin, uint8_t aLedType, u
 
 void LedSet::updateState() {
 	if (this->active && (_timeElapsed >= _updateFreq)) {
-		updateLeds();
+		//updateLeds();
 		_timeElapsed = 0;
 	}
 }
@@ -81,9 +81,9 @@ void LedSet::setAllOff() {
 }
 
 void LedSet::resetLeds() {
-	setAllOff();
-	delete[] _leds;
-	_leds = new Led[_ledCount]();
+	//setAllOff();
+	//delete[] _leds;
+	//_leds = new Led[_ledCount]();
 	/*for (uint8_t i = 0; i < _ledCount; ++i) {
 		_leds[i] = {};
 	}*/

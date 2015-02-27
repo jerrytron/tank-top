@@ -24,8 +24,12 @@ void GameManager::initialize(StateController *aStateController) {
 }
 
 void GameManager::reset() {
+	DEBUG("RESET");
 	_hardwareManager->button()->resetButton();
-	_hardwareManager->ledSet()->resetLeds();
+	//_hardwareManager->ledSet()->resetLeds();
+	DEBUG("Done reset");
+	delay(1000);
+	_fireStormAnimStep = 0;
 }
 
 void GameManager::updateIntro() {
@@ -40,6 +44,152 @@ void GameManager::updatePlay() {
 void GameManager::updateGameOver(bool aWonGame) {
 }
 
+
+void GameManager::playLedTest() {
+	DEBUG("hi");
+	/*Animation a = Animation();
+	a.startColor = Color(0, 0, 0);
+	a.endColor = Color(0, 0, 127);
+	a.repeats = 5;
+	a.yoyo = true;
+	a.tweenTime = 1000;
+	a.ease = EASE_QUAD_IN_OUT;
+
+	_hardwareManager->ledSet()->animateAll(a, true, 250, false);*/
+
+	for (int16_t i = 0; i < _hardwareManager->ledSet()->ledCount(); ++i) {
+		_hardwareManager->ledSet()->setColor(i, Color(0, 0, 127));
+	}
+	/*Animation b = Animation();
+	b.startColor = Color(0, 0, 0);
+	b.endColor = Color(0, 0, 127);
+	b.repeats = 0;
+	b.yoyo = false;
+	b.tweenTime = 1000;
+	b.ease = EASE_QUAD_IN_OUT;
+
+	Animation c = Animation();
+	c.startColor = Color(0, 0, 0);
+	c.endColor = Color(0, 0, 127);
+	c.repeats = 0;
+	c.yoyo = false;
+	c.tweenTime = 1000;
+	c.ease = EASE_QUAD_IN_OUT;*/
+}
+
+void GameManager::playFireStormAnim() {
+	Animation bomb1 = Animation();
+	bomb1.endColor = Color(200, 0, 0); // Red
+	bomb1.tweenTime = 500;
+	bomb1.ease = EASE_LINEAR;
+
+	Animation bomb2 = Animation();
+	bomb2.startColor = Color(200, 0, 0);
+	bomb2.endColor = Color(200, 200, 0); // Yellow
+	bomb2.tweenTime = 250;
+	bomb2.ease = EASE_QUAD_IN_OUT;
+	bomb2.yoyo = true;
+	bomb2.repeats = 2;
+
+	Animation bomb3 = Animation();
+	bomb3.startColor = Color(200, 200, 0);
+	bomb3.endColor = Color(255, 102, 0); // Orange
+	bomb3.tweenTime = 250;
+	bomb3.ease = EASE_QUAD_IN_OUT;
+	bomb3.yoyo = true;
+	bomb3.repeats = 2;
+
+	Animation bomb4 = Animation();
+	bomb4.startColor = Color(255, 102, 0);
+	bomb4.endColor = Color(255, 255, 255); // White
+	bomb4.tweenTime = 500;
+	bomb4.ease = EASE_QUAD_IN_OUT;
+	bomb4.repeats = 0;
+
+	Animation bomb5 = Animation();
+	bomb5.startColor = Color(255, 255, 255);
+	bomb5.endColor = Color(0, 0, 0);
+	bomb5.tweenTime = 700;
+	bomb5.ease = EASE_LINEAR;
+
+	//Animation bombAnimSeries[kBombAnimLength] = { bomb1, bomb2, bomb3, bomb4, bomb5 };
+
+	_fireStormAnimSeries[0] = bomb1;
+	_fireStormAnimSeries[1] = bomb2;
+	_fireStormAnimSeries[2] = bomb3;
+	_fireStormAnimSeries[3] = bomb4;
+	_fireStormAnimSeries[4] = bomb5;
+
+	for (int16_t i = 0; i < _hardwareManager->ledSet()->ledCount(); ++i) {
+		_fireStormAnimSeries[0].delayTime = random(0, 500);
+		_fireStormAnimSeries[1].repeats = random(2, 6);
+		_fireStormAnimSeries[2].repeats = random(2, 6);
+		_hardwareManager->ledSet()->animateSeries(i, _fireStormAnimSeries, 5, 0);
+	}
+}
+
+void GameManager::updateAnimations() {
+	if (1) {
+		updateFireStormAnim();
+	}
+}
+
+void GameManager::updateFireStormAnim() {
+	if (_fireStormAnimStep == 0) {
+		if (_hardwareManager->ledSet()->allLedsIdle()) {
+			Animation a = Animation();
+			a.endColor = Color(200, 0, 0); // Red
+			a.tweenTime = 500;
+			a.ease = EASE_LINEAR;
+			_hardwareManager->ledSet()->animateAll(a, true, 0, false);
+			_fireStormAnimStep++;
+		}
+	} else if (_fireStormAnimStep == 1) {
+		if (_hardwareManager->ledSet()->allLedsIdle()) {
+			Animation a = Animation();
+			a.startColor = Color(200, 0, 0);
+			a.endColor = Color(200, 200, 0); // Yellow
+			a.tweenTime = 250;
+			a.ease = EASE_QUAD_IN_OUT;
+			a.yoyo = true;
+			a.repeats = 2;
+			_hardwareManager->ledSet()->animateAll(a, true, 0, false);
+			_fireStormAnimStep++;
+		}
+	} else if (_fireStormAnimStep == 2) {
+		if (_hardwareManager->ledSet()->allLedsIdle()) {
+			Animation a = Animation();
+			a.startColor = Color(200, 200, 0);
+			a.endColor = Color(255, 102, 0); // Orange
+			a.tweenTime = 250;
+			a.ease = EASE_QUAD_IN_OUT;
+			a.yoyo = true;
+			a.repeats = 2;
+			_hardwareManager->ledSet()->animateAll(a, true, 0, false);
+			_fireStormAnimStep++;
+		}
+	} else if (_fireStormAnimStep == 3) {
+		if (_hardwareManager->ledSet()->allLedsIdle()) {
+			Animation a = Animation();
+			a.startColor = Color(255, 102, 0);
+			a.endColor = Color(255, 255, 255); // White
+			a.tweenTime = 500;
+			a.ease = EASE_QUAD_IN_OUT;
+			_hardwareManager->ledSet()->animateAll(a, true, 0, false);
+			_fireStormAnimStep++;
+		}
+	} else if (_fireStormAnimStep == 4) {
+		if (_hardwareManager->ledSet()->allLedsIdle()) {
+			Animation a = Animation();
+			a.startColor = Color(255, 255, 255);
+			a.endColor = Color(0, 0, 0);
+			a.tweenTime = 700;
+			a.ease = EASE_LINEAR;
+			_hardwareManager->ledSet()->animateAll(a, true, 0, false);
+			_fireStormAnimStep++;
+		}
+	}
+}
 
 /*void GameManager::playMissAnim(uint16_t aLedIndex) {
 	Animation a = Animation();

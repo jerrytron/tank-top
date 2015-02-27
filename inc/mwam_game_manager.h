@@ -70,11 +70,16 @@ class GameManager
 		void initialize(StateController *aStateController);
 		void reset();
 
-		//void updateState();
 		void updateIntro();
 		void updateTutorial();
 		void updatePlay();
 		void updateGameOver(bool aWonGame);
+
+		void playLedTest();
+		void playFireStormAnim();
+
+		void updateAnimations();
+		void updateFireStormAnim();
 
 		/* Animation Accessors */
 
@@ -88,7 +93,10 @@ class GameManager
 		DataManager* _dataManager;
 		HardwareManager* _hardwareManager;
 
+		uint8_t _fireStormAnimStep;
+
 		Animation _testAnim[5];
+		Animation _fireStormAnimSeries[5];
 		/*Animation _playerHitAnimSeries[kPlayHitAnimLength];
 		Animation _disruptorAnimSeries[kDisruptorAnimLength];
 		Animation _destroyAnimSeries[kDestroyAnimLength];

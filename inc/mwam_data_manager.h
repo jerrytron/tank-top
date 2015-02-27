@@ -18,23 +18,16 @@ class DataManager
 		DataManager();
 
 		bool initialize(StateController *aStateController);
-		void logScoreData();
 		void handleSerialData();
-		// Save score data to flash, return place on high score table or 0.
-		bool saveScoreData(ScoreData *aScoreData);
-		bool saveScoreData(ScoreData *aScoreData, uint8_t aStanding);
-		// Return high score table standing, or 0.
-		uint8_t highScoreStanding(ScoreData *aScoreData);
-		bool getHighScore(ScoreData *aScoreData, uint8_t aStanding);
 
 		/* API Calls */
 		// Set and write a flag.
 		bool setFlag(uint8_t aFlagIndex, uint8_t aBitIndex, bool aValue);
 		bool setValue(uint8_t aIndex, uint16_t aValue);
 		// Resets metadata to default values.
-		bool resetMetadata();
+		//bool resetMetadata();
 		// Erase entire flash memory, includes metadata.
-		bool eraseFlash();
+		//bool eraseFlash();
 
 		// Accessor Functions
 		StateController *stateController();
@@ -47,7 +40,7 @@ class DataManager
 
 	private:
 		/* Private Methods */
-		bool uploadScore(ScoreData *aScoreData);
+		/*bool uploadScore(ScoreData *aScoreData);
 		bool tweetHighScore(ScoreData *aScoreData, uint8_t aStanding);
 		uint16_t calculateScore(ScoreData *aScoreData);
 		bool insertHighScore(Metadata *aMetadata, ScoreData *aScoreData, uint8_t aTableIndex);
@@ -57,11 +50,11 @@ class DataManager
 		bool readMetadata(Metadata *aMetadata);
 		bool writeMetadata(Metadata *aMetadata);
 		bool readScoreData(ScoreData *aScoreData, uint8_t aIndex);
-		bool writeScoreData(ScoreData *aScoreData, uint8_t aIndex);
+		bool writeScoreData(ScoreData *aScoreData, uint8_t aIndex);*/
 
 		/* Private Variables */
 		StateController* _stateController;
-		Flashee::FlashDevice* _flashData;
+		//Flashee::FlashDevice* _flashData;
 		Metadata _metadata;
 
 		ElapsedMillis _serialElapsed;
