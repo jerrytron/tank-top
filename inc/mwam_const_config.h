@@ -15,6 +15,10 @@ namespace mwam
 	// LED default brightness.
 	const uint8_t kLedBrightness = 200;
 
+	// Piezo Pins
+	const uint8_t kPiezoOnePin = A0;
+	const uint8_t kPiezoTwoPin = A1;
+
 	// Button Pins
 	const uint8_t kButtonPin = D4;
 	const uint8_t kButtonLedPin = D3;
@@ -27,6 +31,14 @@ namespace mwam
 	const uint16_t kIntervalLedSetMillis = 10;
 	// How often to update the button state.
 	const uint16_t kIntervalButtonMillis = 10;
+	// How often to update the piezos.
+	const uint16_t kIntervalPiezosMillis = 10;
+	// How often to update the tanks.
+	const uint16_t kIntervalTankMillis = 10;
+	// How often to update the bullets.
+	const uint16_t kIntervalBulletMillis = 10;
+	// How often to update the Level.
+	const uint16_t kIntervalLevelMillis = 10;
 
 }
 
