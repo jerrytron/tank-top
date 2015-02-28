@@ -8,26 +8,31 @@
 namespace mwam
 {
 
+class Tank;
+
 typedef enum Theme_t {
 	THEME_DEFAULT = 0
 } Theme;
 
 typedef enum ThemeElement_t {
+	BACKGROUND = 0,
 	P1_BODY = 0,
 	P1_TURRET,
 	P2_BODY,
 	P2_TURRET,
 	BULLETS,
-	BACKGROUND,
 	WALLS
 } ThemeElement;
 
 typedef enum TileType_t {
-	TILE_EMPTY = 0,
-	TILE_WALL,
-	TILE_TANK,
+	TILE_BACKGROUND = 0,
+	TILE_TANK_ONE,
+	TILE_TURRET_ONE,
+	TILE_TANK_TWO,
+	TILE_TURRET_TWO,
 	TILE_BULLET,
-	TILE_FLAG
+	TILE_WALL,
+	TILE_BOUNDARY
 } TileType;
 
 /*typedef enum Collision_t {
@@ -44,6 +49,8 @@ class Level
 		Level();
 		void initialize(Theme aTheme, uint32_t aUpdateFreq = 0);
 		void updateState();
+		void setTankAtIndex(Tank* aTank);
+		void setTileAtIndex(TileType aTile, uint16_t aIndex);
 
 		void setTheme(Theme aTheme);
 		uint16_t updatePosition(uint16_t aIndex, Direction aDir, TileType &aCollision);

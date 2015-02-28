@@ -19,11 +19,11 @@ void GameManager::initialize(StateController *aStateController) {
 	_level = new Level();
 	_level->initialize(THEME_DEFAULT);
 	_tankOne = new Tank();
-	_tankOne->initialize(_level, kPlayerOneStartIndex, kIntervalPlayerDelayMillis);
+	_tankOne->initialize(TANK_ONE, _level, kPlayerOneStartIndex, kIntervalPlayerDelayMillis);
 	_tankTwo = new Tank();
-	_tankTwo->initialize(_level, kPlayerTwoStartIndex, kIntervalPlayerDelayMillis);
+	_tankTwo->initialize(TANK_TWO, _level, kPlayerTwoStartIndex, kIntervalPlayerDelayMillis);
 
-	_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
+	//_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
 }
 
 void GameManager::reset() {
@@ -40,7 +40,12 @@ void GameManager::updatePlay() {
 	Direction dir = _hardwareManager->joystickOne()->getDirection();
 	JoystickThreshold threshold = _hardwareManager->joystickOne()->getThreshold();
 	if (dir) {
-		_tankOne->updateState(dir, threshold * kIntervalPlayerSpeedMillis);
+		//DEBUG("Tank: %d", _tankOne->getIndex());
+		uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
+		if (_hardwareManager->joystickOne()->clickDown()) {
+			movementDelay = 0;
+		}
+		_tankOne->updateState(dir, movementDelay);
 	}
 	if (_hardwareManager->joystickOne()->clickUp()) {
 		_tankOne->fireBullet();
@@ -49,7 +54,11 @@ void GameManager::updatePlay() {
 	dir = _hardwareManager->joystickTwo()->getDirection();
 	threshold = _hardwareManager->joystickTwo()->getThreshold();
 	if (dir) {
-		_tankTwo->updateState(dir, threshold * kIntervalPlayerSpeedMillis);
+		uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
+		if (_hardwareManager->joystickTwo()->clickDown()) {
+			movementDelay = 0;
+		}
+		_tankTwo->updateState(dir, movementDelay);
 	}
 	if (_hardwareManager->joystickTwo()->clickUp()) {
 		_tankTwo->fireBullet();

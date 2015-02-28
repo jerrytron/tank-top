@@ -10,8 +10,8 @@ namespace mwam
 	const uint8_t kLedsPerRing = 21;
 	// LED indexes to add/subtract for diagnal positions.
 	const int8_t kLedDiagUpLeft = 20;
-	const int8_t kLedDiagUpRight = 22;
-	const int8_t kLedDiagDownLeft = 22;
+	const int8_t kLedDiagUpRight = 21;
+	const int8_t kLedDiagDownLeft = 21;
 	const int8_t kLedDiagDownRight = 20;
 	// LED pin.
 	const uint8_t kLedPin = A7;
@@ -28,7 +28,7 @@ namespace mwam
 	// Player One Start Index
 	const uint8_t kPlayerOneStartIndex = 126;
 	// Player One Start Index
-	const uint8_t kPlayerTwoStartIndex = 147;
+	const uint8_t kPlayerTwoStartIndex = 137;
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
 	// Max Bullet Bounces
@@ -64,11 +64,13 @@ namespace mwam
 	// How often to update the Led set state.
 	const uint16_t kIntervalLedSetMillis = 10;
 	// How often to update the joystick set state.
-	const uint16_t kIntervalJoystickMillis = 10;
+	const uint16_t kIntervalJoystickMillis = 0;
 	// How often to update the button state.
 	const uint16_t kIntervalButtonMillis = 10;
 	// How often to update the piezos.
 	const uint16_t kIntervalPiezoMillis = 10;
+	// How often to update the game play loop.
+	//const uint16_t kIntervalGamePlayMillis = 10;
 
 }
 

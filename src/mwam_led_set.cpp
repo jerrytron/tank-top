@@ -438,16 +438,22 @@ float LedSet::easeCircularInOut(float aCurrentFrame, float aEndFrame, float aSta
 
 /* Private Methods */
 
+// TODO
 void LedSet::updateLedsFast(Level* aLevel) {
-	_ledSet->setPixelColor(_tankOne->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getLastIndex()));
-	_ledSet->setPixelColor(_tankOne->getIndex(), aLevel->getColorAtIndex(_tankOne->getIndex()));
+	//DEBUG("Old index: %d, Index: %d", _tankOne->getLastIndex(), _tankOne->getIndex());
+	if (_tankOne->getLastIndex() != _tankOne->getIndex()) {
+		_ledSet->setPixelColor(_tankOne->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getLastIndex()));
+		_ledSet->setPixelColor(_tankOne->getIndex(), aLevel->getColorAtIndex(_tankOne->getIndex()));
+	}
 	for (uint8_t i = 0; i < _tankOne->getBulletCount(); ++i) {
 		_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getLastIndex()));
 		_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getIndex()));
 	}
 
-	_ledSet->setPixelColor(_tankTwo->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getLastIndex()));
-	_ledSet->setPixelColor(_tankTwo->getIndex(), aLevel->getColorAtIndex(_tankTwo->getIndex()));
+	if (_tankTwo->getLastIndex() != _tankTwo->getIndex()) {
+		_ledSet->setPixelColor(_tankTwo->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getLastIndex()));
+		_ledSet->setPixelColor(_tankTwo->getIndex(), aLevel->getColorAtIndex(_tankTwo->getIndex()));
+	}
 	for (uint8_t i = 0; i < _tankTwo->getBulletCount(); ++i) {
 		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getLastIndex()));
 		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getIndex()));
