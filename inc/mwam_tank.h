@@ -2,6 +2,7 @@
 #define MWAM_TANK_H
 
 #include "mwam_constants.h"
+#include "ElapsedTime.h"
 
 namespace mwam
 {

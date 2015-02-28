@@ -8,9 +8,11 @@ namespace mwam
 Piezo::Piezo() {
 }
 
-void Piezo::initialize(uint32_t aUpdateFreq) {
+void Piezo::initialize(uint8_t aPin, uint32_t aUpdateFreq) {
+	_pin = aPin;
 	_updateFreq = aUpdateFreq;
 	_timeElapsed = 0;
+	this->active = true;
 }
 
 void Piezo::updateState() {

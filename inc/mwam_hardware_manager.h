@@ -4,6 +4,8 @@
 #include "mwam_constants.h"
 #include "mwam_led_set.h"
 #include "mwam_momentary_button.h"
+#include "mwam_joystick.h"
+#include "mwam_piezo.h"
 #include "ElapsedTime.h"
 
 namespace mwam
@@ -22,6 +24,10 @@ class HardwareManager
 		// Accessors
 		LedSet* ledSet();
 		MomentaryButton* button();
+		Joystick* joystickOne();
+		Joystick* joystickTwo();
+		Piezo* piezoOne();
+		Piezo* piezoTwo();
 
 		// Call once per loop, check intervals.
 		void updateIntervalTimers();
@@ -31,8 +37,6 @@ class HardwareManager
 	private:
 		/* Private Methods */
 
-		// Assign the Spark Core pins.
-		void setupHardwarePins();
 		// Setup hardware communication objects.
 		void initHardware();
 
@@ -40,6 +44,10 @@ class HardwareManager
 		StateController* _stateController;
 		LedSet* _ledSet;
 		MomentaryButton* _button;
+		Joystick* _joystickOne;
+		Joystick* _joystickTwo;
+		Piezo* _piezoOne;
+		Piezo* _piezoTwo;
 };
 
 }

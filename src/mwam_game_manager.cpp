@@ -11,6 +11,12 @@ const Color kColorYellow = Color(255, 255, 0);
 const Color kColorOrange = Color(255, 140, 0);
 const Color kColorRed = Color(255, 0, 0);
 const Color kColorBlack = Color(0, 0, 0);
+const Color kColorWhite = Color(255, 255, 255);
+const Color kColorBlue = Color(0, 0, 255);
+const Color kColorPurple = Color(255, 0, 255);
+// Themes: P1 Color, P1 Turret, P2 Color, P2 Turret, Bullets, Background, Walls
+const Color themeDefault[] = { kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorBlack, kColorOrange };
+
 
 /* Public Methods */
 
@@ -28,6 +34,12 @@ void GameManager::reset() {
 	_hardwareManager->ledSet()->resetLeds();
 
 	_fireStormAnimStep = 0;
+}
+
+void GameManager::setupLevel(Theme aTheme) {
+	if (aTheme == DEFAULT) {
+		_activeTheme = themeDefault;
+	}
 }
 
 void GameManager::updateIntro() {
