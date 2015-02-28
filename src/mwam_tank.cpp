@@ -13,6 +13,7 @@ void Tank::initialize(Level* aLevel, uint8_t aStartIndex, uint32_t aMovementFreq
 	_level = aLevel;
 	_startIndex = aStartIndex;
 	_movementFreq = aMovementFreq;
+	reset();
 	_timeElapsed = 0;
 }
 
