@@ -1,4 +1,6 @@
 #include "mwam_led_set.h"
+#include "mwam_level.h"
+#include "mwam_tank.h"
 #include "math.h"
 
 namespace mwam
@@ -26,15 +28,26 @@ void LedSet::initialize(uint16_t aLedCount, uint8_t aLedPin, uint8_t aLedType, u
 	_doneEvent = EVENT_NONE;
 	_updateFreq = aUpdateFreq;
 	_ledCount = aLedCount;
+	_fastUpdates = false;
 	this->active = true;
 	_timeElapsed = 0;
 }
 
-void LedSet::updateState() {
+void LedSet::updateState(Level* aLevel) {
 	if (this->active && (_timeElapsed >= _updateFreq)) {
-		//updateLeds();
 		_timeElapsed = 0;
+		if (_fastUpdates) {
+			updateLedsFast(aLevel);
+		} else {
+			updateLeds(aLevel);
+		}
 	}
+}
+
+void LedSet::setFastUpdates(Tank* aTankOne, Tank* aTankTwo) {
+	_fastUpdates = true;
+	_tankOne = aTankOne;
+	_tankTwo = aTankTwo;
 }
 
 uint16_t LedSet::ledCount() {
@@ -425,7 +438,32 @@ float LedSet::easeCircularInOut(float aCurrentFrame, float aEndFrame, float aSta
 
 /* Private Methods */
 
-void LedSet::updateLeds() {
+void LedSet::updateLedsFast(Level* aLevel) {
+	_ledSet->setPixelColor(_tankOne->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getLastIndex()));
+	_ledSet->setPixelColor(_tankOne->getIndex(), aLevel->getColorAtIndex(_tankOne->getIndex()));
+	for (uint8_t i = 0; i < _tankOne->getBulletCount(); ++i) {
+		_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getLastIndex()));
+		_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getIndex()));
+	}
+
+	_ledSet->setPixelColor(_tankTwo->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getLastIndex()));
+	_ledSet->setPixelColor(_tankTwo->getIndex(), aLevel->getColorAtIndex(_tankTwo->getIndex()));
+	for (uint8_t i = 0; i < _tankTwo->getBulletCount(); ++i) {
+		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getLastIndex()));
+		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getIndex()));
+	}
+
+	_ledSet->show();
+}
+
+void LedSet::updateLeds(Level* aLevel) {
+	for (uint16_t i = 0; i < _ledCount; ++i) {
+		_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+	}
+	_ledSet->show();
+}
+
+/*void LedSet::updateLeds() {
 	for (int i = 0; i < _ledCount; ++i) {
 		if (_leds[i].state == LED_DELAY) {
 			if (_leds[i].elapsedTime >= _leds[i].anim.delayTime) {
@@ -443,9 +481,6 @@ void LedSet::updateLeds() {
 				_leds[i].anim.currentColor = calculateEase(_leds[i].anim.ease, _leds[i].elapsedTime,
 				                                           _leds[i].anim.tweenTime, _leds[i].anim.startColor,
 				                                           _leds[i].anim.endColor, result);
-				/*if (result) {
-					DEBUG("LED Index: %d", i);
-				}*/
 				uint32_t colorVal = 0;
 				if (_leds[i].elapsedTime >= _leds[i].anim.tweenTime) {
 					colorVal = _ledSet->Color(_leds[i].anim.endColor.red, _leds[i].anim.endColor.green, _leds[i].anim.endColor.blue);
@@ -490,12 +525,6 @@ void LedSet::updateLeds() {
 									animateLed(i, _leds[i].series[_leds[i].seriesIndex], _leds[i].seriesFromCurrentColor);
 								} else {
 									_leds[i] = Led();
-									/*_leds[i].series = NULL;
-									_leds[i].seriesLength = 0;
-									_leds[i].seriesIndex = 0;
-									_leds[i].seriesRepeats = 0;
-									_leds[i].seriesFromCurrentColor = false;
-									_leds[i].state = LED_IDLE;*/
 									_leds[i].doneEvent = EVENT_SERIES_DONE;
 									checkIfAllAnimsDone();
 								}
@@ -514,7 +543,7 @@ void LedSet::updateLeds() {
 		}
 	}
 	_ledSet->show();
-}
+}*/
 
 void LedSet::checkIfAllAnimsDone() {
 	for (uint16_t i = 0; i < _ledCount; ++i) {

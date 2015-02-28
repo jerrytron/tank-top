@@ -1,5 +1,5 @@
-#ifndef MWAM_LED_RING_H
-#define MWAM_LED_RING_H
+#ifndef MWAM_LED_SET_H
+#define MWAM_LED_SET_H
 
 #include "mwam_constants.h"
 #include "ElapsedTime.h"
@@ -7,6 +7,9 @@
 
 namespace mwam
 {
+
+class Level;
+class Tank;
 
 // Led States
 typedef enum LedState_t {
@@ -100,7 +103,9 @@ class LedSet
 		/* Public Methods */
 		LedSet();
 		void initialize(uint16_t aLedCount, uint8_t aLedPin, uint8_t aLedType, uint32_t aUpdateFreq);
-		void updateState();
+		void updateState(Level* aLevel);
+		void setFastUpdates(Tank* aTankOne, Tank* aTankTwo);
+
 		uint16_t ledCount();
 		void setBrightness(uint8_t aBrightness);
 		Color getColor(uint16_t aLedIndex);
@@ -157,7 +162,8 @@ class LedSet
 
 	private:
 		/* Private Methods */
-		void updateLeds();
+		void updateLedsFast(Level* aLevel);
+		void updateLeds(Level* aLevel);
 		void checkIfAllAnimsDone();
 
 		Color calculateEase(EaseType aEase, float aCurrentFrame, float aEndFrame, Color aStart, Color aEnd, bool &aError);
@@ -169,6 +175,10 @@ class LedSet
 		Adafruit_NeoPixel* _ledSet;
 		Led* _leds;
 		uint16_t _ledCount;
+		bool _fastUpdates;
+		Level* _level;
+		Tank* _tankOne;
+		Tank* _tankTwo;
 
 };
 

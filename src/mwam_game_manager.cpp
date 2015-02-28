@@ -17,17 +17,17 @@ void GameManager::initialize(StateController *aStateController) {
 	_hardwareManager = Manager::getInstance().hardwareManager;
 
 	_level = new Level();
-	_level->initialize(0, THEME_DEFAULT);
+	_level->initialize(THEME_DEFAULT);
 	_tankOne = new Tank();
-	_tankOne->initialize(0, kPlayerOneStartIndex);
+	_tankOne->initialize(_level, kPlayerOneStartIndex, kIntervalPlayerDelayMillis);
 	_tankTwo = new Tank();
-	_tankTwo->initialize(0, kPlayerTwoStartIndex);
+	_tankTwo->initialize(_level, kPlayerTwoStartIndex, kIntervalPlayerDelayMillis);
+
+	_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
 }
 
 void GameManager::reset() {
 	_hardwareManager->resetHardware();
-
-	_fireStormAnimStep = 0;
 }
 
 void GameManager::updateIntro() {
@@ -37,7 +37,23 @@ void GameManager::updateTutorial() {
 }
 
 void GameManager::updatePlay() {
+	Direction dir = _hardwareManager->joystickOne()->getDirection();
+	JoystickThreshold threshold = _hardwareManager->joystickOne()->getThreshold();
+	if (dir) {
+		_tankOne->updateState(dir, threshold * kIntervalPlayerSpeedMillis);
+	}
+	if (_hardwareManager->joystickOne()->clickUp()) {
+		_tankOne->fireBullet();
+	}
 
+	dir = _hardwareManager->joystickTwo()->getDirection();
+	threshold = _hardwareManager->joystickTwo()->getThreshold();
+	if (dir) {
+		_tankTwo->updateState(dir, threshold * kIntervalPlayerSpeedMillis);
+	}
+	if (_hardwareManager->joystickTwo()->clickUp()) {
+		_tankTwo->fireBullet();
+	}
 }
 
 void GameManager::updateGameOver(bool aWonGame) {
@@ -84,7 +100,7 @@ void GameManager::playLedTest() {
 	c.ease = EASE_QUAD_IN_OUT;*/
 }
 
-void GameManager::playFireStormAnim() {
+/*void GameManager::playFireStormAnim() {
 	Animation bomb1 = Animation();
 	bomb1.endColor = Color(200, 0, 0); // Red
 	bomb1.tweenTime = 500;
@@ -133,7 +149,7 @@ void GameManager::playFireStormAnim() {
 		_fireStormAnimSeries[2].repeats = random(2, 6);
 		_hardwareManager->ledSet()->animateSeries(i, _fireStormAnimSeries, 5, 0);
 	}
-}
+}*/
 
 void GameManager::updateAnimations() {
 	if (1) {
@@ -146,7 +162,7 @@ void GameManager::updateAnimations() {
 	}
 }
 
-void GameManager::updateFireStormAnim() {
+/*void GameManager::updateFireStormAnim() {
 	if (_fireStormAnimStep == 0) {
 		if (_hardwareManager->ledSet()->allLedsIdle()) {
 			Animation a = Animation();
@@ -201,6 +217,10 @@ void GameManager::updateFireStormAnim() {
 			_fireStormAnimStep++;
 		}
 	}
+}*/
+
+Level* GameManager::getLevel() {
+	return _level;
 }
 
 /*void GameManager::playMissAnim(uint16_t aLedIndex) {

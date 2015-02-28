@@ -32,7 +32,9 @@ class GameManager
 		void playFireStormAnim();
 
 		void updateAnimations();
-		void updateFireStormAnim();
+		//void updateFireStormAnim();
+
+		Level* getLevel();
 
 		/* Animation Accessors */
 
@@ -50,10 +52,10 @@ class GameManager
 		Tank* _tankOne;
 		Tank* _tankTwo;
 
-		uint8_t _fireStormAnimStep;
+		//uint8_t _fireStormAnimStep;
 
-		Animation _testAnim[5];
-		Animation _fireStormAnimSeries[5];
+		//Animation _testAnim[5];
+		//Animation _fireStormAnimSeries[5];
 		/*Animation _playerHitAnimSeries[kPlayHitAnimLength];
 		Animation _disruptorAnimSeries[kDisruptorAnimLength];
 		Animation _destroyAnimSeries[kDestroyAnimLength];

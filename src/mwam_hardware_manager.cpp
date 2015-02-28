@@ -32,7 +32,7 @@ void HardwareManager::resetHardware() {
 
 // Calls each setup interval timer.
 void HardwareManager::updateIntervalTimers() {
-	_ledSet->updateState();
+	_ledSet->updateState(Manager::getInstance().gameManager->getLevel());
 	_button->updateState();
 	_joystickOne->updateState();
 	_joystickTwo->updateState();
@@ -79,11 +79,11 @@ void HardwareManager::initHardware() {
 
 	// Setup Joystick One
 	_joystickOne = new Joystick();
-	_joystickOne->initialize(kJoystickOneX, kJoystickOneY, kIntervalJoystickMillis);
+	_joystickOne->initialize(kJoystickOneX, kJoystickOneY, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
 
 	// Setup Joystick Two
 	_joystickTwo = new Joystick();
-	_joystickTwo->initialize(kJoystickTwoX, kJoystickTwoY, kIntervalJoystickMillis);
+	_joystickTwo->initialize(kJoystickTwoX, kJoystickTwoY, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
 
 	// Setup Piezo One
 	_piezoOne = new Piezo();

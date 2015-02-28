@@ -2,6 +2,7 @@
 #define MWAM_LEVEL_H
 
 #include "mwam_constants.h"
+#include "mwam_joystick.h"
 #include "ElapsedTime.h"
 
 namespace mwam
@@ -21,26 +22,40 @@ typedef enum ThemeElement_t {
 	WALLS
 } ThemeElement;
 
+typedef enum TileType_t {
+	TILE_EMPTY = 0,
+	TILE_WALL,
+	TILE_TANK,
+	TILE_BULLET,
+	TILE_FLAG
+} TileType;
+
 class Level
 {
 	public:
 		/* Public Methods */
 		Level();
-		void initialize(uint32_t aUpdateFreq, Theme aTheme);
+		void initialize(Theme aTheme, uint32_t aUpdateFreq = 0);
 		void updateState();
 
 		void setTheme(Theme aTheme);
+		uint16_t updatePosition(uint16_t aIndex, Direction aDir, bool &aBlocked);
+
+		TileType getTileAtIndex(uint16_t aIndex);
+		uint32_t getColorAtIndex(uint16_t aIndex);
 
 		/* Public Variables */
 		bool active;
 
 	private:
 		/* Private Methods */
-		const Color* _activeTheme;
+		bool checkForCollision();
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;
 		uint32_t _updateFreq;
+		const Color* _activeTheme;
+		TileType _levelTiles[kLedCount];
 
 };
 

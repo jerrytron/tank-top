@@ -8,11 +8,12 @@ namespace mwam
 Joystick::Joystick() {
 }
 
-void Joystick::initialize(uint8_t aPinX, uint8_t aPinY, uint32_t aUpdateFreq) {
+void Joystick::initialize(uint8_t aPinX, uint8_t aPinY, DirectionSet aDirSet, uint32_t aUpdateFreq) {
 	_pinX = aPinX;
 	_pinY = aPinY;
 	pinMode(_pinX, INPUT);
 	pinMode(_pinY, INPUT);
+	_dirSet = aDirSet;
 	_updateFreq = aUpdateFreq;
 	this->active = true;
 	reset();
@@ -24,7 +25,7 @@ void Joystick::reset() {
 	_lastY = 0;
 	_clickDown = false;
 	_clickUp = false;
-	_direction = (Direction)0;
+	_direction = DIR_NONE;
 	_threshold = JOY_IDLE;
 }
 
@@ -36,6 +37,15 @@ void Joystick::updateState() {
 }
 
 Direction Joystick::getDirection() {
+	if (_dirSet == DIR_SET_FOUR) {
+		if (_direction % 2 != 0) {
+			return DIR_NONE;
+		}
+	} else if (_dirSet == DIR_SET_FOUR_DIAG) {
+		if (_direction % 2 == 0) {
+			return DIR_NONE;
+		}
+	}
 	return _direction;
 }
 

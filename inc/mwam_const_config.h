@@ -8,6 +8,11 @@ namespace mwam
 	const uint16_t kLedCount = 240;
 	// LEDs per ring in the spiral.
 	const uint8_t kLedsPerRing = 21;
+	// LED indexes to add/subtract for diagnal positions.
+	const int8_t kLedDiagUpLeft = 20;
+	const int8_t kLedDiagUpRight = 22;
+	const int8_t kLedDiagDownLeft = 22;
+	const int8_t kLedDiagDownRight = 20;
 	// LED pin.
 	const uint8_t kLedPin = A7;
 	// LED type.
@@ -21,11 +26,15 @@ namespace mwam
 	const uint16_t kIntervalPlayerSpeedMillis = 125;
 
 	// Player One Start Index
-	const uint8_t kPlayerOneStartIndex = 100;
+	const uint8_t kPlayerOneStartIndex = 126;
 	// Player One Start Index
-	const uint8_t kPlayerTwoStartIndex = 50;
+	const uint8_t kPlayerTwoStartIndex = 147;
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
+	// Max Bullet Bounces
+	const uint8_t kMaxBulletBounces = 5;
+	// Bullet speed, delay before movement.
+	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player
 	const uint8_t kHealthTotal = 3;
 
@@ -55,17 +64,11 @@ namespace mwam
 	// How often to update the Led set state.
 	const uint16_t kIntervalLedSetMillis = 10;
 	// How often to update the joystick set state.
-	const uint16_t kIntervalJoystickMillis = 250;
+	const uint16_t kIntervalJoystickMillis = 10;
 	// How often to update the button state.
 	const uint16_t kIntervalButtonMillis = 10;
 	// How often to update the piezos.
 	const uint16_t kIntervalPiezoMillis = 10;
-	// How often to update the tanks.
-	const uint16_t kIntervalTankMillis = 10;
-	// How often to update the bullets.
-	const uint16_t kIntervalBulletMillis = 10;
-	// How often to update the Level.
-	const uint16_t kIntervalLevelMillis = 10;
 
 }
 

@@ -9,6 +9,7 @@ namespace mwam
 
 // Joystick Directions
 typedef enum Direction_t {
+	DIR_NONE = 0,
 	DIR_UP_LEFT,
 	DIR_LEFT,
 	DIR_DOWN_LEFT,
@@ -21,18 +22,25 @@ typedef enum Direction_t {
 
 // Joystick Thresholds
 typedef enum JoystickThreshold_t {
-	JOY_IDLE = 0,
-	JOY_ONE,
+	JOY_ONE = 0,
 	JOY_TWO,
-	JOY_THREE
+	JOY_THREE,
+	JOY_IDLE
 } JoystickThreshold;
+
+// Joystick Direction Sets
+typedef enum DirectionSet_t {
+	DIR_SET_EIGHT = 0,
+	DIR_SET_FOUR,
+	DIR_SET_FOUR_DIAG
+} DirectionSet;
 
 class Joystick
 {
 	public:
 		/* Public Methods */
 		Joystick();
-		void initialize(uint8_t aPinX, uint8_t aPinY, uint32_t aUpdateFreq);
+		void initialize(uint8_t aPinX, uint8_t aPinY, DirectionSet aDirSet, uint32_t aUpdateFreq = 0);
 		void reset();
 		void updateState();
 		Direction getDirection();
@@ -57,6 +65,7 @@ class Joystick
 		int16_t _lastY;
 		bool _clickDown;
 		bool _clickUp;
+		DirectionSet _dirSet;
 		Direction _direction;
 		JoystickThreshold _threshold;
 
