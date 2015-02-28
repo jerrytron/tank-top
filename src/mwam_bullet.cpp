@@ -33,10 +33,14 @@ void Bullet::updateState() {
 		_lastIndex = _index;
 		_lastOverlapTile = _overlapTile;
 		_index = _level->getNewPosition(_index, _direction, _overlapTile);
-		if ((_overlapTile == TILE_BOUNDARY) || (_overlapTile == TILE_WALL)) {
+		if (_overlapTile == TILE_BULLET) {
+			_overlapTile = _lastOverlapTile;
+			if (_lastOverlapTile == TILE_BULLET) {
+				DEBUG("Old overlap is bullet");
+			}
+		} else if ((_overlapTile == TILE_BOUNDARY) || (_overlapTile == TILE_WALL)) {
 			_overlapTile = _lastOverlapTile;
 			_index = _lastIndex;
-			DEBUG("Bullet hit barrier!");
 			if (!bounceBullet()) {
 				this->endOfLife = true;
 			}
@@ -44,8 +48,6 @@ void Bullet::updateState() {
 			DEBUG("Hit tank!");
 			this->collided = true;
 			this->endOfLife = true;
-		} else if (_overlapTile == TILE_BULLET) {
-			_overlapTile = _lastOverlapTile;
 		} else {
 			_level->setTileAtIndex(_lastOverlapTile, _lastIndex);
 			_level->setTileAtIndex(TILE_BULLET, _index);
@@ -76,7 +78,7 @@ TileType Bullet::getLastOverlapTyle() {
 /* Private Methods */
 
 bool Bullet::bounceBullet() {
-	if (_bouncesLeft > 0) {
+	if (_bouncesLeft > 1) {
 		switch(_direction) {
 			case DIR_UP_LEFT: {
 				_direction = DIR_DOWN_LEFT;
