@@ -23,6 +23,7 @@ class GameManager
 		void initialize(StateController *aStateController);
 		void reset();
 
+		void generateWalls();
 		void updateIntro();
 		void updateTutorial();
 		void updatePlay();

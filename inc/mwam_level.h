@@ -71,6 +71,7 @@ class Level
 		ElapsedMillis _timeElapsed;
 		uint32_t _updateFreq;
 		const Color* _activeTheme;
+		//Color _activeTheme[7];
 		Theme _currentTheme;
 		TileType _levelTiles[kLedCount];
 

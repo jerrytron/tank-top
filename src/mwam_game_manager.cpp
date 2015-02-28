@@ -28,12 +28,20 @@ void GameManager::initialize(StateController *aStateController) {
 
 void GameManager::reset() {
 	_hardwareManager->resetHardware();
+	generateWalls();
+	_hardwareManager->ledSet()->updateLeds(_level);
 }
 
 void GameManager::updateIntro() {
 }
 
 void GameManager::updateTutorial() {
+}
+
+void GameManager::generateWalls() {
+	for (uint16_t i = 100; i > 21; i -= 21) {
+		_level->setTileAtIndex(TILE_WALL, i);
+	}
 }
 
 void GameManager::updatePlay() {
@@ -55,6 +63,7 @@ void GameManager::updatePlay() {
 	if (_hardwareManager->joystickOne()->clickUp()) {
 		_tankOne->fireBullet();
 	}
+	_tankOne->updateBullets();
 
 	dir = _hardwareManager->joystickTwo()->getDirection();
 	threshold = _hardwareManager->joystickTwo()->getThreshold();
@@ -68,6 +77,7 @@ void GameManager::updatePlay() {
 	if (_hardwareManager->joystickTwo()->clickUp()) {
 		_tankTwo->fireBullet();
 	}
+	_tankTwo->updateBullets();
 }
 
 void GameManager::updateGameOver(bool aWonGame) {

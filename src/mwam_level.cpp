@@ -1,5 +1,6 @@
 #include "mwam_level.h"
 #include "mwam_tank.h"
+#include "mwam_manager.h"
 
 namespace mwam
 {
@@ -36,6 +37,7 @@ void Level::updateState() {
 
 void Level::setTankAtIndex(Tank* aTank) {
 	if (aTank->getTankNumber() == TANK_ONE) {
+		//setTileAtIndex(aTank->getLastOverlapTile(), aTank->getLastIndex());
 		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
 		setTileAtIndex(aTank->getLastTurretOverlapTile(), aTank->getLastTurretIndex());
 		DEBUG("Cleanup indexes: %d & %d", aTank->getLastIndex(), aTank->getLastTurretIndex());
@@ -43,6 +45,7 @@ void Level::setTankAtIndex(Tank* aTank) {
 		setTileAtIndex(TILE_TURRET_ONE, aTank->getTurretIndex());
 		DEBUG("New indexes: %d & %d", aTank->getIndex(), aTank->getTurretIndex());
 	} else if (aTank->getTankNumber() == TANK_TWO) {
+		//setTileAtIndex(aTank->getLastOverlapTile(), aTank->getLastIndex());
 		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
 		setTileAtIndex(aTank->getLastTurretOverlapTile(), aTank->getLastTurretIndex());
 		setTileAtIndex(TILE_TANK_TWO, aTank->getIndex());
@@ -68,10 +71,13 @@ void Level::nextTheme() {
 void Level::setTheme(Theme aTheme) {
 	_currentTheme = aTheme;
 	if (_currentTheme == THEME_DEFAULT) {
+		//memcpy(_activeTheme, themeDefault, sizeof(themeDefault));
 		_activeTheme = themeDefault;
 	} else if (_currentTheme == THEME_BRIGHT) {
+		//memcpy(_activeTheme, themeBright, sizeof(themeDefault));
 		_activeTheme = themeBright;
 	}
+	Manager::getInstance().hardwareManager->ledSet()->updateLeds(this);
 }
 
 uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aCollision) {
@@ -107,7 +113,7 @@ uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aColli
 	}
 	aCollision = checkForCollision(newIndex);
 	if ((aCollision == TILE_WALL) || (aCollision == TILE_TANK_ONE) || (aCollision == TILE_TANK_TWO)) {
-		return aIndex;
+		//return aIndex;
 	}
 
 	//_levelTiles[newIndex] = _levelTiles[aIndex];

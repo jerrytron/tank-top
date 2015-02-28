@@ -44,6 +44,13 @@ void LedSet::updateState(Level* aLevel) {
 	}
 }
 
+void LedSet::updateLeds(Level* aLevel) {
+	for (uint16_t i = 0; i < _ledCount; ++i) {
+		_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+	}
+	_ledSet->show();
+}
+
 void LedSet::setFastUpdates(Tank* aTankOne, Tank* aTankTwo) {
 	_fastUpdates = true;
 	_tankOne = aTankOne;
@@ -465,13 +472,6 @@ void LedSet::updateLedsFast(Level* aLevel) {
 		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getIndex()));
 	}
 
-	_ledSet->show();
-}
-
-void LedSet::updateLeds(Level* aLevel) {
-	for (uint16_t i = 0; i < _ledCount; ++i) {
-		_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
-	}
 	_ledSet->show();
 }
 

@@ -25,12 +25,14 @@ class Tank
 		void initialize(TankNumber aTankNum, Level* aLevel, uint8_t aStartIndex, uint32_t aMovementFreq);
 		void reset();
 		void updateState(Direction aDirection, uint16_t aDelayReduction);
+		void updateBullets();
 		bool fireBullet();
 
 		TankNumber getTankNumber();
 		uint16_t getIndex();
 		void setIndex(uint16_t aIndex);
 		uint16_t getLastIndex();
+		TileType getLastOverlapTile();
 		uint8_t getBulletCount();
 		Bullet* getBulletAtIndex(uint8_t aIndex);
 		uint16_t getTurretIndex();
@@ -44,7 +46,6 @@ class Tank
 
 	private:
 		/* Private Methods */
-		void updateBullets();
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;
@@ -56,7 +57,8 @@ class Tank
 		uint16_t _startIndex;
 		uint16_t _index;
 		uint16_t _lastIndex;
-		TileType _lastCollision;
+		TileType _overlap;
+		TileType _lastOverlap;
 		uint16_t _turretIndex;
 		uint16_t _lastTurretIndex;
 		TileType _turretOverlap;

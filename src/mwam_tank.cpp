@@ -20,7 +20,8 @@ void Tank::initialize(TankNumber aTankNum, Level* aLevel, uint8_t aStartIndex, u
 void Tank::reset() {
 	_index = _startIndex;
 	_lastIndex = 0;
-	_lastCollision = TILE_BACKGROUND;
+	_overlap = TILE_BACKGROUND;
+	_lastOverlap = TILE_BACKGROUND;
 	_direction = DIR_DOWN_LEFT;
 	_turretIndex = _index - kLedDiagDownLeft;
 	_lastTurretIndex = 0;
@@ -28,41 +29,72 @@ void Tank::reset() {
 	_lastTurretOverlap = TILE_BACKGROUND;
 	_health = kHealthTotal;
 	_bulletCount = 0;
-	memset(_bullets, 0, kMaxBulletsLive);
+	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
+		_bullets[i].initialize(_level, kBulletMovementDelay);
+		_bullets[i].endOfLife = true;
+	}
 }
 
 void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 	if (this->active && (_timeElapsed >= aMovementFreq)) {
 		_timeElapsed = 0;
+
+		if (_health == 0) {
+			DEBUG("Tank destroyed!");
+			return;
+		}
+
 		if ((_direction == DIR_NONE) && (aDirection != DIR_NONE)) {
 			_timeElapsed = _movementFreq;
 		}
 		_direction = aDirection;
 		//TileType collisionTile = TILE_BACKGROUND;
 		_lastIndex = _index;
-		_index = _level->getNewPosition(_index, _direction, _lastCollision);
-		if (_lastIndex != _index) {
+		_lastOverlap = _overlap;
+		_index = _level->getNewPosition(_index, _direction, _overlap);
+		DEBUG("Tank Overlap: %d", _overlap);
+		if ((_overlap == TILE_BACKGROUND) || (_overlap == TILE_BULLET) ||
+		    (_overlap == TILE_TURRET_ONE) || (_overlap == TILE_TURRET_TWO)) {
 			DEBUG("Tank Index: %d", _index);
 			_lastTurretIndex = _turretIndex;
 			_turretIndex = findTurretIndex();
 			_level->setTankAtIndex(this);
+		} else if ((_overlap == TILE_WALL) || (_overlap == TILE_TANK_ONE) ||
+		    (_overlap == TILE_TANK_TWO)) {
+			_index = _lastIndex;
 		}
-		if (_lastCollision == TILE_BULLET) {
+		if (_overlap == TILE_BULLET) {
 			// TODO: DESTROY!!!!
 			DEBUG("Ran into bullet!");
-		}
-		if (_lastCollision != TILE_BACKGROUND) {
-			DEBUG("Tank collided with tile: %d", _lastCollision);
+			_health--;
 		}
 
-		updateBullets();
+	}
+}
+
+void Tank::updateBullets() {
+	for (uint8_t i = 0; i < _bulletCount; ++i) {
+		_bullets[i].updateState();
+		if (_bullets[i].collided) {
+			DEBUG("Bullet hit tank!");
+			_health--;
+		}
+		if (_bullets[i].endOfLife) {
+			_level->setTileAtIndex(_bullets[i].getOverlapTile(), _bullets[i].getIndex());
+		}
 	}
 }
 
 bool Tank::fireBullet() {
 	if (_bulletCount < kMaxBulletsLive) {
-		_bullets[_bulletCount] = Bullet();
-		_bullets[_bulletCount].initialize(_index, _direction, kBulletMovementDelay);
+		uint8_t i;
+		for (i = 0; i < kMaxBulletsLive; ++i) {
+			if (_bullets[i].endOfLife) {
+				//delete _bullets[i];
+				_bullets[i].reset(_turretIndex, _direction);
+				break;
+			}
+		}
 		_bulletCount++;
 		return true;
 	}
@@ -83,6 +115,10 @@ void Tank::setIndex(uint16_t aIndex) {
 
 uint16_t Tank::getLastIndex() {
 	return _lastIndex;
+}
+
+TileType Tank::getLastOverlapTile() {
+	return _lastOverlap;
 }
 
 uint8_t Tank::getBulletCount() {
@@ -110,37 +146,37 @@ TileType Tank::getLastTurretOverlapTile() {
 }
 
 uint16_t Tank::findTurretIndex() {
-	TileType collisionTile = TILE_BACKGROUND;
-	uint16_t index = _level->getNewPosition(_index, _direction, collisionTile);
-	if (collisionTile == TILE_BOUNDARY) {
-		if (_direction == DIR_DOWN_LEFT) {
-			_direction = DIR_UP_LEFT;
-			index = _index + kLedDiagUpLeft;
-		} else if (_direction == DIR_DOWN_RIGHT) {
-			_direction = DIR_UP_RIGHT;
-			index = _index + kLedDiagUpRight;
-		} else if (_direction == DIR_UP_LEFT) {
-			_direction = DIR_DOWN_LEFT;
-			index = _index - kLedDiagDownLeft;
-		} else if (_direction == DIR_UP_RIGHT) {
-			_direction = DIR_DOWN_RIGHT;
-			index = _index - kLedDiagDownRight;
+	TileType collisionTile = TILE_BOUNDARY;
+	//uint16_t index = _level->getNewPosition(_index, _direction, collisionTile);
+	uint16_t index = _index;
+	Direction tryDir = _direction;
+	bool searching = true;
+	while (searching) {
+		index = _level->getNewPosition(_index, tryDir, collisionTile);
+		if ((collisionTile == TILE_BOUNDARY) || (collisionTile == TILE_WALL)) {
+			if (tryDir == DIR_DOWN_LEFT) {
+				tryDir = DIR_UP_LEFT;
+			} else if (tryDir == DIR_UP_LEFT) {
+				tryDir = DIR_UP_RIGHT;
+			} else if (tryDir == DIR_UP_RIGHT) {
+				tryDir = DIR_DOWN_RIGHT;
+			} else if (tryDir == DIR_DOWN_RIGHT) {
+				tryDir = DIR_DOWN_LEFT;
+			}
+		} else {
+			searching = false;
 		}
 	}
-	_lastTurretOverlap = _turretOverlap;
-	if (_turretOverlap == TILE_TANK_ONE) {
-		DEBUG("Last turret layer is tank, bad");
+	_direction = tryDir;
+
+	if ((_turretOverlap != TILE_TURRET_ONE) && (_turretOverlap != TILE_TURRET_TWO) &&
+	    (_turretOverlap != TILE_TANK_ONE) && (_turretOverlap != TILE_TANK_TWO)) {
+		_lastTurretOverlap = _turretOverlap;
 	}
 	_turretOverlap = _level->getTileAtIndex(index);
 	return index;
 }
 
 /* Private Methods */
-
-void Tank::updateBullets() {
-	for (uint8_t i = 0; i < _bulletCount; ++i) {
-		_bullets[i].updateState();
-	}
-}
 
 }

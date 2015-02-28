@@ -104,6 +104,7 @@ class LedSet
 		LedSet();
 		void initialize(uint16_t aLedCount, uint8_t aLedPin, uint8_t aLedType, uint32_t aUpdateFreq);
 		void updateState(Level* aLevel);
+		void updateLeds(Level* aLevel);
 		void setFastUpdates(Tank* aTankOne, Tank* aTankTwo);
 
 		uint16_t ledCount();
@@ -163,7 +164,6 @@ class LedSet
 	private:
 		/* Private Methods */
 		void updateLedsFast(Level* aLevel);
-		void updateLeds(Level* aLevel);
 		void checkIfAllAnimsDone();
 
 		Color calculateEase(EaseType aEase, float aCurrentFrame, float aEndFrame, Color aStart, Color aEnd, bool &aError);
