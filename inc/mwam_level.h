@@ -11,7 +11,8 @@ namespace mwam
 class Tank;
 
 typedef enum Theme_t {
-	THEME_DEFAULT = 0
+	THEME_DEFAULT = 0,
+	THEME_BRIGHT
 } Theme;
 
 typedef enum ThemeElement_t {
@@ -51,11 +52,12 @@ class Level
 		void updateState();
 		void setTankAtIndex(Tank* aTank);
 		void setTileAtIndex(TileType aTile, uint16_t aIndex);
-
-		void setTheme(Theme aTheme);
-		uint16_t updatePosition(uint16_t aIndex, Direction aDir, TileType &aCollision);
-
 		TileType getTileAtIndex(uint16_t aIndex);
+
+		void nextTheme();
+		void setTheme(Theme aTheme);
+		uint16_t getNewPosition(uint16_t aIndex, Direction aDir, TileType &aCollision);
+
 		uint32_t getColorAtIndex(uint16_t aIndex);
 
 		/* Public Variables */
@@ -69,6 +71,7 @@ class Level
 		ElapsedMillis _timeElapsed;
 		uint32_t _updateFreq;
 		const Color* _activeTheme;
+		Theme _currentTheme;
 		TileType _levelTiles[kLedCount];
 
 };

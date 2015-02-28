@@ -4,6 +4,7 @@
 #include "mwam_constants.h"
 #include "mwam_bullet.h"
 #include "mwam_joystick.h"
+#include "mwam_level.h"
 #include "ElapsedTime.h"
 
 namespace mwam
@@ -33,6 +34,10 @@ class Tank
 		uint8_t getBulletCount();
 		Bullet* getBulletAtIndex(uint8_t aIndex);
 		uint16_t getTurretIndex();
+		uint16_t getLastTurretIndex();
+		uint16_t findTurretIndex();
+		TileType getTurretOverlapTile();
+		TileType getLastTurretOverlapTile();
 
 		/* Public Variables */
 		bool active;
@@ -51,8 +56,11 @@ class Tank
 		uint16_t _startIndex;
 		uint16_t _index;
 		uint16_t _lastIndex;
+		TileType _lastCollision;
 		uint16_t _turretIndex;
 		uint16_t _lastTurretIndex;
+		TileType _turretOverlap;
+		TileType _lastTurretOverlap;
 		uint8_t _health;
 		uint8_t _bulletCount;
 		Bullet _bullets[kMaxBulletsLive];

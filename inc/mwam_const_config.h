@@ -64,7 +64,7 @@ namespace mwam
 	// How often to update the Led set state.
 	const uint16_t kIntervalLedSetMillis = 10;
 	// How often to update the joystick set state.
-	const uint16_t kIntervalJoystickMillis = 0;
+	const uint16_t kIntervalJoystickMillis = 10;
 	// How often to update the button state.
 	const uint16_t kIntervalButtonMillis = 10;
 	// How often to update the piezos.

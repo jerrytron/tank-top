@@ -94,7 +94,7 @@ void LedSet::setAllOff() {
 }
 
 void LedSet::resetLeds() {
-	//setAllOff();
+	setAllOff();
 	//delete[] _leds;
 	//_leds = new Led[_ledCount]();
 	/*for (uint8_t i = 0; i < _ledCount; ++i) {
@@ -444,6 +444,9 @@ void LedSet::updateLedsFast(Level* aLevel) {
 	if (_tankOne->getLastIndex() != _tankOne->getIndex()) {
 		_ledSet->setPixelColor(_tankOne->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getLastIndex()));
 		_ledSet->setPixelColor(_tankOne->getIndex(), aLevel->getColorAtIndex(_tankOne->getIndex()));
+
+		_ledSet->setPixelColor(_tankOne->getLastTurretIndex(), aLevel->getColorAtIndex(_tankOne->getLastTurretIndex()));
+		_ledSet->setPixelColor(_tankOne->getTurretIndex(), aLevel->getColorAtIndex(_tankOne->getTurretIndex()));
 	}
 	for (uint8_t i = 0; i < _tankOne->getBulletCount(); ++i) {
 		_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getLastIndex()));
@@ -453,6 +456,9 @@ void LedSet::updateLedsFast(Level* aLevel) {
 	if (_tankTwo->getLastIndex() != _tankTwo->getIndex()) {
 		_ledSet->setPixelColor(_tankTwo->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getLastIndex()));
 		_ledSet->setPixelColor(_tankTwo->getIndex(), aLevel->getColorAtIndex(_tankTwo->getIndex()));
+
+		_ledSet->setPixelColor(_tankTwo->getLastTurretIndex(), aLevel->getColorAtIndex(_tankTwo->getLastTurretIndex()));
+		_ledSet->setPixelColor(_tankTwo->getTurretIndex(), aLevel->getColorAtIndex(_tankTwo->getTurretIndex()));
 	}
 	for (uint8_t i = 0; i < _tankTwo->getBulletCount(); ++i) {
 		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getLastIndex()));

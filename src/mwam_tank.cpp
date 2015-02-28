@@ -1,5 +1,4 @@
 #include "mwam_tank.h"
-#include "mwam_level.h"
 
 namespace mwam
 {
@@ -20,34 +19,44 @@ void Tank::initialize(TankNumber aTankNum, Level* aLevel, uint8_t aStartIndex, u
 
 void Tank::reset() {
 	_index = _startIndex;
-	_lastIndex = _index;
+	_lastIndex = 0;
+	_lastCollision = TILE_BACKGROUND;
 	_direction = DIR_DOWN_LEFT;
 	_turretIndex = _index - kLedDiagDownLeft;
-	_lastTurretIndex = _turretIndex;
+	_lastTurretIndex = 0;
+	_turretOverlap = TILE_BACKGROUND;
+	_lastTurretOverlap = TILE_BACKGROUND;
 	_health = kHealthTotal;
 	_bulletCount = 0;
 	memset(_bullets, 0, kMaxBulletsLive);
 }
 
 void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
-	_direction = aDirection;
-	if ((_direction == DIR_NONE) && (_direction != DIR_NONE)) {
-		_timeElapsed = _movementFreq;
-	}
 	if (this->active && (_timeElapsed >= aMovementFreq)) {
 		_timeElapsed = 0;
-		TileType collisionTile = TILE_BACKGROUND;
-		_lastIndex = _index;
-		_index = _level->updatePosition(_index, _direction, collisionTile);
-		DEBUG("Tank Index: %d", _index);
-		if (collisionTile == TILE_BULLET) {
-			// TODO: DESTROY!!!!
-			DEBUG("Tank collided with tile: %d", collisionTile);
+		if ((_direction == DIR_NONE) && (aDirection != DIR_NONE)) {
+			_timeElapsed = _movementFreq;
 		}
-		//_turretIndex = getTurretIndex();
-		_level->setTankAtIndex(this);
+		_direction = aDirection;
+		//TileType collisionTile = TILE_BACKGROUND;
+		_lastIndex = _index;
+		_index = _level->getNewPosition(_index, _direction, _lastCollision);
+		if (_lastIndex != _index) {
+			DEBUG("Tank Index: %d", _index);
+			_lastTurretIndex = _turretIndex;
+			_turretIndex = findTurretIndex();
+			_level->setTankAtIndex(this);
+		}
+		if (_lastCollision == TILE_BULLET) {
+			// TODO: DESTROY!!!!
+			DEBUG("Ran into bullet!");
+		}
+		if (_lastCollision != TILE_BACKGROUND) {
+			DEBUG("Tank collided with tile: %d", _lastCollision);
+		}
+
+		updateBullets();
 	}
-	updateBullets();
 }
 
 bool Tank::fireBullet() {
@@ -85,8 +94,24 @@ Bullet* Tank::getBulletAtIndex(uint8_t aIndex) {
 }
 
 uint16_t Tank::getTurretIndex() {
+	return _turretIndex;
+}
+
+uint16_t Tank::getLastTurretIndex() {
+	return _lastTurretIndex;
+}
+
+TileType Tank::getTurretOverlapTile() {
+	return _turretOverlap;
+}
+
+TileType Tank::getLastTurretOverlapTile() {
+	return _lastTurretOverlap;
+}
+
+uint16_t Tank::findTurretIndex() {
 	TileType collisionTile = TILE_BACKGROUND;
-	uint16_t index = _level->updatePosition(_index, _direction, collisionTile);
+	uint16_t index = _level->getNewPosition(_index, _direction, collisionTile);
 	if (collisionTile == TILE_BOUNDARY) {
 		if (_direction == DIR_DOWN_LEFT) {
 			_direction = DIR_UP_LEFT;
@@ -102,6 +127,11 @@ uint16_t Tank::getTurretIndex() {
 			index = _index - kLedDiagDownRight;
 		}
 	}
+	_lastTurretOverlap = _turretOverlap;
+	if (_turretOverlap == TILE_TANK_ONE) {
+		DEBUG("Last turret layer is tank, bad");
+	}
+	_turretOverlap = _level->getTileAtIndex(index);
 	return index;
 }
 

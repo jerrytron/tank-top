@@ -46,11 +46,15 @@ Direction Joystick::getDirection() {
 			return DIR_NONE;
 		}
 	}
-	return _direction;
+	Direction returnDir = _direction;
+	_direction = DIR_NONE;
+	return returnDir;
 }
 
 JoystickThreshold Joystick::getThreshold() {
-	return _threshold;
+	JoystickThreshold jt = _threshold;
+	_threshold = JOY_IDLE;
+	return jt;
 }
 
 bool Joystick::clickDown() {
@@ -58,7 +62,9 @@ bool Joystick::clickDown() {
 }
 
 bool Joystick::clickUp() {
-	return _clickUp;
+	bool clickUp = _clickUp;
+	_clickUp = false;
+	return clickUp;
 }
 
 /* Private Methods */

@@ -15,7 +15,7 @@ void MomentaryButton::initialize(uint8_t aBtnPin, uint8_t aLedPin, uint32_t aUpd
 	_ledPin = aLedPin;
 	_updateFreq = aUpdateFreq;
 	pinMode(_btnPin, INPUT_PULLUP);
-	pinMode(_ledPin, OUTPUT);
+	//pinMode(_ledPin, OUTPUT);
 	//digitalWrite(_btnPin, HIGH);
 	this->active = true;
 	reset();

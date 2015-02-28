@@ -13,6 +13,8 @@ namespace mwam
 // Themes: Background, P1 Color, P1 Turret, P2 Color, P2 Turret, Bullets, Walls
 const Color themeDefault[] = { kColorBlack, kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorOrange };
 
+const Color themeBright[] = { kColorWhite, kColorBlue, kColorYellow, kColorRed, kColorYellow, kColorOrange, kColorBlack };
+
 
 /* Public Methods */
 
@@ -34,9 +36,15 @@ void Level::updateState() {
 
 void Level::setTankAtIndex(Tank* aTank) {
 	if (aTank->getTankNumber() == TANK_ONE) {
+		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
+		setTileAtIndex(aTank->getLastTurretOverlapTile(), aTank->getLastTurretIndex());
+		DEBUG("Cleanup indexes: %d & %d", aTank->getLastIndex(), aTank->getLastTurretIndex());
 		setTileAtIndex(TILE_TANK_ONE, aTank->getIndex());
 		setTileAtIndex(TILE_TURRET_ONE, aTank->getTurretIndex());
+		DEBUG("New indexes: %d & %d", aTank->getIndex(), aTank->getTurretIndex());
 	} else if (aTank->getTankNumber() == TANK_TWO) {
+		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
+		setTileAtIndex(aTank->getLastTurretOverlapTile(), aTank->getLastTurretIndex());
 		setTileAtIndex(TILE_TANK_TWO, aTank->getIndex());
 		setTileAtIndex(TILE_TURRET_TWO, aTank->getTurretIndex());
 	}
@@ -46,13 +54,27 @@ void Level::setTileAtIndex(TileType aTile, uint16_t aIndex) {
 	_levelTiles[aIndex] = aTile;
 }
 
+TileType Level::getTileAtIndex(uint16_t aIndex) {
+	return _levelTiles[aIndex];
+}
+
+void Level::nextTheme() {
+	if (_currentTheme == THEME_BRIGHT) {
+		_currentTheme = THEME_DEFAULT;
+	} else {
+		_currentTheme = (Theme)(_currentTheme + 1);
+	}
+}
 void Level::setTheme(Theme aTheme) {
-	if (aTheme == THEME_DEFAULT) {
+	_currentTheme = aTheme;
+	if (_currentTheme == THEME_DEFAULT) {
 		_activeTheme = themeDefault;
+	} else if (_currentTheme == THEME_BRIGHT) {
+		_activeTheme = themeBright;
 	}
 }
 
-uint16_t Level::updatePosition(uint16_t aIndex, Direction aDir, TileType &aCollision) {
+uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aCollision) {
 	uint16_t newIndex = aIndex;
 	if (aDir == DIR_UP_LEFT) {
 		newIndex += kLedDiagUpLeft;
@@ -88,13 +110,9 @@ uint16_t Level::updatePosition(uint16_t aIndex, Direction aDir, TileType &aColli
 		return aIndex;
 	}
 
-	_levelTiles[newIndex] = _levelTiles[aIndex];
-	_levelTiles[aIndex] = TILE_BACKGROUND;
+	//_levelTiles[newIndex] = _levelTiles[aIndex];
+	//_levelTiles[aIndex] = TILE_BACKGROUND;
 	return newIndex;
-}
-
-TileType Level::getTileAtIndex(uint16_t aIndex) {
-	return _levelTiles[aIndex];
 }
 
 uint32_t Level::getColorAtIndex(uint16_t aIndex) {

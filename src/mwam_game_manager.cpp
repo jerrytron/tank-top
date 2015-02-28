@@ -23,7 +23,7 @@ void GameManager::initialize(StateController *aStateController) {
 	_tankTwo = new Tank();
 	_tankTwo->initialize(TANK_TWO, _level, kPlayerTwoStartIndex, kIntervalPlayerDelayMillis);
 
-	//_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
+	_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
 }
 
 void GameManager::reset() {
@@ -37,6 +37,11 @@ void GameManager::updateTutorial() {
 }
 
 void GameManager::updatePlay() {
+	if (_hardwareManager->button()->wasClicked()) {
+		DEBUG("Change theme!");
+		_level->nextTheme();
+	}
+
 	Direction dir = _hardwareManager->joystickOne()->getDirection();
 	JoystickThreshold threshold = _hardwareManager->joystickOne()->getThreshold();
 	if (dir) {
