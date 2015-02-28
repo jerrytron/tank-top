@@ -30,6 +30,13 @@ typedef enum TileType_t {
 	TILE_FLAG
 } TileType;
 
+/*typedef enum Collision_t {
+	COL_NONE = 0,
+	COL_BOUNDS,
+	COL_WALL,
+	COL_BULLET,
+} Collision;*/
+
 class Level
 {
 	public:
@@ -39,7 +46,7 @@ class Level
 		void updateState();
 
 		void setTheme(Theme aTheme);
-		uint16_t updatePosition(uint16_t aIndex, Direction aDir, bool &aBlocked);
+		uint16_t updatePosition(uint16_t aIndex, Direction aDir, TileType &aCollision);
 
 		TileType getTileAtIndex(uint16_t aIndex);
 		uint32_t getColorAtIndex(uint16_t aIndex);
@@ -49,7 +56,7 @@ class Level
 
 	private:
 		/* Private Methods */
-		bool checkForCollision();
+		TileType checkForCollision(uint16_t aIndex);
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;

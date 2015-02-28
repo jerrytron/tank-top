@@ -31,9 +31,14 @@ void Tank::updateState(Direction aDirection, uint16_t aDelayReduction) {
 	}
 	if (this->active && (_timeElapsed >= (_movementFreq - aDelayReduction))) {
 		_timeElapsed = 0;
-		bool blocked = false;
+		TileType collisionTile = TILE_EMPTY;
 		_lastIndex = _index;
-		_index = _level->updatePosition(_index, _direction, blocked);
+		_index = _level->updatePosition(_index, _direction, collisionTile);
+
+		if (collisionTile == TILE_BULLET) {
+			// TODO: DESTROY!!!!
+			DEBUG("Tank collided with tile: %d", collisionTile);
+		}
 
 	}
 	updateBullets();

@@ -36,34 +36,38 @@ void Level::setTheme(Theme aTheme) {
 	}
 }
 
-uint16_t Level::updatePosition(uint16_t aIndex, Direction aDir, bool &aBlocked) {
+uint16_t Level::updatePosition(uint16_t aIndex, Direction aDir, TileType &aCollision) {
 	uint16_t newIndex = aIndex;
 	if (aDir == DIR_UP_LEFT) {
 		newIndex += kLedDiagUpLeft;
 		if (newIndex >= kLedCount) {
-			newIndex = aIndex;
-			aBlocked = true;
+			aCollision = TILE_WALL;
+			return aIndex;
 		}
 	} else if (aDir == DIR_UP_RIGHT) {
 		newIndex += kLedDiagUpRight;
 		if (newIndex >= kLedCount) {
-			newIndex = aIndex;
-			aBlocked = true;
+			aCollision = TILE_WALL;
+			return aIndex;
 		}
 	} else if (aDir == DIR_DOWN_LEFT) {
 		if (newIndex < kLedDiagDownLeft) {
-			aBlocked = true;
-		} else {
-			newIndex -= kLedDiagDownLeft;
+			aCollision = TILE_WALL;
+			return aIndex;
 		}
+		newIndex -= kLedDiagDownLeft;
 	} else if (aDir == DIR_DOWN_RIGHT) {
 		if (newIndex < kLedDiagDownRight) {
-			aBlocked = true;
-		} else {
-			newIndex -= kLedDiagDownRight;
+			aCollision = TILE_WALL;
+			return aIndex;
 		}
+		newIndex -= kLedDiagDownRight;
 	}
-	checkForCollision();
+	aCollision = checkForCollision(newIndex);
+	if ((aCollision == TILE_WALL) && (aCollision == TILE_TANK)) {
+		return aIndex;
+	}
+
 	return newIndex;
 }
 
@@ -78,9 +82,8 @@ uint32_t Level::getColorAtIndex(uint16_t aIndex) {
 
 /* Private Methods */
 
-bool Level::checkForCollision() {
-
-	return false;
+TileType Level::checkForCollision(uint16_t aIndex) {
+	return _levelTiles[aIndex];
 }
 
 }
