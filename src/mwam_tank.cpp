@@ -40,6 +40,7 @@ void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 		_timeElapsed = 0;
 
 		if (_health == 0) {
+			_health = kHealthTotal;
 			DEBUG("Tank destroyed!");
 			return;
 		}
@@ -77,6 +78,7 @@ void Tank::updateBullets() {
 		_bullets[i].updateState();
 		if (_bullets[i].collided) {
 			DEBUG("Bullet hit tank!");
+			_bullets[i].collided = false;
 			_health--;
 		}
 		if (_bullets[i].endOfLife) {

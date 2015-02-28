@@ -12,7 +12,7 @@ namespace mwam
 };*/
 
 // Themes: Background, P1 Color, P1 Turret, P2 Color, P2 Turret, Bullets, Walls
-const Color themeDefault[] = { kColorBlack, kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorOrange };
+const Color themeDefault[] = { kColorBlack, kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorPurple };
 
 const Color themeBright[] = { kColorWhite, kColorBlue, kColorYellow, kColorRed, kColorYellow, kColorOrange, kColorBlack };
 
@@ -40,10 +40,10 @@ void Level::setTankAtIndex(Tank* aTank) {
 		//setTileAtIndex(aTank->getLastOverlapTile(), aTank->getLastIndex());
 		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
 		setTileAtIndex(aTank->getLastTurretOverlapTile(), aTank->getLastTurretIndex());
-		DEBUG("Cleanup indexes: %d & %d", aTank->getLastIndex(), aTank->getLastTurretIndex());
+		//DEBUG("Cleanup indexes: %d & %d", aTank->getLastIndex(), aTank->getLastTurretIndex());
 		setTileAtIndex(TILE_TANK_ONE, aTank->getIndex());
 		setTileAtIndex(TILE_TURRET_ONE, aTank->getTurretIndex());
-		DEBUG("New indexes: %d & %d", aTank->getIndex(), aTank->getTurretIndex());
+		//DEBUG("New indexes: %d & %d", aTank->getIndex(), aTank->getTurretIndex());
 	} else if (aTank->getTankNumber() == TANK_TWO) {
 		//setTileAtIndex(aTank->getLastOverlapTile(), aTank->getLastIndex());
 		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
