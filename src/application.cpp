@@ -17,7 +17,7 @@ void setup()
 #ifndef DEBUG_BUILD
 	Serial.begin(9600);
 #endif
-	while(!Serial.available()) SPARK_WLAN_Loop();
+	//while(!Serial.available()) SPARK_WLAN_Loop();
 	_stateController = new mwam::StateController();
 	_stateController->initialize();
 }

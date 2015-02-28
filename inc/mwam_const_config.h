@@ -32,7 +32,7 @@ namespace mwam
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
 	// Max Bullet Bounces
-	const uint8_t kMaxBulletBounces = 50;
+	const uint8_t kMaxBulletBounces = 5;
 	// Bullet speed, delay before movement.
 	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player

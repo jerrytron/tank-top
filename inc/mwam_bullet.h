@@ -25,6 +25,7 @@ class Bullet
 		TileType getLastOverlapTyle();
 
 		/* Public Variables */
+		bool active;
 		bool collided;
 		bool endOfLife;
 

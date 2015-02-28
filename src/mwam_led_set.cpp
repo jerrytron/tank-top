@@ -455,9 +455,13 @@ void LedSet::updateLedsFast(Level* aLevel) {
 		_ledSet->setPixelColor(_tankOne->getLastTurretIndex(), aLevel->getColorAtIndex(_tankOne->getLastTurretIndex()));
 		_ledSet->setPixelColor(_tankOne->getTurretIndex(), aLevel->getColorAtIndex(_tankOne->getTurretIndex()));
 	}
-	for (uint8_t i = 0; i < _tankOne->getBulletCount(); ++i) {
+	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
 		_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getLastIndex()));
-		_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getIndex()));
+		if (_tankOne->getBulletAtIndex(i)->endOfLife) {
+			_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getLastIndex()));
+		} else {
+			_ledSet->setPixelColor(_tankOne->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankOne->getBulletAtIndex(i)->getIndex()));
+		}
 	}
 
 	if (_tankTwo->getLastIndex() != _tankTwo->getIndex()) {
@@ -467,9 +471,13 @@ void LedSet::updateLedsFast(Level* aLevel) {
 		_ledSet->setPixelColor(_tankTwo->getLastTurretIndex(), aLevel->getColorAtIndex(_tankTwo->getLastTurretIndex()));
 		_ledSet->setPixelColor(_tankTwo->getTurretIndex(), aLevel->getColorAtIndex(_tankTwo->getTurretIndex()));
 	}
-	for (uint8_t i = 0; i < _tankTwo->getBulletCount(); ++i) {
+	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
 		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getLastIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getLastIndex()));
-		_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getIndex()));
+		if (_tankOne->getBulletAtIndex(i)->endOfLife) {
+			_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getLastIndex()));
+		} else {
+			_ledSet->setPixelColor(_tankTwo->getBulletAtIndex(i)->getIndex(), aLevel->getColorAtIndex(_tankTwo->getBulletAtIndex(i)->getIndex()));
+		}
 	}
 
 	_ledSet->show();

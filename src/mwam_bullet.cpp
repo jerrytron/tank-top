@@ -24,10 +24,11 @@ void Bullet::reset(uint16_t aIndex, Direction aDir) {
 	_bouncesLeft = kMaxBulletBounces;
 	this->collided = false;
 	this->endOfLife = false;
+	this->active = false;
 }
 
 void Bullet::updateState() {
-	if (!this->endOfLife && (_timeElapsed >= _movementDelay)) {
+	if (this->active && !this->endOfLife && (_timeElapsed >= _movementDelay)) {
 		_timeElapsed = 0;
 		_lastIndex = _index;
 		_lastOverlapTile = _overlapTile;
@@ -43,6 +44,8 @@ void Bullet::updateState() {
 			DEBUG("Hit tank!");
 			this->collided = true;
 			this->endOfLife = true;
+		} else if (_overlapTile == TILE_BULLET) {
+			_overlapTile = _lastOverlapTile;
 		} else {
 			_level->setTileAtIndex(_lastOverlapTile, _lastIndex);
 			_level->setTileAtIndex(TILE_BULLET, _index);

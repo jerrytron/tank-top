@@ -74,7 +74,7 @@ void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 }
 
 void Tank::updateBullets() {
-	for (uint8_t i = 0; i < _bulletCount; ++i) {
+	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
 		_bullets[i].updateState();
 		if (_bullets[i].collided) {
 			DEBUG("Bullet hit tank!");
@@ -83,18 +83,29 @@ void Tank::updateBullets() {
 		}
 		if (_bullets[i].endOfLife) {
 			_level->setTileAtIndex(_bullets[i].getOverlapTile(), _bullets[i].getIndex());
+			_bullets[i].endOfLife = false;
+			_bullets[i].active = false;
+			if (_bulletCount > 0) {
+				_bulletCount--;
+			}
 		}
 	}
 }
 
 bool Tank::fireBullet() {
+	DEBUG("try to fire: %d", _bulletCount);
 	if (_bulletCount < kMaxBulletsLive) {
+		DEBUG("can fire");
 		uint8_t i;
 		for (i = 0; i < kMaxBulletsLive; ++i) {
-			if (_bullets[i].endOfLife) {
+			if (!_bullets[i].active) {
+				DEBUG("Fire!");
 				//delete _bullets[i];
 				_bullets[i].reset(_turretIndex, _direction);
+				_bullets[i].active = true;
 				break;
+			} else {
+				DEBUG("Don't fire...");
 			}
 		}
 		_bulletCount++;
