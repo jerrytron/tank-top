@@ -6,18 +6,6 @@ extern char* itoa(int a, char* buffer, unsigned char radix);
 namespace mwam
 {
 
-const Color kColorGreen = Color(0, 255, 0);
-const Color kColorYellow = Color(255, 255, 0);
-const Color kColorOrange = Color(255, 140, 0);
-const Color kColorRed = Color(255, 0, 0);
-const Color kColorBlack = Color(0, 0, 0);
-const Color kColorWhite = Color(255, 255, 255);
-const Color kColorBlue = Color(0, 0, 255);
-const Color kColorPurple = Color(255, 0, 255);
-// Themes: P1 Color, P1 Turret, P2 Color, P2 Turret, Bullets, Background, Walls
-const Color themeDefault[] = { kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorBlack, kColorOrange };
-
-
 /* Public Methods */
 
 GameManager::GameManager() {
@@ -27,19 +15,19 @@ void GameManager::initialize(StateController *aStateController) {
 	_stateController = aStateController;
 	_dataManager = Manager::getInstance().dataManager;
 	_hardwareManager = Manager::getInstance().hardwareManager;
+
+	_level = new Level();
+	_level->initialize(0, THEME_DEFAULT);
+	_tankOne = new Tank();
+	_tankOne->initialize(0, kPlayerOneStartIndex);
+	_tankTwo = new Tank();
+	_tankTwo->initialize(0, kPlayerTwoStartIndex);
 }
 
 void GameManager::reset() {
-	_hardwareManager->button()->resetButton();
-	_hardwareManager->ledSet()->resetLeds();
+	_hardwareManager->resetHardware();
 
 	_fireStormAnimStep = 0;
-}
-
-void GameManager::setupLevel(Theme aTheme) {
-	if (aTheme == DEFAULT) {
-		_activeTheme = themeDefault;
-	}
 }
 
 void GameManager::updateIntro() {
@@ -49,6 +37,7 @@ void GameManager::updateTutorial() {
 }
 
 void GameManager::updatePlay() {
+
 }
 
 void GameManager::updateGameOver(bool aWonGame) {

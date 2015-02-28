@@ -13,6 +13,7 @@ class Piezo
 		/* Public Methods */
 		Piezo();
 		void initialize(uint8_t aPin, uint32_t aUpdateFreq);
+		void reset();
 		void updateState();
 
 		/* Public Variables */

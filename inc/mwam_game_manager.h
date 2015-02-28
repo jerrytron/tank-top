@@ -3,6 +3,8 @@
 
 #include "mwam_constants.h"
 #include "mwam_led_set.h"
+#include "mwam_level.h"
+#include "mwam_tank.h"
 #include "ElapsedTime.h"
 
 namespace mwam
@@ -12,9 +14,6 @@ class StateController;
 class DataManager;
 class HardwareManager;
 
-typedef enum Theme_t {
-	DEFAULT = 0
-} Theme;
 
 class GameManager
 {
@@ -23,8 +22,6 @@ class GameManager
 		GameManager();
 		void initialize(StateController *aStateController);
 		void reset();
-
-		void setupLevel(Theme aTheme);
 
 		void updateIntro();
 		void updateTutorial();
@@ -49,7 +46,9 @@ class GameManager
 		DataManager* _dataManager;
 		HardwareManager* _hardwareManager;
 
-		const Color* _activeTheme;
+		Level* _level;
+		Tank* _tankOne;
+		Tank* _tankTwo;
 
 		uint8_t _fireStormAnimStep;
 

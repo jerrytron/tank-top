@@ -8,9 +8,17 @@ namespace mwam
 Tank::Tank() {
 }
 
-void Tank::initialize(uint32_t aUpdateFreq) {
+void Tank::initialize(uint32_t aUpdateFreq, uint8_t aStartIndex) {
 	_updateFreq = aUpdateFreq;
+	_startIndex = aStartIndex;
 	_timeElapsed = 0;
+}
+
+void Tank::reset() {
+	_index = _startIndex;
+	_health = kHealthTotal;
+	_bulletCount = 0;
+	memset(_bullets, 0, kMaxBulletsLive);
 }
 
 void Tank::updateState() {

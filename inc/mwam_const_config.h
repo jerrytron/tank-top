@@ -5,7 +5,7 @@ namespace mwam
 {
 
 	// Total count of LEDs.
-	const uint8_t kLedCount = 240;
+	const uint16_t kLedCount = 240;
 	// LEDs per ring in the spiral.
 	const uint8_t kLedsPerRing = 21;
 	// LED pin.
@@ -22,7 +22,12 @@ namespace mwam
 
 	// Player One Start Index
 	const uint8_t kPlayerOneStartIndex = 100;
+	// Player One Start Index
 	const uint8_t kPlayerTwoStartIndex = 50;
+	// Max Bullets Live
+	const uint8_t kMaxBulletsLive = 3;
+	// Health Total Per Player
+	const uint8_t kHealthTotal = 3;
 
 	// Piezo Pins
 	const uint8_t kPiezoOnePin = A0;

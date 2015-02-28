@@ -45,39 +45,6 @@ typedef enum EaseType_t {
 // Can switch between an ease in and out by adding / subtracting diff.
 const uint8_t kEaseInOutDiff = EASE_QUAD_OUT - EASE_QUAD_IN;
 
-typedef struct Color_t {
-	uint8_t red;
-	uint8_t green;
-	uint8_t blue;
-
-	// Default Constructor
-	Color_t(uint8_t aRed=0, uint8_t aGreen=0, uint8_t aBlue=0)
-		: red(aRed), green(aGreen), blue(aBlue) {}
-
-	// Assignment Operator
-	Color_t& operator=(const Color_t& aColor) {
-		red = aColor.red;
-		green = aColor.green;
-		blue = aColor.blue;
-		return *this;
-	}
-
-	// Add Operation
-	Color_t operator+(const Color_t& aColor) const {
-		return Color_t(aColor.red + red, aColor.green + green, aColor.blue + blue);
-	}
-
-	// Subtract Operation
-	Color_t operator-(const Color_t& aColor) const {
-		return Color_t(aColor.red - red, aColor.green - green, aColor.blue - blue);
-	}
-
-	// Equality Operation
-	bool operator==(const Color_t& aColor) const {
-		return (aColor.red == red && aColor.green == green && aColor.blue == blue);
-	}
-} Color;
-
 // Anim Events
 typedef enum AnimEvent_t {
 	EVENT_NONE = 0,

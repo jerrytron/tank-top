@@ -15,6 +15,10 @@ void Piezo::initialize(uint8_t aPin, uint32_t aUpdateFreq) {
 	this->active = true;
 }
 
+void Piezo::reset() {
+
+}
+
 void Piezo::updateState() {
 	if (this->active && (_timeElapsed >= _updateFreq)) {
 		_timeElapsed = 0;

@@ -33,6 +33,7 @@ class Joystick
 		/* Public Methods */
 		Joystick();
 		void initialize(uint8_t aPinX, uint8_t aPinY, uint32_t aUpdateFreq);
+		void reset();
 		void updateState();
 		Direction getDirection();
 		JoystickThreshold getThreshold();

@@ -20,6 +20,9 @@ class HardwareManager
 		HardwareManager();
 
 		void initialize(StateController* aStatecontroller);
+		void resetHardware();
+		// Call once per loop, check intervals.
+		void updateIntervalTimers();
 
 		// Accessors
 		LedSet* ledSet();
@@ -28,9 +31,6 @@ class HardwareManager
 		Joystick* joystickTwo();
 		Piezo* piezoOne();
 		Piezo* piezoTwo();
-
-		// Call once per loop, check intervals.
-		void updateIntervalTimers();
 
 		/* Public Variables */
 

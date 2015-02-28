@@ -21,6 +21,15 @@ void HardwareManager::initialize(StateController *aStateController) {
 	initHardware();
 }
 
+void HardwareManager::resetHardware() {
+	_ledSet->resetLeds();
+	_button->reset();
+	_joystickOne->reset();
+	_joystickTwo->reset();
+	_piezoOne->reset();
+	_piezoTwo->reset();
+}
+
 // Calls each setup interval timer.
 void HardwareManager::updateIntervalTimers() {
 	_ledSet->updateState();
@@ -75,8 +84,6 @@ void HardwareManager::initHardware() {
 	// Setup Joystick Two
 	_joystickTwo = new Joystick();
 	_joystickTwo->initialize(kJoystickTwoX, kJoystickTwoY, kIntervalJoystickMillis);
-	// TODO
-	_joystickTwo->active = false;
 
 	// Setup Piezo One
 	_piezoOne = new Piezo();

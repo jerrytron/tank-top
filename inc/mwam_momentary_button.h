@@ -13,7 +13,7 @@ class MomentaryButton
 		/* Public Methods */
 		MomentaryButton();
 		void initialize(uint8_t aBtnPin, uint8_t aLedPin, uint32_t aUpdateFreq);
-		void resetButton();
+		void reset();
 		void updateState();
 		bool pressed();
 		bool wasClicked();

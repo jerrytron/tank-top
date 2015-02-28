@@ -14,6 +14,11 @@ void Joystick::initialize(uint8_t aPinX, uint8_t aPinY, uint32_t aUpdateFreq) {
 	pinMode(_pinX, INPUT);
 	pinMode(_pinY, INPUT);
 	_updateFreq = aUpdateFreq;
+	this->active = true;
+	reset();
+}
+
+void Joystick::reset() {
 	_timeElapsed = 0;
 	_lastX = 0;
 	_lastY = 0;
@@ -21,7 +26,6 @@ void Joystick::initialize(uint8_t aPinX, uint8_t aPinY, uint32_t aUpdateFreq) {
 	_clickUp = false;
 	_direction = (Direction)0;
 	_threshold = JOY_IDLE;
-	this->active = true;
 }
 
 void Joystick::updateState() {

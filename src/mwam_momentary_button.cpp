@@ -18,7 +18,7 @@ void MomentaryButton::initialize(uint8_t aBtnPin, uint8_t aLedPin, uint32_t aUpd
 	pinMode(_ledPin, OUTPUT);
 	//digitalWrite(_btnPin, HIGH);
 	this->active = true;
-	resetButton();
+	reset();
 }
 
 void MomentaryButton::updateState() {
@@ -28,7 +28,7 @@ void MomentaryButton::updateState() {
 	}
 }
 
-void MomentaryButton::resetButton() {
+void MomentaryButton::reset() {
 	_wasOpen = 1;
 	_clicked = false;
 	_clickReported = false;
