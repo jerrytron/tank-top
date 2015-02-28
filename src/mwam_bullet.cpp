@@ -153,6 +153,7 @@ bool Bullet::bounceBullet() {
 		}
 
 		_bouncesLeft--;
+		_timeElapsed = _movementDelay;
 		return true;
 	}
 	return false;
