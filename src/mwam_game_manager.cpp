@@ -176,14 +176,7 @@ void GameManager::playLedTest() {
 }*/
 
 void GameManager::updateAnimations() {
-	if (1) {
-		/*delay(10);
-		for (int16_t i = 0; i < _hardwareManager->ledSet()->ledCount(); ++i) {
-			_hardwareManager->ledSet()->setColor(i, Color(random(0, 256), random(0, 256), random(0, 256)));
-		}*/
-		_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
-		//updateFireStormAnim();
-	}
+	_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
 }
 
 /*void GameManager::updateFireStormAnim() {

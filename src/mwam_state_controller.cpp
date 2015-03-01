@@ -118,11 +118,12 @@ void StateController::loopState(GameState aState) {
 	} else if (aState == STATE_INIT) {
 		changeState(STATE_WAITING);
 	} else if (aState == STATE_WAITING) {
-		//_gameManager->updateAnimations();
+		_gameManager->updateAnimations();
 		if (_hardwareManager->joystickOne()->clickUp()) {
-			//changeState(STATE_PLAY);
+			_hardwareManager->ledSet()->updateLeds(_gameManager->getLevel());
+			changeState(STATE_PLAY);
 		}
-		changeState(STATE_PLAY);
+		//changeState(STATE_PLAY);
 	} else if (aState == STATE_TUTORIAL) {
 
 	} else if (aState == STATE_INTRO) {
