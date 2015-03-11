@@ -84,7 +84,6 @@ void HardwareManager::initHardware() {
 	// Setup Joystick Two
 	_joystickTwo = new Joystick();
 	_joystickTwo->initialize(kJoystickTwoX, kJoystickTwoY, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
-	_joystickTwo->active = false;
 
 	// Setup Piezo One
 	_piezoOne = new Piezo();

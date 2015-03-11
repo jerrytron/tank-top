@@ -72,6 +72,7 @@ bool Joystick::clickUp() {
 void Joystick::updateJoystick() {
 	_lastX = analogRead(_pinX) - kJoystickOffset;
 	_lastY = analogRead(_pinY) - kJoystickOffset;
+	//DEBUG("X: %d, Y: %d", _lastX, _lastY);
 	if (_lastY > kJoystickOffset) {
 		_clickDown = true;
 		_lastY -= kJoystickOffset;

@@ -44,9 +44,92 @@ void LedSet::updateState(Level* aLevel) {
 	}
 }
 
-void LedSet::updateLeds(Level* aLevel) {
+/*void LedSet::updateLeds(Level* aLevel) {
 	for (uint16_t i = 0; i < _ledCount; ++i) {
 		_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+	}
+	_ledSet->show();
+}*/
+
+void LedSet::updateLeds(Level* aLevel) {
+	for (int i = 0; i < _ledCount; ++i) {
+		_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+		if (_leds[i].state == LED_DELAY) {
+			if (_leds[i].elapsedTime >= _leds[i].anim.delayTime) {
+				_leds[i].elapsedTime = 0;
+				_leds[i].state = LED_ANIMATING;
+			}
+		/*} else if (_leds[i].state == LED_REPEAT_DELAY) {
+			if (_leds[i].elapsedTime >= _leds[i].anim.repeatDelay) {
+				_leds[i].elapsedTime = 0;
+				_leds[i].state = LED_ANIMATING;
+			}*/
+		} else if (_leds[i].state == LED_ANIMATING) {
+			//if (!_leds[i].paused) {
+				bool result = false;
+				_leds[i].anim.currentColor = calculateEase(_leds[i].anim.ease, _leds[i].elapsedTime,
+				                                           _leds[i].anim.tweenTime, _leds[i].anim.startColor,
+				                                           _leds[i].anim.endColor, result);
+				uint32_t colorVal = 0;
+				if (_leds[i].elapsedTime >= _leds[i].anim.tweenTime) {
+					colorVal = _ledSet->Color(_leds[i].anim.endColor.red, _leds[i].anim.endColor.green, _leds[i].anim.endColor.blue);
+					_ledSet->setPixelColor(i, colorVal);
+					_leds[i].elapsedTime = 0;
+					if (_leds[i].anim.repeats > 0) {
+						// Decrement number of repeats.
+						_leds[i].anim.repeats--;
+						// Yoyo reverses the animation.
+						if (_leds[i].anim.yoyo) {
+							// Swap start and end colors.
+							Color endColor = _leds[i].anim.startColor;
+							_leds[i].anim.startColor = _leds[i].anim.endColor;
+							_leds[i].anim.endColor = endColor;
+							// Reverse the ease.
+							if ((_leds[i].anim.ease >= EASE_QUAD_IN) &&
+							    (_leds[i].anim.ease <= EASE_CIRCULAR_IN)) {
+								_leds[i].anim.ease = (EaseType)(_leds[i].anim.ease + kEaseInOutDiff);
+							} else if ((_leds[i].anim.ease >= EASE_QUAD_OUT) &&
+							    (_leds[i].anim.ease <= EASE_CIRCULAR_OUT)) {
+								_leds[i].anim.ease = (EaseType)(_leds[i].anim.ease - kEaseInOutDiff);
+							}
+						}
+						// Check if there is a delay before the repeat.
+						/*if (_leds[i].anim.repeatDelay) {
+							_leds[i].state = LED_REPEAT_DELAY;
+							_leds[i].doneEvent = EVENT_DONE;
+						}*/
+					} else {
+						_leds[i].anim.startColor = _leds[i].anim.endColor;
+						_leds[i].doneEvent = EVENT_ALL_DONE;
+
+						/*if (_leds[i].seriesLength > 0) {
+							_leds[i].seriesIndex++;
+							if (_leds[i].seriesIndex < _leds[i].seriesLength) {
+								animateLed(i, _leds[i].series[_leds[i].seriesIndex]);
+							} else {
+								if (_leds[i].seriesRepeats > 0) {
+									// Decrement number of repeats.
+									_leds[i].seriesRepeats--;
+									_leds[i].seriesIndex = 0;
+									animateLed(i, _leds[i].series[_leds[i].seriesIndex], _leds[i].seriesFromCurrentColor);
+								} else {
+									_leds[i] = Led();
+									_leds[i].doneEvent = EVENT_SERIES_DONE;
+									checkIfAllAnimsDone();
+								}
+							}
+						} else {*/
+							_leds[i].state = LED_IDLE;
+							checkIfAllAnimsDone();
+						//}
+					}
+				} else {
+					colorVal = _ledSet->Color(_leds[i].anim.currentColor.red, _leds[i].anim.currentColor.green, _leds[i].anim.currentColor.blue);
+					_ledSet->setPixelColor(i, colorVal);
+				}
+			//}
+		} else if (_leds[i].state == LED_IDLE) {
+		}
 	}
 	_ledSet->show();
 }
@@ -164,7 +247,7 @@ bool LedSet::allAnimsDone() {
 	}
 }*/
 
-void LedSet::pauseAnim(uint16_t aLedIndex) {
+/*void LedSet::pauseAnim(uint16_t aLedIndex) {
 	if (aLedIndex < _ledCount) {
 		if (!_leds[aLedIndex].paused) {
 			_leds[aLedIndex].paused = true;
@@ -193,7 +276,7 @@ void LedSet::resumeAllAnims() {
 	for (int i = 0; i < _ledCount; ++i) {
 		resumeAnim(i);
 	}
-}
+}*/
 
 void LedSet::restartAnim(uint16_t aLedIndex, bool aWithDelay) {
 	if (aLedIndex < _ledCount) {
@@ -263,14 +346,14 @@ void LedSet::animateLed(uint16_t aLedIndex, Animation aAnimation, bool aFromCurr
 	}
 }
 
-void LedSet::animateSeries(uint16_t aLedIndex, Animation aAnims[], uint8_t aLength, uint16_t aRepeats, bool aFromCurrentColor) {
+/*void LedSet::animateSeries(uint16_t aLedIndex, Animation aAnims[], uint8_t aLength, uint16_t aRepeats, bool aFromCurrentColor) {
 	_leds[aLedIndex].series = aAnims;
 	_leds[aLedIndex].seriesLength = aLength;
 	_leds[aLedIndex].seriesIndex = 0;
 	_leds[aLedIndex].seriesRepeats = aRepeats;
 	_leds[aLedIndex].seriesFromCurrentColor = aFromCurrentColor;
 	animateLed(aLedIndex, _leds[aLedIndex].series[0], aFromCurrentColor);
-}
+}*/
 
 void LedSet::animateSet(uint16_t aLedIndexes[], Animation aAnims[], uint8_t aLength, uint32_t aDelayBetween, bool aFromCurrentColor) {
 	for (int8_t i = 0; i < aLength; ++i) {
@@ -482,88 +565,6 @@ void LedSet::updateLedsFast(Level* aLevel) {
 
 	_ledSet->show();
 }
-
-/*void LedSet::updateLeds() {
-	for (int i = 0; i < _ledCount; ++i) {
-		if (_leds[i].state == LED_DELAY) {
-			if (_leds[i].elapsedTime >= _leds[i].anim.delayTime) {
-				_leds[i].elapsedTime = 0;
-				_leds[i].state = LED_ANIMATING;
-			}
-		} else if (_leds[i].state == LED_REPEAT_DELAY) {
-			if (_leds[i].elapsedTime >= _leds[i].anim.repeatDelay) {
-				_leds[i].elapsedTime = 0;
-				_leds[i].state = LED_ANIMATING;
-			}
-		} else if (_leds[i].state == LED_ANIMATING) {
-			if (!_leds[i].paused) {
-				bool result = false;
-				_leds[i].anim.currentColor = calculateEase(_leds[i].anim.ease, _leds[i].elapsedTime,
-				                                           _leds[i].anim.tweenTime, _leds[i].anim.startColor,
-				                                           _leds[i].anim.endColor, result);
-				uint32_t colorVal = 0;
-				if (_leds[i].elapsedTime >= _leds[i].anim.tweenTime) {
-					colorVal = _ledSet->Color(_leds[i].anim.endColor.red, _leds[i].anim.endColor.green, _leds[i].anim.endColor.blue);
-					_ledSet->setPixelColor(i, colorVal);
-					_leds[i].elapsedTime = 0;
-					if (_leds[i].anim.repeats > 0) {
-						// Decrement number of repeats.
-						_leds[i].anim.repeats--;
-						// Yoyo reverses the animation.
-						if (_leds[i].anim.yoyo) {
-							// Swap start and end colors.
-							Color endColor = _leds[i].anim.startColor;
-							_leds[i].anim.startColor = _leds[i].anim.endColor;
-							_leds[i].anim.endColor = endColor;
-							// Reverse the ease.
-							if ((_leds[i].anim.ease >= EASE_QUAD_IN) &&
-							    (_leds[i].anim.ease <= EASE_CIRCULAR_IN)) {
-								_leds[i].anim.ease = (EaseType)(_leds[i].anim.ease + kEaseInOutDiff);
-							} else if ((_leds[i].anim.ease >= EASE_QUAD_OUT) &&
-							    (_leds[i].anim.ease <= EASE_CIRCULAR_OUT)) {
-								_leds[i].anim.ease = (EaseType)(_leds[i].anim.ease - kEaseInOutDiff);
-							}
-						}
-						// Check if there is a delay before the repeat.
-						if (_leds[i].anim.repeatDelay) {
-							_leds[i].state = LED_REPEAT_DELAY;
-							_leds[i].doneEvent = EVENT_DONE;
-						}
-					} else {
-						_leds[i].anim.startColor = _leds[i].anim.endColor;
-						_leds[i].doneEvent = EVENT_ALL_DONE;
-
-						if (_leds[i].seriesLength > 0) {
-							_leds[i].seriesIndex++;
-							if (_leds[i].seriesIndex < _leds[i].seriesLength) {
-								animateLed(i, _leds[i].series[_leds[i].seriesIndex]);
-							} else {
-								if (_leds[i].seriesRepeats > 0) {
-									// Decrement number of repeats.
-									_leds[i].seriesRepeats--;
-									_leds[i].seriesIndex = 0;
-									animateLed(i, _leds[i].series[_leds[i].seriesIndex], _leds[i].seriesFromCurrentColor);
-								} else {
-									_leds[i] = Led();
-									_leds[i].doneEvent = EVENT_SERIES_DONE;
-									checkIfAllAnimsDone();
-								}
-							}
-						} else {
-							_leds[i].state = LED_IDLE;
-							checkIfAllAnimsDone();
-						}
-					}
-				} else {
-					colorVal = _ledSet->Color(_leds[i].anim.currentColor.red, _leds[i].anim.currentColor.green, _leds[i].anim.currentColor.blue);
-					_ledSet->setPixelColor(i, colorVal);
-				}
-			}
-		} else if (_leds[i].state == LED_IDLE) {
-		}
-	}
-	_ledSet->show();
-}*/
 
 void LedSet::checkIfAllAnimsDone() {
 	for (uint16_t i = 0; i < _ledCount; ++i) {

@@ -23,7 +23,7 @@ void GameManager::initialize(StateController *aStateController) {
 	_tankTwo = new Tank();
 	_tankTwo->initialize(TANK_TWO, _level, kPlayerTwoStartIndex, kIntervalPlayerDelayMillis);
 
-	_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
+	//_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
 }
 
 void GameManager::reset() {
@@ -49,19 +49,38 @@ void GameManager::updatePlay() {
 		DEBUG("Change theme!");
 		_level->nextTheme();
 	}
-
-	Direction dir = _hardwareManager->joystickOne()->getDirection();
-	JoystickThreshold threshold = _hardwareManager->joystickOne()->getThreshold();
-	if (dir) {
-		//DEBUG("Tank: %d", _tankOne->getIndex());
-		uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
-		if (_hardwareManager->joystickOne()->clickDown()) {
-			movementDelay = 0;
+	Direction dir;
+	JoystickThreshold threshold;
+	TankState state = _tankOne->getState();
+	if (state == TANK_DESTROYED) {
+		DEBUG("DESTROYED!");
+		Animation a;
+		a.endColor = kColorRed;
+		a.yoyo = true;
+		a.repeats = 1;
+		a.ease = EASE_QUAD_IN_OUT;
+		a.tweenTime = 1000;
+		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex(), a, false);
+		a.delayTime = 250;
+		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagUpLeft, a, false);
+		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagUpRight, a, false);
+		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() - kLedDiagDownLeft, a, false);
+		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() - kLedDiagDownRight, a, false);
+		_tankOne->setState(TANK_WAITING);
+	} else if (state == TANK_ACTIVE) {
+		dir = _hardwareManager->joystickOne()->getDirection();
+		threshold = _hardwareManager->joystickOne()->getThreshold();
+		if (dir) {
+			//DEBUG("Tank: %d", _tankOne->getIndex());
+			uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
+			if (_hardwareManager->joystickOne()->clickDown()) {
+				movementDelay = 0;
+			}
+			_tankOne->updateState(dir, movementDelay);
 		}
-		_tankOne->updateState(dir, movementDelay);
-	}
-	if (_hardwareManager->joystickOne()->clickUp()) {
-		_tankOne->fireBullet();
+		if (_hardwareManager->joystickOne()->clickUp()) {
+			_tankOne->fireBullet();
+		}
 	}
 	_tankOne->updateBullets();
 

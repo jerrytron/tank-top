@@ -62,9 +62,36 @@ typedef enum AnimEvent_t {
 } AnimEvent;
 
 typedef struct Animation_t {
-	uint32_t tweenTime = 0; // In millis.
+	uint16_t tweenTime = 0; // In millis.
+	uint16_t delayTime = 0; // In millis.
+	//uint16_t repeatDelay = 0; // In millis;
+	Color startColor = Color(0, 0, 0);
+	Color currentColor = Color(0, 0, 0);
+	Color endColor = Color(0, 0, 0);
+	EaseType ease = EASE_LINEAR;
+	uint8_t repeats = 0;
+	bool repeatForever = false;
+	bool yoyo = false;
+} Animation;
+
+typedef struct Led2_t {
+	Animation anim;
+	//Animation* series;
+	//uint8_t seriesLength = 0;
+	//uint8_t seriesIndex = 0;
+	//uint16_t seriesRepeats = 0;
+	//bool seriesFromCurrentColor = false;
+	ElapsedMillis elapsedTime = 0;
+	LedState state = LED_IDLE;
+	AnimEvent doneEvent = EVENT_NONE;
+	//bool paused = false;
+	//unsigned long pauseTime = 0;
+} Led;
+
+/*typedef struct Animation_t {
+	uint16_t tweenTime = 0; // In millis.
 	uint32_t delayTime = 0; // In millis.
-	uint32_t repeatDelay = 0; // In millis;
+	uint16_t repeatDelay = 0; // In millis;
 	Color startColor = Color(0, 0, 0);
 	Color currentColor = Color(0, 0, 0);
 	Color endColor = Color(0, 0, 0);
@@ -86,7 +113,7 @@ typedef struct Led_t {
 	AnimEvent doneEvent = EVENT_NONE;
 	bool paused = false;
 	unsigned long pauseTime = 0;
-} Led;
+} Led;*/
 
 /*typedef struct LedCallbacks_t {
 	void (*animStart)(uint8_t aLedIndex);
@@ -121,15 +148,15 @@ class LedSet
 		LedState getLedState(uint16_t aLedIndex);
 		bool allLedsIdle();
 		bool allAnimsDone();
-		void pauseAnim(uint16_t aLedIndex);
-		void pauseAllAnims();
-		void resumeAnim(uint16_t aLedIndex);
-		void resumeAllAnims();
+		//void pauseAnim(uint16_t aLedIndex);
+		//void pauseAllAnims();
+		//void resumeAnim(uint16_t aLedIndex);
+		//void resumeAllAnims();
 		void restartAnim(uint16_t aLedIndex, bool aWithDelay = false);
 		void killAnim(uint16_t aLedIndex);
 		void killAllAnims();
 		void animateLed(uint16_t aLedIndex, Animation aAnimation, bool aFromCurrentColor = false);
-		void animateSeries(uint16_t aLedIndex, Animation aAnims[], uint8_t aLength, uint16_t aRepeat, bool aFromCurrentColor = false);
+		//void animateSeries(uint16_t aLedIndex, Animation aAnims[], uint8_t aLength, uint16_t aRepeat, bool aFromCurrentColor = false);
 		void animateSet(uint16_t aLedIndexes[], Animation aAnims[], uint8_t aLength, uint32_t aDelayBetween, bool aFromCurrentColor = false);
 		void animateSet(uint16_t aLedIndexes[], Animation aAnim, uint8_t aLength, uint32_t aDelayBetween, bool aFromCurrentColor = false);
 		void animateRange(uint16_t aLowIndex, uint16_t aHighIndex, Animation aAnim, bool aCountUp, uint32_t aDelayBetween, bool aFromCurrentColor = false);
@@ -173,7 +200,8 @@ class LedSet
 		uint32_t _updateFreq;
 		AnimEvent _doneEvent;
 		Adafruit_NeoPixel* _ledSet;
-		Led* _leds;
+		//Led* _leds;
+		Led _leds[kLedCount];
 		uint16_t _ledCount;
 		bool _fastUpdates;
 		Level* _level;

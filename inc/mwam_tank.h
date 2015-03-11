@@ -17,6 +17,16 @@ typedef enum TankNumber_t {
 	TANK_TWO
 } TankNumber;
 
+typedef enum TankState_t {
+	TANK_WAITING = 0,
+	TANK_READY,
+	TANK_ACTIVE,
+	TANK_INVULNERABLE,
+	TANK_HIT,
+	TANK_DESTROYED,
+	TANK_BURNING
+} TankState;
+
 class Tank
 {
 	public:
@@ -28,6 +38,8 @@ class Tank
 		void updateBullets();
 		bool fireBullet();
 
+		TankState getState();
+		void setState(TankState aState);
 		TankNumber getTankNumber();
 		uint16_t getIndex();
 		void setIndex(uint16_t aIndex);
@@ -52,8 +64,8 @@ class Tank
 		Level* _level;
 		Direction _direction;
 		uint32_t _movementFreq;
+		TankState _tankState;
 		TankNumber _tankNumber;
-
 		uint16_t _startIndex;
 		uint16_t _index;
 		uint16_t _lastIndex;

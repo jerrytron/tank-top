@@ -21,14 +21,14 @@ namespace mwam
 	const uint8_t kLedBrightness = 200;
 
 	// Base delay for player movement.
-	const uint16_t kIntervalPlayerDelayMillis = 500;
+	const uint16_t kIntervalPlayerDelayMillis = 400;
 	// Amount to reduce player speed delay for increased speed levels.
 	const uint16_t kIntervalPlayerSpeedMillis = 125;
 
 	// Player One Start Index
-	const uint8_t kPlayerOneStartIndex = 126;
+	const uint8_t kPlayerOneStartIndex = 123;
 	// Player One Start Index
-	const uint8_t kPlayerTwoStartIndex = 137;
+	const uint8_t kPlayerTwoStartIndex = 134;
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
 	// Max Bullet Bounces
@@ -43,8 +43,8 @@ namespace mwam
 	const uint8_t kPiezoTwoPin = A1;
 
 	// Button Pins
-	const uint8_t kButtonPin = D4;
-	const uint8_t kButtonLedPin = D3;
+	const uint8_t kButtonPin = D3;
+	const uint8_t kButtonLedPin = D2;
 
 	// Joystick Pins
 	const uint8_t kJoystickOneX = A3;

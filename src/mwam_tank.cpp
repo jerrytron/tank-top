@@ -18,8 +18,10 @@ void Tank::initialize(TankNumber aTankNum, Level* aLevel, uint8_t aStartIndex, u
 }
 
 void Tank::reset() {
+	_tankState = TANK_ACTIVE;
 	_index = _startIndex;
 	_lastIndex = 0;
+	//_level->setTankAtIndex(this);
 	_overlap = TILE_BACKGROUND;
 	_lastOverlap = TILE_BACKGROUND;
 	_direction = DIR_DOWN_LEFT;
@@ -40,8 +42,9 @@ void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 		_timeElapsed = 0;
 
 		if (_health == 0) {
-			_health = kHealthTotal;
+			//_health = kHealthTotal;
 			DEBUG("Tank destroyed!");
+			_tankState = TANK_BURNING;
 			return;
 		}
 
@@ -67,6 +70,7 @@ void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 		if (_overlap == TILE_BULLET) {
 			// TODO: DESTROY!!!!
 			DEBUG("Ran into bullet!");
+			_tankState = TANK_DESTROYED;
 			_health--;
 		}
 
@@ -79,6 +83,7 @@ void Tank::updateBullets() {
 		if (_bullets[i].collided) {
 			DEBUG("Bullet hit tank!");
 			_bullets[i].collided = false;
+			_tankState = TANK_DESTROYED;
 			_health--;
 		}
 		if (_bullets[i].endOfLife) {
@@ -112,6 +117,14 @@ bool Tank::fireBullet() {
 		return true;
 	}
 	return false;
+}
+
+TankState Tank::getState() {
+	return _tankState;
+}
+
+void Tank::setState(TankState aState) {
+	_tankState = aState;
 }
 
 TankNumber Tank::getTankNumber() {
