@@ -22,7 +22,7 @@ void HardwareManager::initialize(StateController *aStateController) {
 }
 
 void HardwareManager::resetHardware() {
-	_ledSet->resetLeds();
+	//_ledSet->resetLeds();
 	_button->reset();
 	_joystickOne->reset();
 	_joystickTwo->reset();
@@ -80,6 +80,7 @@ void HardwareManager::initHardware() {
 	// Setup Joystick One
 	_joystickOne = new Joystick();
 	_joystickOne->initialize(kJoystickOneX, kJoystickOneY, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
+	//_joystickOne->active = false;
 
 	// Setup Joystick Two
 	_joystickTwo = new Joystick();

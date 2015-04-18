@@ -84,7 +84,7 @@ void Joystick::updateJoystick() {
 		}
 		_clickDown = false;
 	}
-	//DEBUG("X: %d, Y: %d, Clicked: %s", _lastX, _lastY, (_clicked ? "yes" : "no"));
+	//DEBUG("X: %d, Y: %d, Clicked: %s", _lastX, _lastY, (_clickDown ? "yes" : "no"));
 	updateDirections(_lastX, _lastY);
 }
 

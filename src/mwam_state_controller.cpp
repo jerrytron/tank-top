@@ -28,7 +28,7 @@ void StateController::initialize() {
 	_state = STATE_BOOTING;
 	initState(_state);
 
-	_toneTests = new ToneTests();
+	//_toneTests = new ToneTests();
 }
 
 GameState StateController::getState() {
