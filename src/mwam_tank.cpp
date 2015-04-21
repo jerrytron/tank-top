@@ -109,8 +109,6 @@ bool Tank::fireBullet() {
 				_bullets[i].reset(_turretIndex, _direction);
 				_bullets[i].active = true;
 				break;
-			} else {
-				DEBUG("Don't fire...");
 			}
 		}
 		_bulletCount++;
