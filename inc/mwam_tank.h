@@ -10,7 +10,7 @@
 namespace mwam
 {
 
-class Level;
+class GameManager;
 
 typedef enum TankNumber_t {
 	TANK_ONE = 1,
@@ -32,7 +32,7 @@ class Tank
 	public:
 		/* Public Methods */
 		Tank();
-		void initialize(TankNumber aTankNum, Level* aLevel, uint8_t aStartIndex, uint32_t aMovementFreq);
+		void initialize(TankNumber aTankNum, uint8_t aStartIndex, uint32_t aMovementFreq);
 		void reset();
 		void updateState(Direction aDirection, uint16_t aDelayReduction);
 		void updateBullets();
@@ -61,7 +61,7 @@ class Tank
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;
-		Level* _level;
+		GameManager* _gameManager;
 		Direction _direction;
 		uint32_t _movementFreq;
 		TankState _tankState;

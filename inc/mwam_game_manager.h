@@ -36,6 +36,8 @@ class GameManager
 		//void updateFireStormAnim();
 
 		Level* getLevel();
+		Tank* getTankOne();
+		Tank* getTankTwo();
 
 		/* Animation Accessors */
 

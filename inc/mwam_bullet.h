@@ -9,12 +9,14 @@
 namespace mwam
 {
 
+class GameManager;
+
 class Bullet
 {
 	public:
 		/* Public Methods */
 		Bullet();
-		void initialize(Level* aLevel, uint32_t aMovementDelay);
+		void initialize(uint32_t aMovementDelay);
 		void reset(uint16_t aIndex, Direction aDir);
 		void updateState();
 
@@ -35,8 +37,8 @@ class Bullet
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;
+		GameManager* _gameManager;
 		uint32_t _movementDelay;
-		Level* _level;
 		uint16_t _index;
 		uint16_t _lastIndex;
 		Direction _direction;

@@ -37,6 +37,10 @@ namespace mwam
 	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player
 	const uint8_t kHealthTotal = 3;
+	// Do turrets count as obstacles.
+	const bool kTurretCollision = true;
+	// Can you get hurt by your own bullets?
+	const bool kFriendlyFire = true;
 
 	// Piezo Pins
 	const uint8_t kPiezoOnePin = A0;

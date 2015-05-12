@@ -1,6 +1,10 @@
 #ifndef FINITE_STATE_MACHINE_H
 #define FINITE_STATE_MACHINE_H
 
+#ifdef SPARK
+#include "application.h"
+#endif
+
 class State
 {
 	public:
@@ -36,7 +40,7 @@ class FiniteStateMachine {
 		State& getCurrentState();
 		bool isInState(State& aState) const;
 
-		unsigned long timeInCurrentState();
+		uint32_t timeInCurrentState();
 
 		/* Public Variables */
 
@@ -45,7 +49,7 @@ class FiniteStateMachine {
 		bool _triggerEnter;
 		State* _currentState;
 		State* _nextState;
-		unsigned long _stateChangeTime;
+		uint32_t _stateChangeTime;
 };
 
 #endif

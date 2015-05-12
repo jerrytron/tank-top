@@ -2,7 +2,7 @@
 * @Author: jerrytron
 * @Date:   2015-04-21 20:11:51
 * @Last Modified by:   jerrytron
-* @Last Modified time: 2015-05-09 12:15:50
+* @Last Modified time: 2015-05-11 20:13:07
 */
 
 #include "FiniteStateMachine.h"
@@ -87,6 +87,6 @@ bool FiniteStateMachine::isInState(State &aState) const {
 	}
 }
 
-unsigned long FiniteStateMachine::timeInCurrentState() {
-	millis() - _stateChangeTime;
+uint32_t FiniteStateMachine::timeInCurrentState() {
+	return (millis() - _stateChangeTime);
 }

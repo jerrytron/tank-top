@@ -1,4 +1,5 @@
 #include "mwam_bullet.h"
+#include "mwam_manager.h"
 
 namespace mwam
 {
@@ -8,8 +9,8 @@ namespace mwam
 Bullet::Bullet() {
 }
 
-void Bullet::initialize(Level* aLevel, uint32_t aMovementDelay) {
-	_level = aLevel;
+void Bullet::initialize(uint32_t aMovementDelay) {
+	_gameManager = Manager::getInstance().gameManager;
 	_movementDelay = aMovementDelay;
 	_timeElapsed = 0;
 	reset(0, DIR_NONE);
@@ -19,8 +20,8 @@ void Bullet::reset(uint16_t aIndex, Direction aDir) {
 	_index = aIndex;
 	_lastIndex = aIndex;
 	_direction = aDir;
-	_overlapTile = _level->getTileAtIndex(aIndex);
-	_lastOverlapTile = TILE_BACKGROUND;
+	//_overlapTile = _level->getTileAtIndex(aIndex);
+	//_lastOverlapTile = TILE_BACKGROUND;
 	_bouncesLeft = kMaxBulletBounces;
 	this->collided = false;
 	this->endOfLife = false;
@@ -32,7 +33,7 @@ void Bullet::updateState() {
 		_timeElapsed = 0;
 		_lastIndex = _index;
 		_lastOverlapTile = _overlapTile;
-		_index = _level->getNewPosition(_index, _direction, _overlapTile);
+		_index = _gameManager->getLevel()->getNewPosition(_index, _direction, _overlapTile);
 		if (_overlapTile == TILE_BULLET) {
 			_overlapTile = _lastOverlapTile;
 			if (_lastOverlapTile == TILE_BULLET) {
@@ -49,8 +50,8 @@ void Bullet::updateState() {
 			this->collided = true;
 			this->endOfLife = true;
 		} else {
-			_level->setTileAtIndex(_lastOverlapTile, _lastIndex);
-			_level->setTileAtIndex(TILE_BULLET, _index);
+			_gameManager->getLevel()->setTileAtIndex(_lastOverlapTile, _lastIndex);
+			_gameManager->getLevel()->setTileAtIndex(TILE_BULLET, _index);
 		}
 	}
 }
@@ -115,7 +116,7 @@ bool Bullet::bounceBullet() {
 		}
 
 		TileType collisionTile = TILE_BACKGROUND;
-		_level->getNewPosition(_index, _direction, collisionTile);
+		_gameManager->getLevel()->getNewPosition(_index, _direction, collisionTile);
 		bool collision = false;
 		if ((collisionTile == TILE_BOUNDARY) || (collisionTile == TILE_WALL)) {
 			collision = true;

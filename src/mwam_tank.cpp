@@ -1,4 +1,5 @@
 #include "mwam_tank.h"
+#include "mwam_manager.h"
 
 namespace mwam
 {
@@ -8,9 +9,9 @@ namespace mwam
 Tank::Tank() {
 }
 
-void Tank::initialize(TankNumber aTankNum, Level* aLevel, uint8_t aStartIndex, uint32_t aMovementFreq) {
+void Tank::initialize(TankNumber aTankNum, uint8_t aStartIndex, uint32_t aMovementFreq) {
+	_gameManager = Manager::getInstance().gameManager;
 	_tankNumber = aTankNum;
-	_level = aLevel;
 	_startIndex = aStartIndex;
 	//_movementFreq = aMovementFreq;
 	reset();
@@ -32,13 +33,13 @@ void Tank::reset() {
 	_health = kHealthTotal;
 	_bulletCount = 0;
 	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
-		_bullets[i].initialize(_level, kBulletMovementDelay);
+		_bullets[i].initialize(kBulletMovementDelay);
 		_bullets[i].endOfLife = true;
 	}
 }
 
 void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
-	if (this->active && (_timeElapsed >= aMovementFreq)) {
+	if (_timeElapsed >= aMovementFreq) {
 		_timeElapsed = 0;
 
 		if (_health == 0) {
@@ -53,16 +54,28 @@ void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 		}
 		_direction = aDirection;
 		//TileType collisionTile = TILE_BACKGROUND;
-		_lastIndex = _index;
-		_lastOverlap = _overlap;
-		_index = _level->getNewPosition(_index, _direction, _overlap);
+		//_lastIndex = _index;
+		//_lastOverlap = _overlap;
+
+		TileType tile;
+		uint16_t index = _gameManager->getLevel()->getNewPosition(_index, _direction, tile);
+		DEBUG("Index: %d", index);
+
+		if (tile == TILE_BACKGROUND) {
+
+
+		    //_lastTurretIndex = _turretIndex;
+			_turretIndex = findTurretIndex();
+			_gameManager->getLevel()->setTankAtIndex(this);
+		}
+
 		DEBUG("Tank Overlap: %d", _overlap);
 		if ((_overlap == TILE_BACKGROUND) || (_overlap == TILE_BULLET) ||
 		    (_overlap == TILE_TURRET_ONE) || (_overlap == TILE_TURRET_TWO)) {
 			DEBUG("Tank Index: %d", _index);
 			_lastTurretIndex = _turretIndex;
 			_turretIndex = findTurretIndex();
-			_level->setTankAtIndex(this);
+			_gameManager->getLevel()->setTankAtIndex(this);
 		} else if ((_overlap == TILE_WALL) || (_overlap == TILE_TANK_ONE) ||
 		    (_overlap == TILE_TANK_TWO)) {
 			_index = _lastIndex;
@@ -87,7 +100,7 @@ void Tank::updateBullets() {
 			_health--;
 		}
 		if (_bullets[i].endOfLife) {
-			_level->setTileAtIndex(_bullets[i].getOverlapTile(), _bullets[i].getIndex());
+			_gameManager->getLevel()->setTileAtIndex(_bullets[i].getOverlapTile(), _bullets[i].getIndex());
 			_bullets[i].endOfLife = false;
 			_bullets[i].active = false;
 			if (_bulletCount > 0) {
@@ -176,7 +189,7 @@ uint16_t Tank::findTurretIndex() {
 	Direction tryDir = _direction;
 	bool searching = true;
 	while (searching) {
-		index = _level->getNewPosition(_index, tryDir, collisionTile);
+		index = _gameManager->getLevel()->getNewPosition(_index, tryDir, collisionTile);
 		if ((collisionTile == TILE_BOUNDARY) || (collisionTile == TILE_WALL)) {
 			if (tryDir == DIR_DOWN_LEFT) {
 				tryDir = DIR_UP_LEFT;
@@ -197,7 +210,7 @@ uint16_t Tank::findTurretIndex() {
 	    (_turretOverlap != TILE_TANK_ONE) && (_turretOverlap != TILE_TANK_TWO)) {
 		_lastTurretOverlap = _turretOverlap;
 	}
-	_turretOverlap = _level->getTileAtIndex(index);
+	_turretOverlap = _gameManager->getLevel()->getTileAtIndex(index);
 	return index;
 }
 
