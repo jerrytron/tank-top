@@ -13,7 +13,7 @@ struct GameStateStr_t {
 	{ STATE_INIT, "init" },
 	{ STATE_WAITING, "waiting" },
 	{ STATE_TUTORIAL, "tutorial" },
-	{ STATE_INTRO, "intro" },
+	{ STATE_SELECT, "select" },
 	{ STATE_PLAY, "play" },
 	{ STATE_GAME_OVER, "game_over" },
 	{ STATE_GAME_WON, "game_won" }
@@ -68,14 +68,13 @@ void StateController::initState(GameState aState) {
 			Spark.syncTime();
 		}
 	} else if (aState == STATE_WAITING) {
-		//_toneTests->startTestMario();
-		//_gameManager->playLedTest();
-		//_gameManager->playFireStormAnim();
+		//_hardwareManager->ledSet()->updateLeds(_gameManager->getLevel());
 	} else if (aState == STATE_TUTORIAL) {
 
-	} else if (aState == STATE_INTRO) {
+	} else if (aState == STATE_SELECT) {
 		_seed = millis();
 		randomSeed(_seed);
+		_gameManager->initSelect();
 	} else if (aState == STATE_PLAY) {
 
 	} else if (aState == STATE_GAME_OVER) {
@@ -118,17 +117,15 @@ void StateController::loopState(GameState aState) {
 	} else if (aState == STATE_INIT) {
 		changeState(STATE_WAITING);
 	} else if (aState == STATE_WAITING) {
-		_gameManager->updateAnimations();
+		//_gameManager->updateWaiting();
+		changeState(STATE_SELECT);
+
 		//if (_hardwareManager->joystickOne()->clickUp()) {
 		//if (_hardwareManager->button()->wasClicked()) {
-			_hardwareManager->ledSet()->updateLeds(_gameManager->getLevel());
-			changeState(STATE_PLAY);
-		//}
-		//changeState(STATE_PLAY);
 	} else if (aState == STATE_TUTORIAL) {
 
-	} else if (aState == STATE_INTRO) {
-
+	} else if (aState == STATE_SELECT) {
+		_gameManager->updateSelect();
 	} else if (aState == STATE_PLAY) {
 		_gameManager->updatePlay();
 	} else if (aState == STATE_GAME_OVER) {
@@ -154,7 +151,7 @@ void StateController::endState(GameState aState) {
 
 	} else if (aState == STATE_TUTORIAL) {
 
-	} else if (aState == STATE_INTRO) {
+	} else if (aState == STATE_SELECT) {
 
 	} else if (aState == STATE_PLAY) {
 

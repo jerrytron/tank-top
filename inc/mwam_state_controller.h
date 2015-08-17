@@ -8,20 +8,6 @@
 namespace mwam
 {
 
-// Game States
-typedef enum GameState_t {
-	STATE_NONE = 0,
-	STATE_ERROR,
-	STATE_BOOTING,
-	STATE_INIT,
-	STATE_WAITING,
-	STATE_TUTORIAL,
-	STATE_INTRO,
-	STATE_PLAY,
-	STATE_GAME_OVER,
-	STATE_GAME_WON,
-} GameState;
-
 class DataManager;
 class GameManager;
 class HardwareManager;

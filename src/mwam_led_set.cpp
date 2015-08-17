@@ -36,11 +36,11 @@ void LedSet::initialize(uint16_t aLedCount, uint8_t aLedPin, uint8_t aLedType, u
 void LedSet::updateState(Level* aLevel) {
 	if (this->active && (_timeElapsed >= _updateFreq)) {
 		_timeElapsed = 0;
-		if (_fastUpdates) {
-			updateLedsFast(aLevel);
-		} else {
+		//if (_fastUpdates) {
+		//	updateLedsFast(aLevel);
+		//} else {
 			updateLeds(aLevel);
-		}
+		//}
 	}
 }
 
@@ -529,7 +529,7 @@ float LedSet::easeCircularInOut(float aCurrentFrame, float aEndFrame, float aSta
 /* Private Methods */
 
 // TODO
-void LedSet::updateLedsFast(Level* aLevel) {
+/*void LedSet::updateLedsFast(Level* aLevel) {
 	//DEBUG("Old index: %d, Index: %d", _tankOne->getLastIndex(), _tankOne->getIndex());
 	if (_tankOne->getLastIndex() != _tankOne->getIndex()) {
 		_ledSet->setPixelColor(_tankOne->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getLastIndex()));
@@ -564,7 +564,7 @@ void LedSet::updateLedsFast(Level* aLevel) {
 	}
 
 	_ledSet->show();
-}
+}*/
 
 void LedSet::checkIfAllAnimsDone() {
 	for (uint16_t i = 0; i < _ledCount; ++i) {

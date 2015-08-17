@@ -40,7 +40,7 @@ class Joystick
 	public:
 		/* Public Methods */
 		Joystick();
-		void initialize(uint8_t aPinX, uint8_t aPinY, DirectionSet aDirSet, uint32_t aUpdateFreq = 0);
+		void initialize(uint8_t aPinX, uint8_t aPinY, uint8_t aPinBtn, DirectionSet aDirSet, uint32_t aUpdateFreq = 0);
 		void reset();
 		void updateState();
 		Direction getDirection();
@@ -61,8 +61,10 @@ class Joystick
 		uint32_t _updateFreq;
 		uint8_t _pinX;
 		uint8_t _pinY;
+		uint8_t _pinBtn;
 		int16_t _lastX;
 		int16_t _lastY;
+		uint8_t _lastBtn;
 		bool _clickDown;
 		bool _clickUp;
 		DirectionSet _dirSet;

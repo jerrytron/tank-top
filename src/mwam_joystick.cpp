@@ -8,11 +8,13 @@ namespace mwam
 Joystick::Joystick() {
 }
 
-void Joystick::initialize(uint8_t aPinX, uint8_t aPinY, DirectionSet aDirSet, uint32_t aUpdateFreq) {
+void Joystick::initialize(uint8_t aPinX, uint8_t aPinY, uint8_t aPinBtn, DirectionSet aDirSet, uint32_t aUpdateFreq) {
 	_pinX = aPinX;
 	_pinY = aPinY;
+	_pinBtn = aPinBtn;
 	pinMode(_pinX, INPUT);
 	pinMode(_pinY, INPUT);
+	pinMode(_pinBtn, INPUT);
 	_dirSet = aDirSet;
 	_updateFreq = aUpdateFreq;
 	this->active = true;
@@ -72,10 +74,10 @@ bool Joystick::clickUp() {
 void Joystick::updateJoystick() {
 	_lastX = analogRead(_pinX) - kJoystickOffset;
 	_lastY = analogRead(_pinY) - kJoystickOffset;
-	//DEBUG("X: %d, Y: %d", _lastX, _lastY);
-	if (_lastY > kJoystickOffset) {
+	_lastBtn = digitalRead(_pinBtn);
+	//DEBUG("X: %d, Y: %d, Btn: %d", _lastX, _lastY, _lastBtn);
+	if (_lastBtn) {
 		_clickDown = true;
-		_lastY -= kJoystickOffset;
 	} else {
 		if (_clickDown) {
 			_clickUp = true;

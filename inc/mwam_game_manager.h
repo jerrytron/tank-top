@@ -32,7 +32,9 @@ class GameManager
 		void playLedTest();
 		void playFireStormAnim();
 
-		void updateAnimations();
+		void updateWaiting();
+		void initSelect();
+		void updateSelect();
 		//void updateFireStormAnim();
 
 		Level* getLevel();
@@ -54,6 +56,9 @@ class GameManager
 		Level* _level;
 		Tank* _tankOne;
 		Tank* _tankTwo;
+
+		bool _playerOneActive;
+		bool _playerTwoActive;
 
 		//uint8_t _fireStormAnimStep;
 

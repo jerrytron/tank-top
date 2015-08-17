@@ -27,8 +27,11 @@ void GameManager::initialize(StateController *aStateController) {
 }
 
 void GameManager::reset() {
+	_playerOneActive = false;
+	_playerTwoActive = false;
+
 	_hardwareManager->resetHardware();
-	generateWalls();
+	//generateWalls();
 	_hardwareManager->ledSet()->updateLeds(_level);
 }
 
@@ -44,11 +47,105 @@ void GameManager::generateWalls() {
 	}
 }
 
+
+void GameManager::updateWaiting() {
+	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
+}
+
+void GameManager::initSelect() {
+	/*bool writeTile = true;
+	bool longRow = true;
+	for (uint8_t i = 0; i < kLedCount; i++) {
+	}
+	for (uint8_t i = 0; i < kLedsPerRing; i++) {
+		if (i < (kLedsPerRing / 2)) {
+			_level->setTileAtIndex(TILE_TANK_ONE, i);
+		} else {
+			_level->setTileAtIndex(TILE_TANK_TWO, i);
+		}
+	}*/
+
+	//_level->drawLine(DIR_UP, TILE_BULLET, 219, 5);
+
+	/*_level->drawLine(DIR_UP_LEFT, TILE_BULLET, 198, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_TANK_ONE, 199, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_TANK_TWO, 200, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_WALL, 201, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_BULLET, 202, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_TANK_ONE, 203, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_TANK_TWO, 204, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_WALL, 205, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_BULLET, 206, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_TANK_ONE, 207, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_TANK_TWO, 208, 5);
+	_level->drawLine(DIR_UP_LEFT, TILE_WALL, 209, 5);*/
+
+	/*_level->drawLine(DIR_UP_RIGHT, TILE_TANK_TWO, 196, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_WALL, 197, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_BULLET, 198, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_TANK_ONE, 199, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_TANK_TWO, 200, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_WALL, 201, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_BULLET, 202, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_TANK_ONE, 203, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_TANK_TWO, 204, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_WALL, 205, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_BULLET, 206, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_TANK_ONE, 207, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_TANK_TWO, 208, 5);
+	_level->drawLine(DIR_UP_RIGHT, TILE_WALL, 209, 5);*/
+
+	//_level->setTileAtIndex(TILE_TANK_TWO, 180);
+
+	/*_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 33, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 34, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_BULLET, 35, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_ONE, 36, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 37, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 38, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_BULLET, 39, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_ONE, 40, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 20, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 21, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_BULLET, 22, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_ONE, 23, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 24, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 25, 5);*/
+
+	/*_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 33, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 34, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 35, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_ONE, 36, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 37, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 38, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 39, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_ONE, 40, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 20, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 21, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 22, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_ONE, 23, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 24, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 25, 5);*/
+
+	//_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 40, 5);
+
+	//_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 70, 5);
+
+	//_level->drawLine(DIR_LEFT, TILE_BULLET, 20, 22);
+
+	//_level->drawLine(DIR_RIGHT, TILE_WALL, 235, 6);
+}
+
+void GameManager::updateSelect() {
+	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
+
+}
+
 void GameManager::updatePlay() {
-	if (_hardwareManager->button()->wasClicked()) {
+	/*if (_hardwareManager->button()->wasClicked()) {
 		DEBUG("Change theme!");
 		_level->nextTheme();
-	}
+	}*/
 	Direction dir;
 	JoystickThreshold threshold;
 	TankState state = _tankOne->getState();
@@ -64,8 +161,8 @@ void GameManager::updatePlay() {
 		a.delayTime = 250;
 		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagUpLeft, a, false);
 		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagUpRight, a, false);
-		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() - kLedDiagDownLeft, a, false);
-		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() - kLedDiagDownRight, a, false);
+		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagDownLeft, a, false);
+		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagDownRight, a, false);
 		_tankOne->setState(TANK_WAITING);
 	} else if (state == TANK_ACTIVE) {
 		dir = _hardwareManager->joystickOne()->getDirection();
@@ -99,6 +196,7 @@ void GameManager::updatePlay() {
 	_tankTwo->updateBullets();
 }
 
+
 void GameManager::updateGameOver(bool aWonGame) {
 }
 
@@ -128,9 +226,17 @@ void GameManager::playLedTest() {
 	}
 }
 
-void GameManager::updateAnimations() {
-	_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
+/*void GameManager::updateTitleAnimation() {
+
 }
+
+void GameManager::drawPlayerScreen() {
+
+}*/
+
+
+
+/* Accessors */
 
 Level* GameManager::getLevel() {
 	return _level;

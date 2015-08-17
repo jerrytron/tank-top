@@ -190,7 +190,7 @@ class LedSet
 
 	private:
 		/* Private Methods */
-		void updateLedsFast(Level* aLevel);
+		//void updateLedsFast(Level* aLevel);
 		void checkIfAllAnimsDone();
 
 		Color calculateEase(EaseType aEase, float aCurrentFrame, float aEndFrame, Color aStart, Color aEnd, bool &aError);

@@ -26,13 +26,17 @@ void Level::initialize(Theme aTheme, uint32_t aUpdateFreq) {
 	_updateFreq = aUpdateFreq;
 	_timeElapsed = 0;
 	setTheme(aTheme);
-	memset(_levelTiles, 0, kLedCount);
+	clearLevel();
 }
 
 void Level::updateState() {
 	if (this->active && (_timeElapsed >= _updateFreq)) {
 		_timeElapsed = 0;
 	}
+}
+
+void Level::clearLevel() {
+	memset(_levelTiles, 0, kLedCount);
 }
 
 void Level::setTankAtIndex(Tank* aTank) {
@@ -59,6 +63,73 @@ void Level::setTileAtIndex(TileType aTile, uint16_t aIndex) {
 
 TileType Level::getTileAtIndex(uint16_t aIndex) {
 	return _levelTiles[aIndex];
+}
+
+void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength) {
+	int16_t index = aIndex;
+	uint16_t newIndex = aIndex;
+	for (uint8_t i = 0; i < aLength; i++) {
+		setTileAtIndex(aTile, newIndex);
+		if (aDir == DIR_UP_RIGHT) {
+			index += kLedDiagUpRight;
+			if (index >= kLedCount) {
+				if (newIndex < kLedDiagRightHighThresh) {
+					index = kLedDiagRightRollover - (kLedDiagRightLowThresh - newIndex);
+				} else {
+					index = kLedDiagRightRollover - ((kLedCount - 1) - newIndex) - 1;
+				}
+			}
+		} else if (aDir == DIR_UP) {
+			index += (kLedDiagUpLeft + kLedDiagUpRight);
+			if (index >= kLedCount) {
+				index = kLedVertRollover - ((kLedCount - 1) - newIndex);
+			}
+		} else if (aDir == DIR_UP_LEFT) {
+			index += kLedDiagUpLeft;
+			if (index >= kLedCount) {
+				if (newIndex < kLedDiagLeftHighThresh) {
+					index = kLedDiagLeftRollover - (kLedDiagLeftLowThresh - newIndex) + 1;
+				} else {
+					index = kLedDiagLeftRollover - ((kLedCount - 1) - newIndex);
+				}
+			}
+		} else if (aDir == DIR_LEFT) {
+			index -= 1;
+			if (index < 0) {
+				index = kLedCount - 1;
+			}
+		} else if (aDir == DIR_DOWN_LEFT) {
+			index += kLedDiagDownLeft;
+			if (index < 0) {
+				if (newIndex < kLedDiagLeftRollover) {
+					index = newIndex + ((kLedCount - 1) - kLedDiagRightRollover) + 1;
+				} else {
+					index = newIndex + (kLedDiagRightLowThresh - kLedDiagRightRollover);
+				}
+			}
+		} else if (aDir == DIR_DOWN) {
+			index += (kLedDiagDownLeft + kLedDiagDownRight);
+			if (index < 0) {
+				index = newIndex + ((kLedCount - 1) - kLedVertRollover);
+			}
+		} else if (aDir == DIR_DOWN_RIGHT) {
+			index += kLedDiagDownRight;
+			if (index < 0) {
+				if (newIndex < kLedDiagRightRollover) {
+					index = newIndex + ((kLedCount - 1) - kLedDiagLeftRollover);
+				} else {
+					index = newIndex + (kLedDiagLeftLowThresh - kLedDiagLeftRollover) - 1;
+				}
+			}
+		} else if (aDir == DIR_RIGHT) {
+			index += 1;
+			if (index >= kLedCount) {
+				index = 0;
+			}
+		}
+		DEBUG("Index: %d", index);
+		newIndex = index;
+	}
 }
 
 void Level::nextTheme() {
@@ -102,14 +173,14 @@ uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aColli
 			DEBUG("Lower left boundry.");
 			return aIndex;
 		}
-		newIndex -= kLedDiagDownLeft;
+		newIndex += kLedDiagDownLeft;
 	} else if (aDir == DIR_DOWN_RIGHT) {
 		if (newIndex < kLedDiagDownRight) {
 			aCollision = TILE_BOUNDARY;
 			DEBUG("LowerRight boundry.");
 			return aIndex;
 		}
-		newIndex -= kLedDiagDownRight;
+		newIndex += kLedDiagDownRight;
 	}
 	aCollision = checkForCollision(newIndex);
 	if ((aCollision == TILE_WALL) || (aCollision == TILE_TANK_ONE) || (aCollision == TILE_TANK_TWO)) {

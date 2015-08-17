@@ -26,7 +26,7 @@ void Tank::reset() {
 	_overlap = TILE_BACKGROUND;
 	_lastOverlap = TILE_BACKGROUND;
 	_direction = DIR_DOWN_LEFT;
-	_turretIndex = _index - kLedDiagDownLeft;
+	_turretIndex = _index + kLedDiagDownLeft;
 	_lastTurretIndex = 0;
 	_turretOverlap = TILE_BACKGROUND;
 	_lastTurretOverlap = TILE_BACKGROUND;
@@ -57,9 +57,9 @@ void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 		//_lastIndex = _index;
 		//_lastOverlap = _overlap;
 
-		TileType tile;
-		uint16_t index = _gameManager->getLevel()->getNewPosition(_index, _direction, tile);
-		DEBUG("Index: %d", index);
+		TileType tile = TILE_BACKGROUND;
+		//uint16_t index = _gameManager->getLevel()->getNewPosition(_index, _direction, tile);
+		//DEBUG("Index: %d", index);
 
 		if (tile == TILE_BACKGROUND) {
 
@@ -69,10 +69,10 @@ void Tank::updateState(Direction aDirection, uint16_t aMovementFreq) {
 			_gameManager->getLevel()->setTankAtIndex(this);
 		}
 
-		DEBUG("Tank Overlap: %d", _overlap);
+		//EBUG("Tank Overlap: %d", _overlap);
 		if ((_overlap == TILE_BACKGROUND) || (_overlap == TILE_BULLET) ||
 		    (_overlap == TILE_TURRET_ONE) || (_overlap == TILE_TURRET_TWO)) {
-			DEBUG("Tank Index: %d", _index);
+			//DEBUG("Tank Index: %d", _index);
 			_lastTurretIndex = _turretIndex;
 			_turretIndex = findTurretIndex();
 			_gameManager->getLevel()->setTankAtIndex(this);
@@ -130,6 +130,38 @@ bool Tank::fireBullet() {
 	return false;
 }
 
+uint16_t Tank::findTurretIndex() {
+	TileType collisionTile = TILE_BOUNDARY;
+	//uint16_t index = _level->getNewPosition(_index, _direction, collisionTile);
+	uint16_t index = _index;
+	Direction tryDir = _direction;
+	bool searching = true;
+	while (searching) {
+		index = _gameManager->getLevel()->getNewPosition(_index, tryDir, collisionTile);
+		if ((collisionTile == TILE_BOUNDARY) || (collisionTile == TILE_WALL)) {
+			if (tryDir == DIR_DOWN_LEFT) {
+				tryDir = DIR_UP_LEFT;
+			} else if (tryDir == DIR_UP_LEFT) {
+				tryDir = DIR_UP_RIGHT;
+			} else if (tryDir == DIR_UP_RIGHT) {
+				tryDir = DIR_DOWN_RIGHT;
+			} else if (tryDir == DIR_DOWN_RIGHT) {
+				tryDir = DIR_DOWN_LEFT;
+			}
+		} else {
+			searching = false;
+		}
+	}
+	_direction = tryDir;
+
+	if ((_turretOverlap != TILE_TURRET_ONE) && (_turretOverlap != TILE_TURRET_TWO) &&
+	    (_turretOverlap != TILE_TANK_ONE) && (_turretOverlap != TILE_TANK_TWO)) {
+		_lastTurretOverlap = _turretOverlap;
+	}
+	_turretOverlap = _gameManager->getLevel()->getTileAtIndex(index);
+	return index;
+}
+
 TankState Tank::getState() {
 	return _tankState;
 }
@@ -180,38 +212,6 @@ TileType Tank::getTurretOverlapTile() {
 
 TileType Tank::getLastTurretOverlapTile() {
 	return _lastTurretOverlap;
-}
-
-uint16_t Tank::findTurretIndex() {
-	TileType collisionTile = TILE_BOUNDARY;
-	//uint16_t index = _level->getNewPosition(_index, _direction, collisionTile);
-	uint16_t index = _index;
-	Direction tryDir = _direction;
-	bool searching = true;
-	while (searching) {
-		index = _gameManager->getLevel()->getNewPosition(_index, tryDir, collisionTile);
-		if ((collisionTile == TILE_BOUNDARY) || (collisionTile == TILE_WALL)) {
-			if (tryDir == DIR_DOWN_LEFT) {
-				tryDir = DIR_UP_LEFT;
-			} else if (tryDir == DIR_UP_LEFT) {
-				tryDir = DIR_UP_RIGHT;
-			} else if (tryDir == DIR_UP_RIGHT) {
-				tryDir = DIR_DOWN_RIGHT;
-			} else if (tryDir == DIR_DOWN_RIGHT) {
-				tryDir = DIR_DOWN_LEFT;
-			}
-		} else {
-			searching = false;
-		}
-	}
-	_direction = tryDir;
-
-	if ((_turretOverlap != TILE_TURRET_ONE) && (_turretOverlap != TILE_TURRET_TWO) &&
-	    (_turretOverlap != TILE_TANK_ONE) && (_turretOverlap != TILE_TANK_TWO)) {
-		_lastTurretOverlap = _turretOverlap;
-	}
-	_turretOverlap = _gameManager->getLevel()->getTileAtIndex(index);
-	return index;
 }
 
 /* Private Methods */

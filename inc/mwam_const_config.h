@@ -7,14 +7,24 @@ namespace mwam
 	// Total count of LEDs.
 	const uint16_t kLedCount = 240;
 	// LEDs per ring in the spiral.
-	const uint8_t kLedsPerRing = 21;
+	const uint8_t kLedsPerRing = 20;
 	// LED indexes to add/subtract for diagnal positions.
 	const int8_t kLedDiagUpLeft = 20;
 	const int8_t kLedDiagUpRight = 21;
-	const int8_t kLedDiagDownLeft = 21;
-	const int8_t kLedDiagDownRight = 20;
+	const int8_t kLedDiagDownLeft = -21;
+	const int8_t kLedDiagDownRight = -20;
+
+	const uint8_t kLedVertRollover = 34;
+
+	const uint8_t kLedDiagRightLowThresh = 219;
+	const uint8_t kLedDiagRightHighThresh = 225;
+	const uint8_t kLedDiagRightRollover = 15;
+	const uint8_t kLedDiagLeftLowThresh = 220;
+	const uint8_t kLedDiagLeftHighThresh = 226;
+	const uint8_t kLedDiagLeftRollover = 13;
+
 	// LED pin.
-	const uint8_t kLedPin = A7;
+	const uint8_t kLedPin = A4;
 	// LED type.
 	const uint8_t kLedType = 0x02; // WS2812B
 	// LED default brightness.
@@ -43,23 +53,26 @@ namespace mwam
 	const bool kFriendlyFire = true;
 
 	// Piezo Pins
-	const uint8_t kPiezoOnePin = A0;
-	const uint8_t kPiezoTwoPin = A1;
+	const uint8_t kPiezoOnePin = A5;
+	const uint8_t kPiezoTwoPin = A6;
 
 	// Button Pins
 	const uint8_t kButtonPin = D3;
 	const uint8_t kButtonLedPin = D2;
 
+	const uint8_t kJoystickOneBtnPin = D0;
+	const uint8_t kJoystickTwoBtnPin = D1;
+
 	// Joystick Pins
-	const uint8_t kJoystickOneX = A3;
-	const uint8_t kJoystickOneY = A2;
-	const uint8_t kJoystickTwoX = A5;
-	const uint8_t kJoystickTwoY = A4;
+	const uint8_t kJoystickOneXPin = A1;
+	const uint8_t kJoystickOneYPin = A0;
+	const uint8_t kJoystickTwoXPin = A3;
+	const uint8_t kJoystickTwoYPin = A2;
 
 	const uint16_t kJoystickOffset = 2045;
-	const uint16_t kJoystickThreshOne = 100;
-	const uint16_t kJoystickThreshTwo = 450;
-	const uint16_t kJoystickThreshThree = 850;
+	const uint16_t kJoystickThreshOne = 200;
+	const uint16_t kJoystickThreshTwo = 800;
+	const uint16_t kJoystickThreshThree = 1600;
 
 	// Timeout to input a serial command.
 	const uint16_t kTimeoutSerialMillis = 8000;
