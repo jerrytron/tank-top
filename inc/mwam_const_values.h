@@ -4,6 +4,11 @@
 namespace mwam
 {
 
+static const char kTankTop[] = "TANK-TOP";
+static const uint8_t kTankTopLen = 8;
+
+
+
 typedef struct Color_t {
 	uint8_t red;
 	uint8_t green;

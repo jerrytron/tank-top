@@ -100,7 +100,7 @@ int16_t Level::glyphIndexForChar(const char aChar) {
 	return i;
 }
 
-void Level::drawText(TileType aTile, uint16_t aIndex, char* aBuffer, uint16_t aLength) {
+/*void Level::drawText(TileType aTile, uint16_t aIndex, char* aBuffer, uint16_t aLength) {
 	if (aIndex > kTextLedIndexMax) {
 		aIndex = kTextLedIndexMax;
 	}
@@ -164,10 +164,10 @@ void Level::drawText(TileType aTile, uint16_t aIndex, char* aBuffer, uint16_t aL
 		for (int glyphRow = 0; glyphRow < kRowsPerGlyph; glyphRow++) {
 			int i;
 			//int leftstep;
-			/*if (kMirrorText) {
+			if (kMirrorText) {
 				i = (glyphRow + 1) * kLedsPerRing - 1 - x; // LED index, x-direction mirrored
 				leftstep = 1;
-			} else {*/
+			} else {
 			i = glyphRow * kLedsPerRing + x; // LED index
 			//leftstep = -1;
 			//}
@@ -177,16 +177,16 @@ void Level::drawText(TileType aTile, uint16_t aIndex, char* aBuffer, uint16_t aL
 					DEBUG("I: %d", i);
 					setTileAtIndex(aTile, i);
 					// also adjust pixel left to this one
-					/*if (x > 0) {
+					if (x > 0) {
 						increase(textLayer[i + leftstep], nextBright, maxBright);
-					}*/
+					}
 					continue;
 				}
 			}
 			setTileAtIndex(TILE_BACKGROUND, i); // no text
 		}
 	}
-}
+}*/
 
 void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength) {
 	int16_t index = aIndex;
@@ -251,7 +251,7 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 				index = 0;
 			}
 		}
-		DEBUG("Index: %d", index);
+		//DEBUG("Index: %d", index);
 		newIndex = index;
 	}
 }

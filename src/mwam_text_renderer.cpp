@@ -2,7 +2,7 @@
 * @Author: jerrytron
 * @Date:   2015-08-17 13:19:41
 * @Last Modified by:   jerrytron
-* @Last Modified time: 2015-08-18 18:16:03
+* @Last Modified time: 2015-08-18 18:52:38
 */
 
 #include "mwam_text_renderer.h"
@@ -28,6 +28,9 @@ void TextRenderer::initialize(Level* aLevel, bool aMirrorText) {
 	_text = NULL;
 	_mirrorText = aMirrorText;
 	_textPixels = kLedsPerRing * kRowsPerGlyph;
+	_cycles = 0;
+	_repeats = 0;
+	_tile = TILE_BACKGROUND;
 }
 
 int TextRenderer::hexToInt(char aHex) {
@@ -53,7 +56,7 @@ void TextRenderer::increase(byte &aByte, byte aAmount, byte aMax = 255) {
 	}
 }
 
-int TextRenderer::newMessage(char* aText, uint16_t aLength, uint8_t aCycles, uint8_t aRepeats, int8_t aIndexOffset, int8_t aOffsetChange) {
+int TextRenderer::newMessage(const char *aText, uint16_t aLength, uint8_t aCycles, uint8_t aRepeats, int8_t aIndexOffset, int8_t aOffsetChange) {
 	if (_textLength && _text) {
 		delete [] _text;
 		_text = NULL;
@@ -117,12 +120,26 @@ int TextRenderer::newMessage(char* aText, uint16_t aLength, uint8_t aCycles, uin
 }
 
 
+void TextRenderer::stopMessage() {
+	_level->clearLevel();
+	resetText();
+	if (_textLength && _text) {
+		delete [] _text;
+		_text = NULL;
+		_textLength = 0;
+	}
+}
+
+
 void TextRenderer::resetText() {
 	/*if (_textLength && _text) {
 		delete [] _text;
 		_text = NULL;
 		_textLength = 0;
 	}*/
+	_cycles = 0;
+	_repeats = 0;
+	_tile = TILE_BACKGROUND;
 	for (int i = 0; i < _textPixels; i++) {
 		_level->setTileAtIndex(TILE_BACKGROUND, i);
 	}
@@ -245,7 +262,7 @@ void TextRenderer::renderText(TileType aTile) {
 		if (_textPixelOffset > totalTextPixels) {
 			// text shown, check for repeats
 			_repeatCount++;
-			_indexOffset += (_offsetChange * _repeatCount);
+			_indexOffset += _offsetChange;
 			if (_repeats != 0 && _repeatCount >= _repeats) {
 				// done
 				if (_textLength && _text) {

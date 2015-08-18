@@ -51,15 +51,29 @@ void GameManager::generateWalls() {
 }
 
 void GameManager::initWaiting() {
-
+	//_level->setTheme(THEME_BRIGHT);
+	_textRenderer->newMessage(kTankTop, kTankTopLen, 5, 0, 100, -10);
+	_tileIndex = 1;
 }
 
 void GameManager::updateWaiting() {
 	if (_waitingElapsed >= 10) {
 		_waitingElapsed = 0;
+		_textRenderer->renderText((TileType)_tileIndex);
 
+		if (_colorElapsed >= 1000) {
+			_colorElapsed = 0;
+			_tileIndex += 1;
+			if (_tileIndex > 7) {
+				_tileIndex = 1;
+			}
+		}
 	}
 	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
+}
+
+void GameManager::endWaiting() {
+	_textRenderer->stopMessage();
 }
 
 void GameManager::initSelect() {
@@ -138,13 +152,9 @@ void GameManager::initSelect() {
 	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 25, 5);
 	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 26, 5);*/
 
-	//_level->drawSquare(false, TILE_WALL, 238, 3, 5);
+	_level->drawSquare(false, TILE_TANK_ONE, 218, 11, 7);
+	_level->drawSquare(false, TILE_TANK_TWO, 229, 10, 7);
 	//_level->drawSquare(true, TILE_BULLET, 206, 5, 5);
-	char msg[] = "TANK-TOP";
-
-	_textRenderer->newMessage(msg, 8, 5, 20, 20, 10);
-	_tileIndex = 1;
-	//_level->setTheme(THEME_BRIGHT);
 
 	//_level->drawText(TILE_WALL, 220, hi, 4);
 
@@ -163,16 +173,11 @@ void GameManager::updateSelect() {
 	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
 	if (_selectElapsed >= 10) {
 		_selectElapsed = 0;
-		_textRenderer->renderText((TileType)_tileIndex);
-
-		if (_colorElapsed >= 1000) {
-			_colorElapsed = 0;
-			_tileIndex += 1;
-			if (_tileIndex > 7) {
-				_tileIndex = 1;
-			}
-		}
 	}
+}
+
+void GameManager::endSelect() {
+	_level->clearLevel();
 }
 
 void GameManager::updatePlay() {

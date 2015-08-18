@@ -68,6 +68,7 @@ void StateController::initState(GameState aState) {
 			Spark.syncTime();
 		}
 	} else if (aState == STATE_WAITING) {
+		_gameManager->initWaiting();
 		//_hardwareManager->ledSet()->updateLeds(_gameManager->getLevel());
 	} else if (aState == STATE_TUTORIAL) {
 
@@ -117,10 +118,12 @@ void StateController::loopState(GameState aState) {
 	} else if (aState == STATE_INIT) {
 		changeState(STATE_WAITING);
 	} else if (aState == STATE_WAITING) {
-		//_gameManager->updateWaiting();
-		changeState(STATE_SELECT);
+		_gameManager->updateWaiting();
 
-		//if (_hardwareManager->joystickOne()->clickUp()) {
+		if (_hardwareManager->joystickOne()->clickUp() ||
+		    _hardwareManager->joystickTwo()->clickUp()) {
+			changeState(STATE_SELECT);
+		}
 		//if (_hardwareManager->button()->wasClicked()) {
 	} else if (aState == STATE_TUTORIAL) {
 
@@ -141,16 +144,16 @@ void StateController::loopState(GameState aState) {
 void StateController::endState(GameState aState) {
 	LOG("End State: %s", stateString());
 
-	/*if (aState == STATE_ERROR) {
+	if (aState == STATE_ERROR) {
 
 	} else if (aState == STATE_BOOTING) {
 
 	} else if (aState == STATE_INIT) {
 
 	} else if (aState == STATE_WAITING) {
-
+		_gameManager->endWaiting();
 	} else if (aState == STATE_TUTORIAL) {
-
+		_gameManager->endSelect();
 	} else if (aState == STATE_SELECT) {
 
 	} else if (aState == STATE_PLAY) {
@@ -159,7 +162,7 @@ void StateController::endState(GameState aState) {
 
 	} else if (aState == STATE_GAME_WON) {
 
-	}*/
+	}
 }
 
 }

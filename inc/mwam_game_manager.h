@@ -34,8 +34,11 @@ class GameManager
 
 		void initWaiting();
 		void updateWaiting();
+		void endWaiting();
+
 		void initSelect();
 		void updateSelect();
+		void endSelect();
 		//void updateFireStormAnim();
 
 		Level* getLevel();
