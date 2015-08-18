@@ -23,6 +23,7 @@ namespace mwam
 	const uint8_t kLedDiagLeftRollover = 13;
 
 	const uint8_t kTextLedIndexMax = 225;
+	const bool kMirrorText = false;
 
 	// LED pin.
 	const uint8_t kLedPin = A4;

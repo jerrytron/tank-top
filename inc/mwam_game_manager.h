@@ -13,7 +13,7 @@ namespace mwam
 class StateController;
 class DataManager;
 class HardwareManager;
-
+class TextRenderer;
 
 class GameManager
 {
@@ -32,6 +32,7 @@ class GameManager
 		void playLedTest();
 		void playFireStormAnim();
 
+		void initWaiting();
 		void updateWaiting();
 		void initSelect();
 		void updateSelect();
@@ -52,6 +53,10 @@ class GameManager
 		StateController* _stateController;
 		DataManager* _dataManager;
 		HardwareManager* _hardwareManager;
+		TextRenderer* _textRenderer;
+
+		ElapsedMillis _waitingElapsed;
+		ElapsedMillis _selectElapsed;
 
 		Level* _level;
 		Tank* _tankOne;

@@ -33,7 +33,8 @@ typedef enum TileType_t {
 	TILE_TURRET_TWO,
 	TILE_BULLET,
 	TILE_WALL,
-	TILE_BOUNDARY
+	TILE_BOUNDARY,
+	TILE_KEEP_COLOR
 } TileType;
 
 /*typedef enum Collision_t {

@@ -1,5 +1,6 @@
 #include "mwam_game_manager.h"
 #include "mwam_manager.h"
+#include "mwam_text_renderer.h"
 
 extern char* itoa(int a, char* buffer, unsigned char radix);
 
@@ -18,6 +19,8 @@ void GameManager::initialize(StateController *aStateController) {
 
 	_level = new Level();
 	_level->initialize(THEME_DEFAULT);
+	_textRenderer = new TextRenderer();
+	_textRenderer->initialize(_level, false);
 	_tankOne = new Tank();
 	_tankOne->initialize(TANK_ONE, kPlayerOneStartIndex, kIntervalPlayerDelayMillis);
 	_tankTwo = new Tank();
@@ -47,8 +50,15 @@ void GameManager::generateWalls() {
 	}
 }
 
+void GameManager::initWaiting() {
+
+}
 
 void GameManager::updateWaiting() {
+	if (_waitingElapsed >= 10) {
+		_waitingElapsed = 0;
+
+	}
 	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
 }
 
@@ -130,9 +140,11 @@ void GameManager::initSelect() {
 
 	//_level->drawSquare(false, TILE_WALL, 238, 3, 5);
 	//_level->drawSquare(true, TILE_BULLET, 206, 5, 5);
-	char hi[] = "Tank";
+	char msg[] = "TANK-TOP";
 
-	_level->drawText(TILE_WALL, 220, hi, 4);
+	_textRenderer->newMessage(msg, 8);
+
+	//_level->drawText(TILE_WALL, 220, hi, 4);
 
 	//_level->drawSquare(true, TILE_WALL, 19, 5, 4);
 
@@ -147,7 +159,10 @@ void GameManager::initSelect() {
 
 void GameManager::updateSelect() {
 	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
-
+	if (_selectElapsed >= 10) {
+		_selectElapsed = 0;
+		_textRenderer->renderText();
+	}
 }
 
 void GameManager::updatePlay() {
