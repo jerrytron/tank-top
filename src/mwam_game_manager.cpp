@@ -142,7 +142,9 @@ void GameManager::initSelect() {
 	//_level->drawSquare(true, TILE_BULLET, 206, 5, 5);
 	char msg[] = "TANK-TOP";
 
-	_textRenderer->newMessage(msg, 8);
+	_textRenderer->newMessage(msg, 8, 5, 20, 20, 10);
+	_tileIndex = 1;
+	//_level->setTheme(THEME_BRIGHT);
 
 	//_level->drawText(TILE_WALL, 220, hi, 4);
 
@@ -161,7 +163,15 @@ void GameManager::updateSelect() {
 	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
 	if (_selectElapsed >= 10) {
 		_selectElapsed = 0;
-		_textRenderer->renderText();
+		_textRenderer->renderText((TileType)_tileIndex);
+
+		if (_colorElapsed >= 1000) {
+			_colorElapsed = 0;
+			_tileIndex += 1;
+			if (_tileIndex > 7) {
+				_tileIndex = 1;
+			}
+		}
 	}
 }
 

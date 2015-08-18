@@ -53,7 +53,9 @@ void LedSet::updateState(Level* aLevel) {
 
 void LedSet::updateLeds(Level* aLevel) {
 	for (int i = 0; i < _ledCount; ++i) {
-		_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+		if (aLevel->getTileAtIndex(i) != TILE_KEEP_COLOR) {
+			_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+		}
 		if (_leds[i].state == LED_DELAY) {
 			if (_leds[i].elapsedTime >= _leds[i].anim.delayTime) {
 				_leds[i].elapsedTime = 0;

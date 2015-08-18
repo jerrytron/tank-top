@@ -57,6 +57,8 @@ class GameManager
 
 		ElapsedMillis _waitingElapsed;
 		ElapsedMillis _selectElapsed;
+		ElapsedMillis _colorElapsed;
+		uint8_t _tileIndex;
 
 		Level* _level;
 		Tank* _tankOne;
