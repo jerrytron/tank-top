@@ -15,13 +15,14 @@ namespace mwam
 	const int8_t kLedDiagDownRight = -20;
 
 	const uint8_t kLedVertRollover = 34;
-
 	const uint8_t kLedDiagRightLowThresh = 219;
-	const uint8_t kLedDiagRightHighThresh = 225;
+	const uint8_t kLedDiagRightHighThresh = 226;
 	const uint8_t kLedDiagRightRollover = 15;
 	const uint8_t kLedDiagLeftLowThresh = 220;
-	const uint8_t kLedDiagLeftHighThresh = 226;
+	const uint8_t kLedDiagLeftHighThresh = 225;
 	const uint8_t kLedDiagLeftRollover = 13;
+
+	const uint8_t kTextLedIndexMax = 225;
 
 	// LED pin.
 	const uint8_t kLedPin = A4;

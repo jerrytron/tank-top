@@ -78,7 +78,6 @@ void Level::drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t 
 					index = kLedDiagRightRollover - ((kLedCount - 1) - aIndex) - 1;
 				}
 			}
-			DEBUG("SIndex: %d", index);
 			aIndex = index;
 		}
 	} else {
@@ -93,6 +92,102 @@ void Level::drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t 
 	}
 }
 
+int16_t Level::glyphIndexForChar(const char aChar) {
+	int i = aChar - 0x20;
+	if (i < 0 || i >= kNumGlyphs) {
+		i = 95; // ASCII 0x7F-0x20
+	}
+	return i;
+}
+
+void Level::drawText(TileType aTile, uint16_t aIndex, char* aBuffer, uint16_t aLength) {
+	if (aIndex > kTextLedIndexMax) {
+		aIndex = kTextLedIndexMax;
+	}
+
+	DEBUG("Msg: %s", aBuffer);
+	// initiate display of new text
+	int8_t textPixelOffset = 0;//-kLedsPerRing;
+	//uint8_t textCycleCount = 0;
+	//uint8_t repeatCount = 0;
+
+	// fade between rows
+	//byte maxBright = kTextIntensity - repeatCount * kFadePerRepeat;
+	//byte thisBright, nextBright;
+	//crossFade(255 * textCycleCount / kCyclesPerPx, maxBright, thisBright, nextBright);
+	// generate vertical rows
+	uint8_t activeCols = kLedsPerRing - 2;
+	// calculate text length in pixels
+	uint16_t totalTextPixels = 0;
+
+	for (int i = 0; i < aLength; i++) {
+		// sum up width of individual chars
+		totalTextPixels += kFontGlyphs[glyphIndexForChar(aBuffer[i])].width + kGlyphSpacing;
+	}
+	DEBUG("TTP: %d", totalTextPixels);
+
+	for (int x = 0; x < kLedsPerRing; x++) {
+		uint8_t column = 0;
+		// determine font column
+		if (x < activeCols) {
+			DEBUG("Active");
+			int colPixelOffset = textPixelOffset + x;
+			DEBUG("Col Off: %d", colPixelOffset);
+			if (colPixelOffset >= 0) {
+				// visible column
+				// - calculate character index
+				int charIndex = 0;
+				int glyphOffset = colPixelOffset;
+				const glyph_t *glyphP = NULL;
+				while (charIndex < aLength) {
+					glyphP = &kFontGlyphs[glyphIndexForChar(aBuffer[charIndex])];
+					int cw = glyphP->width + kGlyphSpacing;
+					if (glyphOffset < cw) {
+						break; // found char
+					}
+					glyphOffset -= cw;
+					charIndex++;
+				}
+				// now we have
+				// - glyphP = the glyph,
+				// - glyphOffset=column offset within that glyph (but might address a spacing column not stored in font table)
+				if (charIndex < aLength) {
+					// is a column of a visible char
+					if (glyphOffset < glyphP->width) {
+						// fetch glyph column
+						column = glyphP->cols[glyphOffset];
+					}
+				}
+			}
+		}
+		// now render columns
+		for (int glyphRow = 0; glyphRow < kRowsPerGlyph; glyphRow++) {
+			int i;
+			//int leftstep;
+			/*if (kMirrorText) {
+				i = (glyphRow + 1) * kLedsPerRing - 1 - x; // LED index, x-direction mirrored
+				leftstep = 1;
+			} else {*/
+			i = glyphRow * kLedsPerRing + x; // LED index
+			//leftstep = -1;
+			//}
+			if (glyphRow < kRowsPerGlyph) {
+				if (column & (0x40 >> glyphRow)) {
+					//textLayer[i] = thisBright; DELETE
+					DEBUG("I: %d", i);
+					setTileAtIndex(aTile, i);
+					// also adjust pixel left to this one
+					/*if (x > 0) {
+						increase(textLayer[i + leftstep], nextBright, maxBright);
+					}*/
+					continue;
+				}
+			}
+			setTileAtIndex(TILE_BACKGROUND, i); // no text
+		}
+	}
+}
+
 void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength) {
 	int16_t index = aIndex;
 	uint16_t newIndex = aIndex;
@@ -102,9 +197,10 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 			index += kLedDiagUpRight;
 			if (index >= kLedCount) {
 				if (newIndex < kLedDiagRightHighThresh) {
-					index = kLedDiagRightRollover - (kLedDiagRightLowThresh - newIndex);
+					// Just comment out and ignore drawing to the LEDs between end of LED strip and beginning?
+					index = kLedDiagRightRollover - (kLedDiagRightLowThresh - newIndex) - 1;
 				} else {
-					index = kLedDiagRightRollover - ((kLedCount - 1) - newIndex) - 1;
+					index = kLedDiagRightRollover - ((kLedCount - 1) - newIndex) - 2;
 				}
 			}
 		} else if (aDir == DIR_UP) {
@@ -116,9 +212,9 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 			index += kLedDiagUpLeft;
 			if (index >= kLedCount) {
 				if (newIndex < kLedDiagLeftHighThresh) {
-					index = kLedDiagLeftRollover - (kLedDiagLeftLowThresh - newIndex) + 1;
+					index = kLedDiagLeftRollover - (kLedDiagLeftLowThresh - newIndex) + 2;
 				} else {
-					index = kLedDiagLeftRollover - ((kLedCount - 1) - newIndex);
+					index = kLedDiagLeftRollover - ((kLedCount - 1) - newIndex) + 1;
 				}
 			}
 		} else if (aDir == DIR_LEFT) {
@@ -129,10 +225,10 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 		} else if (aDir == DIR_DOWN_LEFT) {
 			index += kLedDiagDownLeft;
 			if (index < 0) {
-				if (newIndex < kLedDiagLeftRollover) {
-					index = newIndex + ((kLedCount - 1) - kLedDiagRightRollover) + 1;
+				if (newIndex <= kLedDiagLeftRollover) {
+					index = newIndex + ((kLedCount - 1) - kLedDiagRightRollover) + 2;
 				} else {
-					index = newIndex + (kLedDiagRightLowThresh - kLedDiagRightRollover);
+					index = newIndex + (kLedDiagRightLowThresh - kLedDiagRightRollover) + 1;
 				}
 			}
 		} else if (aDir == DIR_DOWN) {
@@ -144,9 +240,9 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 			index += kLedDiagDownRight;
 			if (index < 0) {
 				if (newIndex < kLedDiagRightRollover) {
-					index = newIndex + ((kLedCount - 1) - kLedDiagLeftRollover);
+					index = newIndex + ((kLedCount - 1) - kLedDiagLeftRollover); // - 1 ?
 				} else {
-					index = newIndex + (kLedDiagLeftLowThresh - kLedDiagLeftRollover) - 1;
+					index = newIndex + (kLedDiagLeftLowThresh - kLedDiagLeftRollover) - 1; // - 2 ?
 				}
 			}
 		} else if (aDir == DIR_RIGHT) {

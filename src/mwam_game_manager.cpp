@@ -105,12 +105,12 @@ void GameManager::initSelect() {
 	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 38, 5);
 	_level->drawLine(DIR_DOWN_RIGHT, TILE_BULLET, 39, 5);
 	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_ONE, 40, 5);
-	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 20, 5);
-	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 21, 5);
-	_level->drawLine(DIR_DOWN_RIGHT, TILE_BULLET, 22, 5);
-	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_ONE, 23, 5);
-	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 24, 5);
-	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 25, 5);*/
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 21, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 22, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_BULLET, 23, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_ONE, 24, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_TANK_TWO, 25, 5);
+	_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 26, 5);*/
 
 	/*_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 33, 5);
 	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 34, 5);
@@ -120,15 +120,21 @@ void GameManager::initSelect() {
 	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 38, 5);
 	_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 39, 5);
 	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_ONE, 40, 5);
-	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 20, 5);
-	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 21, 5);
-	_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 22, 5);
-	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_ONE, 23, 5);
-	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 24, 5);
-	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 25, 5);*/
+	_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 41, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 21, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 22, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 23, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_ONE, 24, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 25, 5);
+	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 26, 5);*/
 
 	//_level->drawSquare(false, TILE_WALL, 238, 3, 5);
-	_level->drawSquare(true, TILE_BULLET, 199, 5, 5);
+	//_level->drawSquare(true, TILE_BULLET, 206, 5, 5);
+	char hi[] = "Tank";
+
+	_level->drawText(TILE_WALL, 220, hi, 4);
+
+	//_level->drawSquare(true, TILE_WALL, 19, 5, 4);
 
 	//_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 40, 5);
 
