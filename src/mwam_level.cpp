@@ -65,6 +65,34 @@ TileType Level::getTileAtIndex(uint16_t aIndex) {
 	return _levelTiles[aIndex];
 }
 
+void Level::drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t aWidth, uint8_t aHeight) {
+	int16_t index = aIndex;
+	if (aDiagonal) {
+		for (uint8_t i = 0; i < aWidth; i++) {
+			drawLine(DIR_DOWN_RIGHT, aTile, aIndex, aHeight);
+			index += kLedDiagUpRight;
+			if (index >= kLedCount) {
+				if (aIndex < kLedDiagRightHighThresh) {
+					index = kLedDiagRightRollover - (kLedDiagRightLowThresh - aIndex);
+				} else {
+					index = kLedDiagRightRollover - ((kLedCount - 1) - aIndex) - 1;
+				}
+			}
+			DEBUG("SIndex: %d", index);
+			aIndex = index;
+		}
+	} else {
+		for (uint8_t i = 0; i < aHeight; i++) {
+			drawLine(DIR_RIGHT, aTile, aIndex, aWidth);
+			index += (kLedDiagDownLeft + kLedDiagDownRight);
+			if (index < 0) {
+				index = aIndex + ((kLedCount - 1) - kLedVertRollover);
+			}
+			aIndex = index;
+		}
+	}
+}
+
 void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength) {
 	int16_t index = aIndex;
 	uint16_t newIndex = aIndex;

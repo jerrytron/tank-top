@@ -55,6 +55,7 @@ class Level
 		void setTileAtIndex(TileType aTile, uint16_t aIndex);
 		TileType getTileAtIndex(uint16_t aIndex);
 
+		void drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t aWidth, uint8_t aHeight);
 		void drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength);
 
 		void nextTheme();

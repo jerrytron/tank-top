@@ -127,6 +127,9 @@ void GameManager::initSelect() {
 	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 24, 5);
 	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 25, 5);*/
 
+	//_level->drawSquare(false, TILE_WALL, 238, 3, 5);
+	_level->drawSquare(true, TILE_BULLET, 199, 5, 5);
+
 	//_level->drawLine(DIR_DOWN_LEFT, TILE_BULLET, 40, 5);
 
 	//_level->drawLine(DIR_DOWN_RIGHT, TILE_WALL, 70, 5);
