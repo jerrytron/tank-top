@@ -30,8 +30,12 @@ void Tank::initialize(TankNumber aTankNum, uint8_t aStartIndex) {
 
 	if (_tankNumber == TANK_ONE) {
 		_joystick = Manager::getInstance().hardwareManager->joystickOne();
+		_tankTile = TILE_TANK_ONE;
+		_turretTile = TILE_TURRET_ONE;
 	} else if (_tankNumber == TANK_TWO) {
 		_joystick = Manager::getInstance().hardwareManager->joystickTwo();
+		_tankTile = TILE_TANK_TWO;
+		_turretTile = TILE_TURRET_TWO;
 	}
 
 	//_movementFreq = aMovementFreq;
@@ -47,7 +51,7 @@ const char* Tank::stateString() {
 void Tank::reset() {
 	_resetElapsed = 0;
 	_index = _startIndex;
-	_lastIndex = _startIndex;
+	//_lastIndex = _startIndex;
 	_blinks = 0;
 	_visible = true;
 	_invulnerable = true;
@@ -75,6 +79,40 @@ void Tank::updateState() {
 	loopState(_state);
 }
 
+bool Tank::checkCollisionAtIndex(TileType aSource, uint16_t aIndex, TileType &aTile, bool aInvulnerable) {
+	bool collided = false;
+	if (aIndex == _index) {
+		collided = true;
+		aTile = _tankTile;
+	} else if (kTurretCollision && (aIndex == _turretIndex)) {
+		collided = true;
+		aTile = _turretTile;
+	} else if (checkBulletCollision(aSource, aIndex, aInvulnerable)) {
+		collided = true;
+		aTile = TILE_BULLET;
+	}
+
+	return collided;
+}
+
+bool Tank::checkBulletCollision(TileType aSource, uint16_t aIndex, bool aInvulnerable) {
+	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
+		if (_bullets[i].getState() == BULLET_ACTIVE) {
+			if (aIndex == _bullets[i].getIndex()) {
+				if ((aSource == TILE_TANK_ONE) || (aSource == TILE_TANK_TWO)) {
+					if (aInvulnerable) {
+						_bullets[i].changeState(BULLET_BOUNCE);
+					} else {
+						_bullets[i].changeState(BULLET_HIT);
+					}
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 /* Accessors */
 
 TankNumber Tank::getTankNumber() {
@@ -89,9 +127,9 @@ void Tank::setIndex(uint16_t aIndex) {
 	_index = aIndex;
 }
 
-uint16_t Tank::getLastIndex() {
+/*uint16_t Tank::getLastIndex() {
 	return _lastIndex;
-}
+}*/
 
 /*TileType Tank::getLastOverlapTile() {
 	return _lastOverlap;
@@ -123,6 +161,10 @@ bool Tank::isVisible() {
 	return _visible;
 }
 
+bool Tank::isInvulnerable() {
+	return _invulnerable;
+}
+
 /*TileType Tank::getTurretOverlapTile() {
 	return _turretOverlap;
 }
@@ -141,7 +183,7 @@ void Tank::initState(TankState aState) {
 	} else if (aState == TANK_RESETTING) {
 		_resetElapsed = 0;
 		_index = _startIndex;
-		_lastIndex = _startIndex;
+		//_lastIndex = _startIndex;
 		_blinks = 0;
 		_visible = true;
 		_invulnerable = true;
@@ -269,44 +311,10 @@ void Tank::endState(TankState aState) {
 	}
 }
 
-bool Tank::checkCollisionAtIndex(uint16_t aIndex, TileType &aCollision) {
-	bool collided = false;
-	if (aIndex == _index) {
-		collided = true;
-		if (_tankNumber == TANK_ONE) {
-			aCollision = TILE_TANK_ONE;
-		} else if (_tankNumber == TANK_TWO) {
-			aCollision = TILE_TANK_TWO;
-		}
-	}
-	if (kTurretCollision) {
-		if (aIndex == _turretIndex) {
-			collided = true;
-			if (_tankNumber == TANK_ONE) {
-				aCollision = TILE_TURRET_ONE;
-			} else if (_tankNumber == TANK_TWO) {
-				aCollision = TILE_TURRET_TWO;
-			}
-		}
-	}
-	if (checkBulletCollision(aIndex)) {
-		collided = true;
-		aCollision = TILE_BULLET;
-	}
-
-	return collided;
-}
-
-bool Tank::checkBulletCollision(uint16_t aIndex) {
+void Tank::updateBullets() {
 	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
-		if (_bullets[i].getState() == BULLET_ACTIVE) {
-			if (aIndex == _bullets[i].getIndex()) {
-				_bullets[i].changeState(BULLET_HIT);
-				return true;
-			}
-		}
+		_bullets[i].updateState();
 	}
-	return false;
 }
 
 void Tank::updateMovement(Direction aDirection, uint16_t aMovementFreq) {
@@ -316,44 +324,41 @@ void Tank::updateMovement(Direction aDirection, uint16_t aMovementFreq) {
 		if ((_direction == DIR_NONE) && (aDirection != DIR_NONE)) {
 			_moveElapsed = _movementFreq;
 		}
-		Direction dir = aDirection;
-		_lastIndex = _index;
+		_direction = aDirection;
+		//_lastIndex = _index;
 
 		TileType tile = TILE_BACKGROUND;
 
 		// Get new position index while checking for screen boundaries and walls.
-		uint16_t newIndex = _gameManager->getLevel()->getNewPosition(_index, dir, tile);
-
-		bool moved = false;
+		uint16_t newIndex = _gameManager->getLevel()->getNewPosition(_index, _direction, tile);
 
 		if ((tile == TILE_BOUNDARY) || (tile == TILE_WALL)) {
 			// Barrier, don't do anything.
-		} else if (_gameManager->getOtherTank(_tankNumber)->checkCollisionAtIndex(newIndex, tile)) {
+		} else if (_gameManager->getOtherTank(_tankNumber)->checkCollisionAtIndex(_tankTile, newIndex, tile, _invulnerable)) {
 			if ((tile == TILE_TANK_ONE) || (tile == TILE_TANK_TWO)) {
 				// Don't do anything.
 			} else if ((tile == TILE_TURRET_ONE) || (tile == TILE_TURRET_TWO)) {
-				moved = true;
+				_index = newIndex;
 			} else if (tile == TILE_BULLET) {
-				moved = true;
+				_index = newIndex;
 				if (!_invulnerable) {
 					changeState(TANK_HIT);
 				}
 			}
-		} else if (checkBulletCollision(_index)) {
+		} else if (checkBulletCollision(_tankTile, _index, _invulnerable)) {
 			if (kFriendlyFire) {
-
-				moved = true;
+				_index = newIndex;
 				if (!_invulnerable) {
 					changeState(TANK_HIT);
 				}
 			} else {
 				// Barrier, don't do anything.
 			}
-		}
-
-		if (moved) {
+		} else {
 			_index = newIndex;
 		}
+
+		_turretIndex = findTurretIndex();
 	}
 }
 
@@ -381,18 +386,7 @@ uint16_t Tank::findTurretIndex() {
 	}
 	_direction = tryDir;
 
-	/*if ((_turretOverlap != TILE_TURRET_ONE) && (_turretOverlap != TILE_TURRET_TWO) &&
-	    (_turretOverlap != TILE_TANK_ONE) && (_turretOverlap != TILE_TANK_TWO)) {
-		_lastTurretOverlap = _turretOverlap;
-	}
-	_turretOverlap = _gameManager->getLevel()->getTileAtIndex(index);*/
 	return index;
-}
-
-void Tank::updateBullets() {
-	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
-		_bullets[i].updateState();
-	}
 }
 
 bool Tank::fireBullet() {

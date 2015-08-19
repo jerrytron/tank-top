@@ -40,7 +40,7 @@ void Bullet::updateState() {
 }
 
 /*void Bullet::updateState() {
-	if (this->active && !this->endOfLife && (_timeElapsed >= _movementDelay)) {
+	if (_timeElapsed >= _movementDelay) {
 		_timeElapsed = 0;
 		_lastIndex = _index;
 		_lastOverlapTile = _overlapTile;
@@ -88,10 +88,18 @@ void Bullet::initState(BulletState aState) {
 	} else if (aState == BULLET_AVAILABLE) {
 
 	} else if (aState == BULLET_ACTIVE) {
-
+		_timeElapsed = 0;
+	} else if (aState == BULLET_BOUNCE) {
+		if (!bounceBullet()) {
+			changeState(BULLET_EXPIRE);
+		} else {
+			changeState(BULLET_ACTIVE);
+		}
 	} else if (aState == BULLET_HIT) {
 		// Animation?
 	} else if (aState == BULLET_EXPLODE) {
+		// Animation?
+	} else if (aState == BULLET_EXPIRE) {
 		// Animation?
 	}
 }
@@ -102,6 +110,8 @@ void Bullet::loopState(BulletState aState) {
 	} else if (aState == BULLET_AVAILABLE) {
 
 	} else if (aState == BULLET_ACTIVE) {
+		updateMovement();
+	} else if (aState == BULLET_BOUNCE) {
 
 	} else if (aState == BULLET_HIT) {
 		if (1) {
@@ -109,6 +119,10 @@ void Bullet::loopState(BulletState aState) {
 		}
 	} else if (aState == BULLET_EXPLODE) {
 		// Wait until animation ends.
+		if (1) {
+			changeState(BULLET_INIT);
+		}
+	} else if (aState == BULLET_EXPIRE) {
 		if (1) {
 			changeState(BULLET_INIT);
 		}
@@ -122,10 +136,74 @@ void Bullet::endState(BulletState aState) {
 
 	} else if (aState == BULLET_ACTIVE) {
 
+	} else if (aState == BULLET_BOUNCE) {
+
 	} else if (aState == BULLET_HIT) {
 
 	} else if (aState == BULLET_EXPLODE) {
 
+	} else if (aState == BULLET_EXPIRE) {
+		// Animation?
+	}
+}
+
+void Bullet::updateMovement() {
+	if (_timeElapsed >= _movementDelay) {
+		_timeElapsed = 0;
+		//_lastIndex = _index;
+
+		TileType tile = TILE_BACKGROUND;
+		uint16_t newIndex = _gameManager->getLevel()->getNewPosition(_index, _direction, tile);
+
+		if ((tile == TILE_BOUNDARY) || (tile == TILE_WALL)) {
+			changeState(BULLET_BOUNCE);
+		} else {
+			tile = TILE_BACKGROUND;
+			// Check for a collision.
+			_gameManager->getTankOne()->checkCollisionAtIndex(TILE_BULLET, newIndex, tile);
+
+			if (tile == TILE_BACKGROUND) {
+				_gameManager->getTankTwo()->checkCollisionAtIndex(TILE_BULLET, newIndex, tile);
+			}
+
+			if (tile == TILE_TANK_ONE) {
+				if (_gameManager->getTankOne()->isInvulnerable()) {
+					changeState(BULLET_BOUNCE);
+				} else {
+					changeState(BULLET_HIT);
+				}
+			} else if (tile == TILE_TANK_TWO) {
+				if (_gameManager->getTankTwo()->isInvulnerable()) {
+					changeState(BULLET_BOUNCE);
+				} else {
+					changeState(BULLET_HIT);
+				}
+			} else if (tile == TILE_BULLET) {
+				changeState(BULLET_BOUNCE);
+			} else if ((tile == TILE_TURRET_ONE) || (tile == TILE_TURRET_TWO)) {
+				_index = newIndex;
+			} else {
+				_index = newIndex;
+			}
+		}
+
+		/*if (_overlapTile == TILE_BULLET) {
+			_overlapTile = _lastOverlapTile;
+
+		} else if ((_overlapTile == TILE_BOUNDARY) || (_overlapTile == TILE_WALL)) {
+
+			_index = _lastIndex;
+			if (!bounceBullet()) {
+				//this->endOfLife = true;
+			}
+		} else if ((_overlapTile == TILE_TANK_ONE) || (_overlapTile == TILE_TANK_TWO)) {
+			DEBUG("Hit tank!");
+			//this->collided = true;
+			//this->endOfLife = true;
+		} else {
+			_gameManager->getLevel()->setTileAtIndex(_lastOverlapTile, _lastIndex);
+			_gameManager->getLevel()->setTileAtIndex(TILE_BULLET, _index);
+		}*/
 	}
 }
 

@@ -15,9 +15,10 @@ typedef enum BulletState_t {
 	BULLET_INIT = 0,
 	BULLET_AVAILABLE,
 	BULLET_ACTIVE,
+	BULLET_BOUNCE,
 	BULLET_HIT,
 	BULLET_EXPLODE,
-	BULLET_IDLE
+	BULLET_EXPIRE
 } BulletState;
 
 class Bullet
@@ -46,6 +47,7 @@ class Bullet
 		void loopState(BulletState aState);
 		void endState(BulletState aState);
 
+		void updateMovement();
 		bool bounceBullet();
 
 		/* Private Variables */

@@ -42,16 +42,20 @@ class Tank
 		void changeState(TankState aState);
 		void updateState();
 
+		bool checkCollisionAtIndex(TileType aSource, uint16_t aIndex, TileType &aTile, bool aInvulnerable = false);
+		bool checkBulletCollision(TileType aSource, uint16_t aIndex, bool aInvulnerable = false);
+
 		TankNumber getTankNumber();
 		uint16_t getIndex();
 		void setIndex(uint16_t aIndex);
-		uint16_t getLastIndex();
+		//uint16_t getLastIndex();
 		//TileType getLastOverlapTile();
 		uint8_t getBulletCount();
 		Bullet* getBulletAtIndex(uint8_t aIndex);
 		uint16_t getTurretIndex();
 		uint16_t getLastTurretIndex();
 		bool isVisible();
+		bool isInvulnerable();
 
 		//TileType getTurretOverlapTile();
 		//TileType getLastTurretOverlapTile();
@@ -64,9 +68,6 @@ class Tank
 		void initState(TankState aState);
 		void loopState(TankState aState);
 		void endState(TankState aState);
-
-		bool checkCollisionAtIndex(uint16_t aIndex, TileType &aCollision);
-		bool checkBulletCollision(uint16_t aIndex);
 		void updateMovement(Direction aDirection, uint16_t aMovementFreq);
 		uint16_t findTurretIndex();
 		void updateBullets();
@@ -92,9 +93,11 @@ class Tank
 		uint16_t _movementFreq;
 		TankState _state;
 		TankNumber _tankNumber;
+		TileType _tankTile;
+		TileType _turretTile;
 		uint16_t _startIndex;
 		uint16_t _index;
-		uint16_t _lastIndex;
+		//uint16_t _lastIndex;
 		//TileType _overlap;
 		//TileType _lastOverlap;
 		uint16_t _turretIndex;
