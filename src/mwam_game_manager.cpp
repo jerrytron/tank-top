@@ -23,9 +23,10 @@ void GameManager::initialize(StateController *aStateController) {
 	_textRenderer->initialize(_level, false);
 	_tankOne = new Tank();
 	_tankOne->initialize(TANK_ONE, kPlayerOneStartIndex, kIntervalPlayerDelayMillis);
+	_tankOneReady = false;
 	_tankTwo = new Tank();
 	_tankTwo->initialize(TANK_TWO, kPlayerTwoStartIndex, kIntervalPlayerDelayMillis);
-
+	_tankTwoReady = false;
 	//_hardwareManager->ledSet()->setFastUpdates(_tankOne, _tankTwo);
 }
 
@@ -51,7 +52,7 @@ void GameManager::generateWalls() {
 }
 
 void GameManager::initWaiting() {
-	//_level->setTheme(THEME_BRIGHT);
+	//_level->setTheme(THEME_SPOOKY);
 	_textRenderer->newMessage(kTankTop, kTankTopLen, 5, 0, 100, -10);
 	_tileIndex = 1;
 }
@@ -64,9 +65,10 @@ void GameManager::updateWaiting() {
 		if (_colorElapsed >= 1000) {
 			_colorElapsed = 0;
 			_tileIndex += 1;
-			if (_tileIndex > 7) {
+			if (_tileIndex > 6) {
 				_tileIndex = 1;
 			}
+			DEBUG("Tile Index: %d", _tileIndex);
 		}
 	}
 	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
@@ -152,8 +154,6 @@ void GameManager::initSelect() {
 	_level->drawLine(DIR_DOWN_LEFT, TILE_TANK_TWO, 25, 5);
 	_level->drawLine(DIR_DOWN_LEFT, TILE_WALL, 26, 5);*/
 
-	_level->drawSquare(false, TILE_TANK_ONE, 218, 11, 7);
-	_level->drawSquare(false, TILE_TANK_TWO, 229, 10, 7);
 	//_level->drawSquare(true, TILE_BULLET, 206, 5, 5);
 
 	//_level->drawText(TILE_WALL, 220, hi, 4);
@@ -167,17 +167,47 @@ void GameManager::initSelect() {
 	//_level->drawLine(DIR_LEFT, TILE_BULLET, 20, 22);
 
 	//_level->drawLine(DIR_RIGHT, TILE_WALL, 235, 6);
+
+	_level->drawLine(DIR_RIGHT, TILE_TANK_ONE, 218, 11);
+	_level->drawLine(DIR_RIGHT, TILE_TANK_ONE, 13, 11);
+	_level->drawLine(DIR_DOWN, TILE_TANK_ONE, 218, 7);
+	_level->drawLine(DIR_DOWN, TILE_TANK_ONE, 228, 7);
+
+	_level->drawLine(DIR_RIGHT, TILE_TANK_TWO, 229, 10);
+	_level->drawLine(DIR_RIGHT, TILE_TANK_TWO, 24, 10);
+	_level->drawLine(DIR_DOWN, TILE_TANK_TWO, 229, 7);
+	_level->drawLine(DIR_DOWN, TILE_TANK_TWO, 238, 7);
 }
 
 void GameManager::updateSelect() {
 	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
 	if (_selectElapsed >= 10) {
 		_selectElapsed = 0;
+		if (!_tankOneReady && _hardwareManager->joystickOne()->clickUp()) {
+			_tankOneReady = true;
+			_colorElapsed = 0;
+			_level->drawSquare(false, TILE_TANK_ONE, 218, 11, 7);
+		}
+		if (!_tankTwoReady && _hardwareManager->joystickTwo()->clickUp()) {
+			_tankTwoReady = true;
+			_colorElapsed = 0;
+			_level->drawSquare(false, TILE_TANK_TWO, 229, 10, 7);
+		}
+		if (_tankOneReady && _tankTwoReady) {
+			if (_colorElapsed >= 2000) {
+				_stateController->changeState(STATE_PLAY);
+			}
+		}
 	}
 }
 
 void GameManager::endSelect() {
+	DEBUG("endSelect");
 	_level->clearLevel();
+}
+
+void GameManager::initPlay() {
+
 }
 
 void GameManager::updatePlay() {
@@ -233,6 +263,10 @@ void GameManager::updatePlay() {
 		_tankTwo->fireBullet();
 	}
 	_tankTwo->updateBullets();
+}
+
+void GameManager::endPlay() {
+
 }
 
 

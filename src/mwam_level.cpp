@@ -14,7 +14,7 @@ namespace mwam
 // Themes: Background, P1 Color, P1 Turret, P2 Color, P2 Turret, Bullets, Walls
 const Color themeDefault[] = { kColorBlack, kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorPurple };
 
-const Color themeBright[] = { kColorWhite, kColorBlue, kColorYellow, kColorRed, kColorYellow, kColorOrange, kColorBlack };
+const Color themeTwo[] = { kColorBlack, kColorBlue, kColorYellow, kColorRed, kColorYellow, kColorOrange, kColorWhite };
 
 
 /* Public Methods */
@@ -100,94 +100,6 @@ int16_t Level::glyphIndexForChar(const char aChar) {
 	return i;
 }
 
-/*void Level::drawText(TileType aTile, uint16_t aIndex, char* aBuffer, uint16_t aLength) {
-	if (aIndex > kTextLedIndexMax) {
-		aIndex = kTextLedIndexMax;
-	}
-
-	DEBUG("Msg: %s", aBuffer);
-	// initiate display of new text
-	int8_t textPixelOffset = 0;//-kLedsPerRing;
-	//uint8_t textCycleCount = 0;
-	//uint8_t repeatCount = 0;
-
-	// fade between rows
-	//byte maxBright = kTextIntensity - repeatCount * kFadePerRepeat;
-	//byte thisBright, nextBright;
-	//crossFade(255 * textCycleCount / kCyclesPerPx, maxBright, thisBright, nextBright);
-	// generate vertical rows
-	uint8_t activeCols = kLedsPerRing - 2;
-	// calculate text length in pixels
-	uint16_t totalTextPixels = 0;
-
-	for (int i = 0; i < aLength; i++) {
-		// sum up width of individual chars
-		totalTextPixels += kFontGlyphs[glyphIndexForChar(aBuffer[i])].width + kGlyphSpacing;
-	}
-	DEBUG("TTP: %d", totalTextPixels);
-
-	for (int x = 0; x < kLedsPerRing; x++) {
-		uint8_t column = 0;
-		// determine font column
-		if (x < activeCols) {
-			DEBUG("Active");
-			int colPixelOffset = textPixelOffset + x;
-			DEBUG("Col Off: %d", colPixelOffset);
-			if (colPixelOffset >= 0) {
-				// visible column
-				// - calculate character index
-				int charIndex = 0;
-				int glyphOffset = colPixelOffset;
-				const glyph_t *glyphP = NULL;
-				while (charIndex < aLength) {
-					glyphP = &kFontGlyphs[glyphIndexForChar(aBuffer[charIndex])];
-					int cw = glyphP->width + kGlyphSpacing;
-					if (glyphOffset < cw) {
-						break; // found char
-					}
-					glyphOffset -= cw;
-					charIndex++;
-				}
-				// now we have
-				// - glyphP = the glyph,
-				// - glyphOffset=column offset within that glyph (but might address a spacing column not stored in font table)
-				if (charIndex < aLength) {
-					// is a column of a visible char
-					if (glyphOffset < glyphP->width) {
-						// fetch glyph column
-						column = glyphP->cols[glyphOffset];
-					}
-				}
-			}
-		}
-		// now render columns
-		for (int glyphRow = 0; glyphRow < kRowsPerGlyph; glyphRow++) {
-			int i;
-			//int leftstep;
-			if (kMirrorText) {
-				i = (glyphRow + 1) * kLedsPerRing - 1 - x; // LED index, x-direction mirrored
-				leftstep = 1;
-			} else {
-			i = glyphRow * kLedsPerRing + x; // LED index
-			//leftstep = -1;
-			//}
-			if (glyphRow < kRowsPerGlyph) {
-				if (column & (0x40 >> glyphRow)) {
-					//textLayer[i] = thisBright; DELETE
-					DEBUG("I: %d", i);
-					setTileAtIndex(aTile, i);
-					// also adjust pixel left to this one
-					if (x > 0) {
-						increase(textLayer[i + leftstep], nextBright, maxBright);
-					}
-					continue;
-				}
-			}
-			setTileAtIndex(TILE_BACKGROUND, i); // no text
-		}
-	}
-}*/
-
 void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength) {
 	int16_t index = aIndex;
 	uint16_t newIndex = aIndex;
@@ -257,7 +169,7 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 }
 
 void Level::nextTheme() {
-	if (_currentTheme == THEME_BRIGHT) {
+	if (_currentTheme == THEME_SPOOKY) {
 		_currentTheme = THEME_DEFAULT;
 	} else {
 		_currentTheme = (Theme)(_currentTheme + 1);
@@ -268,9 +180,9 @@ void Level::setTheme(Theme aTheme) {
 	if (_currentTheme == THEME_DEFAULT) {
 		//memcpy(_activeTheme, themeDefault, sizeof(themeDefault));
 		_activeTheme = themeDefault;
-	} else if (_currentTheme == THEME_BRIGHT) {
+	} else if (_currentTheme == THEME_SPOOKY) {
 		//memcpy(_activeTheme, themeBright, sizeof(themeDefault));
-		_activeTheme = themeBright;
+		_activeTheme = themeTwo;
 	}
 	Manager::getInstance().hardwareManager->ledSet()->updateLeds(this);
 }

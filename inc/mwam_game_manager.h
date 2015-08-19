@@ -26,7 +26,7 @@ class GameManager
 		void generateWalls();
 		void updateIntro();
 		void updateTutorial();
-		void updatePlay();
+
 		void updateGameOver(bool aWonGame);
 
 		void playLedTest();
@@ -39,7 +39,10 @@ class GameManager
 		void initSelect();
 		void updateSelect();
 		void endSelect();
-		//void updateFireStormAnim();
+
+		void initPlay();
+		void updatePlay();
+		void endPlay();
 
 		Level* getLevel();
 		Tank* getTankOne();
@@ -65,7 +68,9 @@ class GameManager
 
 		Level* _level;
 		Tank* _tankOne;
+		bool _tankOneReady;
 		Tank* _tankTwo;
+		bool _tankTwoReady;
 
 		bool _playerOneActive;
 		bool _playerTwoActive;

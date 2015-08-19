@@ -77,7 +77,7 @@ void StateController::initState(GameState aState) {
 		randomSeed(_seed);
 		_gameManager->initSelect();
 	} else if (aState == STATE_PLAY) {
-
+		_gameManager->initPlay();
 	} else if (aState == STATE_GAME_OVER) {
 
 	} else if (aState == STATE_GAME_WON) {
@@ -153,11 +153,11 @@ void StateController::endState(GameState aState) {
 	} else if (aState == STATE_WAITING) {
 		_gameManager->endWaiting();
 	} else if (aState == STATE_TUTORIAL) {
-		_gameManager->endSelect();
+
 	} else if (aState == STATE_SELECT) {
-
+		_gameManager->endSelect();
 	} else if (aState == STATE_PLAY) {
-
+		_gameManager->endPlay();
 	} else if (aState == STATE_GAME_OVER) {
 
 	} else if (aState == STATE_GAME_WON) {

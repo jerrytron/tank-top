@@ -12,7 +12,7 @@ class Tank;
 
 typedef enum Theme_t {
 	THEME_DEFAULT = 0,
-	THEME_BRIGHT
+	THEME_SPOOKY
 } Theme;
 
 typedef enum ThemeElement_t {
@@ -57,7 +57,6 @@ class Level
 		TileType getTileAtIndex(uint16_t aIndex);
 
 		int16_t glyphIndexForChar(const char aChar);
-		//void drawText(TileType aTile, uint16_t aIndex, char* aBuffer, uint16_t aLength);
 		void drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t aWidth, uint8_t aHeight);
 		void drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength);
 
