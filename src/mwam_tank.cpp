@@ -392,17 +392,6 @@ uint16_t Tank::findTurretIndex() {
 void Tank::updateBullets() {
 	for (uint8_t i = 0; i < kMaxBulletsLive; ++i) {
 		_bullets[i].updateState();
-		/*if (_bullets[i].collided) {
-			DEBUG("Bullet hit tank!");
-			_bullets[i].collided = false;
-			_tankState = TANK_DESTROYED;
-			_health--;
-		}
-		if (_bullets[i].endOfLife) {
-			_gameManager->getLevel()->setTileAtIndex(_bullets[i].getOverlapTile(), _bullets[i].getIndex());
-			_bullets[i].endOfLife = false;
-			_bullets[i].active = false;
-		}*/
 	}
 }
 

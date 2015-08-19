@@ -23,9 +23,6 @@ void Bullet::reset(uint16_t aIndex, Direction aDir) {
 	_lastIndex = aIndex;
 	_direction = aDir;
 	_bouncesLeft = kMaxBulletBounces;
-	//this->collided = false;
-	//this->endOfLife = false;
-	//this->active = false;
 }
 
 BulletState Bullet::getState() {
