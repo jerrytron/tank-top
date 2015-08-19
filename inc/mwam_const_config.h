@@ -38,9 +38,9 @@ namespace mwam
 	const uint16_t kIntervalPlayerSpeedMillis = 125;
 
 	// Player One Start Index
-	const uint8_t kPlayerOneStartIndex = 123;
+	const uint8_t kPlayerOneStartIndex = 141;
 	// Player One Start Index
-	const uint8_t kPlayerTwoStartIndex = 134;
+	const uint8_t kPlayerTwoStartIndex = 152;
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
 	// Max Bullet Bounces

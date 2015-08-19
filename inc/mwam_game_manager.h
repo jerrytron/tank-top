@@ -44,6 +44,9 @@ class GameManager
 		void updatePlay();
 		void endPlay();
 
+		void drawLevel();
+		void drawScreen();
+
 		Level* getLevel();
 		Tank* getTankOne();
 		Tank* getTankTwo();
