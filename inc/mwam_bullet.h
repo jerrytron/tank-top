@@ -11,6 +11,15 @@ namespace mwam
 
 class GameManager;
 
+typedef enum BulletState_t {
+	BULLET_INIT = 0,
+	BULLET_AVAILABLE,
+	BULLET_ACTIVE,
+	BULLET_HIT,
+	BULLET_EXPLODE,
+	BULLET_IDLE
+} BulletState;
+
 class Bullet
 {
 	public:
@@ -18,32 +27,37 @@ class Bullet
 		Bullet();
 		void initialize(uint32_t aMovementDelay);
 		void reset(uint16_t aIndex, Direction aDir);
+
+		BulletState getState();
+		void changeState(BulletState aState);
 		void updateState();
 
 		uint16_t getIndex();
 		void setIndex(uint16_t aIndex);
 		uint16_t getLastIndex();
-		TileType getOverlapTile();
-		TileType getLastOverlapTyle();
+		//TileType getOverlapTile();
+		//TileType getLastOverlapTyle();
 
 		/* Public Variables */
-		bool active;
-		bool collided;
-		bool endOfLife;
 
 	private:
 		/* Private Methods */
+		void initState(BulletState aState);
+		void loopState(BulletState aState);
+		void endState(BulletState aState);
+
 		bool bounceBullet();
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;
 		GameManager* _gameManager;
+		BulletState _state;
 		uint32_t _movementDelay;
 		uint16_t _index;
 		uint16_t _lastIndex;
 		Direction _direction;
-		TileType _overlapTile;
-		TileType _lastOverlapTile;
+		//TileType _overlapTile;
+		//TileType _lastOverlapTile;
 		uint16_t _bouncesLeft;
 
 };

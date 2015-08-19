@@ -75,7 +75,7 @@ void HardwareManager::initHardware() {
 
 	// Setup Button
 	//_button = new MomentaryButton();
-	//_button->initialize(kButtonPin, kButtonLedPin, kIntervalButtonMillis);
+	//_button->initialize(kButtonPin, kIntervalButtonMillis);
 
 	// Setup Joystick One
 	_joystickOne = new Joystick();

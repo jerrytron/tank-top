@@ -13,22 +13,36 @@ void Bullet::initialize(uint32_t aMovementDelay) {
 	_gameManager = Manager::getInstance().gameManager;
 	_movementDelay = aMovementDelay;
 	_timeElapsed = 0;
-	reset(0, DIR_NONE);
+
+	_state = BULLET_INIT;
+	initState(BULLET_INIT);
 }
 
 void Bullet::reset(uint16_t aIndex, Direction aDir) {
 	_index = aIndex;
 	_lastIndex = aIndex;
 	_direction = aDir;
-	//_overlapTile = _level->getTileAtIndex(aIndex);
-	//_lastOverlapTile = TILE_BACKGROUND;
 	_bouncesLeft = kMaxBulletBounces;
-	this->collided = false;
-	this->endOfLife = false;
-	this->active = false;
+	//this->collided = false;
+	//this->endOfLife = false;
+	//this->active = false;
+}
+
+BulletState Bullet::getState() {
+	return _state;
+}
+
+void Bullet::changeState(BulletState aState) {
+	endState(_state);
+	_state = aState;
+	initState(_state);
 }
 
 void Bullet::updateState() {
+	loopState(_state);
+}
+
+/*void Bullet::updateState() {
 	if (this->active && !this->endOfLife && (_timeElapsed >= _movementDelay)) {
 		_timeElapsed = 0;
 		_lastIndex = _index;
@@ -43,18 +57,18 @@ void Bullet::updateState() {
 			_overlapTile = _lastOverlapTile;
 			_index = _lastIndex;
 			if (!bounceBullet()) {
-				this->endOfLife = true;
+				//this->endOfLife = true;
 			}
 		} else if ((_overlapTile == TILE_TANK_ONE) || (_overlapTile == TILE_TANK_TWO)) {
 			DEBUG("Hit tank!");
-			this->collided = true;
-			this->endOfLife = true;
+			//this->collided = true;
+			//this->endOfLife = true;
 		} else {
 			_gameManager->getLevel()->setTileAtIndex(_lastOverlapTile, _lastIndex);
 			_gameManager->getLevel()->setTileAtIndex(TILE_BULLET, _index);
 		}
 	}
-}
+}*/
 
 uint16_t Bullet::getIndex() {
 	return _index;
@@ -68,15 +82,55 @@ uint16_t Bullet::getLastIndex() {
 	return _lastIndex;
 }
 
-TileType Bullet::getOverlapTile() {
-	return _overlapTile;
-}
-
-TileType Bullet::getLastOverlapTyle() {
-	return _lastOverlapTile;
-}
-
 /* Private Methods */
+
+void Bullet::initState(BulletState aState) {
+	if (aState == BULLET_INIT) {
+		reset(0, DIR_NONE);
+		changeState(BULLET_AVAILABLE);
+	} else if (aState == BULLET_AVAILABLE) {
+
+	} else if (aState == BULLET_ACTIVE) {
+
+	} else if (aState == BULLET_HIT) {
+		// Animation?
+	} else if (aState == BULLET_EXPLODE) {
+		// Animation?
+	}
+}
+
+void Bullet::loopState(BulletState aState) {
+	if (aState == BULLET_INIT) {
+
+	} else if (aState == BULLET_AVAILABLE) {
+
+	} else if (aState == BULLET_ACTIVE) {
+
+	} else if (aState == BULLET_HIT) {
+		if (1) {
+			changeState(BULLET_INIT);
+		}
+	} else if (aState == BULLET_EXPLODE) {
+		// Wait until animation ends.
+		if (1) {
+			changeState(BULLET_INIT);
+		}
+	}
+}
+
+void Bullet::endState(BulletState aState) {
+	if (aState == BULLET_INIT) {
+
+	} else if (aState == BULLET_AVAILABLE) {
+
+	} else if (aState == BULLET_ACTIVE) {
+
+	} else if (aState == BULLET_HIT) {
+
+	} else if (aState == BULLET_EXPLODE) {
+
+	}
+}
 
 bool Bullet::bounceBullet() {
 	if (_bouncesLeft > 1) {

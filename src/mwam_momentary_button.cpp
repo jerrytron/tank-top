@@ -10,12 +10,10 @@ const uint16_t kHoldThreshold = 2000;
 MomentaryButton::MomentaryButton() {
 }
 
-void MomentaryButton::initialize(uint8_t aBtnPin, uint8_t aLedPin, uint32_t aUpdateFreq) {
+void MomentaryButton::initialize(uint8_t aBtnPin, uint32_t aUpdateFreq) {
 	_btnPin = aBtnPin;
-	_ledPin = aLedPin;
 	_updateFreq = aUpdateFreq;
 	pinMode(_btnPin, INPUT_PULLUP);
-	//pinMode(_ledPin, OUTPUT);
 	//digitalWrite(_btnPin, HIGH);
 	this->active = true;
 	reset();
@@ -34,7 +32,6 @@ void MomentaryButton::reset() {
 	_clickReported = false;
 	_held = false;
 	_holdReported = false;
-	turnLedOn();
 }
 
 bool MomentaryButton::pressed() {
@@ -55,14 +52,6 @@ bool MomentaryButton::wasHeld() {
 		return _held;
 	}
 	return false;
-}
-
-void MomentaryButton::turnLedOn() {
-	digitalWrite(_ledPin, HIGH);
-}
-
-void MomentaryButton::turnLedOff() {
-	digitalWrite(_ledPin, LOW);
 }
 
 /* Private Methods */

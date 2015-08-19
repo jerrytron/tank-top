@@ -2,7 +2,6 @@
 #define MWAM_GAME_MANAGER_H
 
 #include "mwam_constants.h"
-#include "mwam_led_set.h"
 #include "mwam_level.h"
 #include "mwam_tank.h"
 #include "ElapsedTime.h"
@@ -45,11 +44,14 @@ class GameManager
 		void endPlay();
 
 		void drawLevel();
-		void drawScreen();
+		void drawObjects();
+
+		void gameOver();
 
 		Level* getLevel();
 		Tank* getTankOne();
 		Tank* getTankTwo();
+		Tank* getOtherTank(TankNumber aTankNum);
 
 		/* Animation Accessors */
 
@@ -66,7 +68,7 @@ class GameManager
 
 		ElapsedMillis _waitingElapsed;
 		ElapsedMillis _selectElapsed;
-		ElapsedMillis _colorElapsed;
+		ElapsedMillis _timeElapsed;
 		uint8_t _tileIndex;
 
 		Level* _level;

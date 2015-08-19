@@ -52,7 +52,7 @@ class Level
 		void initialize(Theme aTheme, uint32_t aUpdateFreq = 0);
 		void updateState();
 		void clearLevel();
-		void setTankAtIndex(Tank* aTank);
+		//void setTankAtIndex(Tank* aTank);
 		void setTileAtIndex(TileType aTile, uint16_t aIndex);
 		TileType getTileAtIndex(uint16_t aIndex);
 
@@ -71,7 +71,6 @@ class Level
 
 	private:
 		/* Private Methods */
-		TileType checkForCollision(uint16_t aIndex);
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;

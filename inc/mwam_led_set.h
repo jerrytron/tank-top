@@ -148,6 +148,7 @@ class LedSet
 		LedState getLedState(uint16_t aLedIndex);
 		bool allLedsIdle();
 		bool allAnimsDone();
+		void clearEvents();
 		//void pauseAnim(uint16_t aLedIndex);
 		//void pauseAllAnims();
 		//void resumeAnim(uint16_t aLedIndex);

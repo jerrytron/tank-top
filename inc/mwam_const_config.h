@@ -49,18 +49,23 @@ namespace mwam
 	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player
 	const uint8_t kHealthTotal = 3;
+	// Lives Total Per Player
+	const uint8_t kLivesTotal = 3;
 	// Do turrets count as obstacles.
 	const bool kTurretCollision = true;
 	// Can you get hurt by your own bullets?
 	const bool kFriendlyFire = true;
+	// Number of blinks until effect is over.
+	const uint16_t kBlinkMax = 6;
+	// Blinking interval.
+	const uint16_t kBlinkIntervalMillis = 500;
 
 	// Piezo Pins
 	const uint8_t kPiezoOnePin = A5;
 	const uint8_t kPiezoTwoPin = A6;
 
 	// Button Pins
-	const uint8_t kButtonPin = D3;
-	const uint8_t kButtonLedPin = D2;
+	const uint8_t kButtonPin = D2;
 
 	const uint8_t kJoystickOneBtnPin = D0;
 	const uint8_t kJoystickTwoBtnPin = D1;

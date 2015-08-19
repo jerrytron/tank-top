@@ -39,6 +39,7 @@ void LedSet::updateState(Level* aLevel) {
 		//if (_fastUpdates) {
 		//	updateLedsFast(aLevel);
 		//} else {
+			clearEvents();
 			updateLeds(aLevel);
 		//}
 	}
@@ -233,21 +234,15 @@ bool LedSet::allLedsIdle() {
 }
 
 bool LedSet::allAnimsDone() {
-	AnimEvent event = _doneEvent;
-	_doneEvent = EVENT_NONE;
-	return (event == EVENT_ALL_DONE);
-	/*for (int i = 0; i < _ledCount; ++i) {
-		if (_leds[i].state != LED_IDLE) {
-			return false;
-		}
-	}*/
+	return (_doneEvent == EVENT_ALL_DONE);
 }
 
-/*void LedSet::clearEvents() {
+void LedSet::clearEvents() {
 	for (int i = 0; i < _ledCount; ++i) {
 		_leds[i].doneEvent = EVENT_NONE;
 	}
-}*/
+	_doneEvent = EVENT_NONE;
+}
 
 /*void LedSet::pauseAnim(uint16_t aLedIndex) {
 	if (aLedIndex < _ledCount) {

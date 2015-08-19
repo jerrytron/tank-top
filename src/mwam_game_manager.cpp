@@ -51,6 +51,7 @@ void GameManager::initWaiting() {
 	//_level->setTheme(THEME_SPOOKY);
 	_textRenderer->newMessage(kTankTop, kTankTopLen, 5, 0, 100, -10);
 	_tileIndex = 1;
+	_timeElapsed = 0;
 }
 
 void GameManager::updateWaiting() {
@@ -58,8 +59,8 @@ void GameManager::updateWaiting() {
 		_waitingElapsed = 0;
 		_textRenderer->renderText((TileType)_tileIndex);
 
-		if (_colorElapsed >= 1000) {
-			_colorElapsed = 0;
+		if (_timeElapsed >= 1000) {
+			_timeElapsed = 0;
 			_tileIndex += 1;
 			if (_tileIndex > 6) {
 				_tileIndex = 1;
@@ -151,16 +152,16 @@ void GameManager::updateSelect() {
 		_selectElapsed = 0;
 		if (!_tankOneReady && _hardwareManager->joystickOne()->clickUp()) {
 			_tankOneReady = true;
-			_colorElapsed = 0;
+			_timeElapsed = 0;
 			_level->drawSquare(false, TILE_TANK_ONE, 218, 11, 7);
 		}
 		if (!_tankTwoReady && _hardwareManager->joystickTwo()->clickUp()) {
 			_tankTwoReady = true;
-			_colorElapsed = 0;
+			_timeElapsed = 0;
 			_level->drawSquare(false, TILE_TANK_TWO, 229, 10, 7);
 		}
 		if (_tankOneReady && _tankTwoReady) {
-			if (_colorElapsed >= 2000) {
+			if (_timeElapsed >= 2000) {
 				_stateController->changeState(STATE_PLAY);
 			}
 		}
@@ -174,11 +175,9 @@ void GameManager::endSelect() {
 
 void GameManager::initPlay() {
 	_tankOne = new Tank();
-	_tankOne->initialize(TANK_ONE, kPlayerOneStartIndex, kIntervalPlayerDelayMillis);
+	_tankOne->initialize(TANK_ONE, kPlayerOneStartIndex);
 	_tankTwo = new Tank();
-	_tankTwo->initialize(TANK_TWO, kPlayerTwoStartIndex, kIntervalPlayerDelayMillis);
-
-	drawLevel();
+	_tankTwo->initialize(TANK_TWO, kPlayerTwoStartIndex);
 }
 
 void GameManager::updatePlay() {
@@ -188,12 +187,12 @@ void GameManager::updatePlay() {
 	}*/
 
 	_level->clearLevel();
+	drawLevel(); // Place walls / obstacles.
 
+	_tankOne->updateState();
+	_tankTwo->updateState();
 
-	Direction dir;
-	JoystickThreshold threshold;
-	TankState state = _tankOne->getState();
-	if (state == TANK_DESTROYED) {
+	/*if (state == TANK_DESTROYED) {
 		DEBUG("DESTROYED!");
 		Animation a;
 		a.endColor = kColorRed;
@@ -223,9 +222,9 @@ void GameManager::updatePlay() {
 			_tankOne->fireBullet();
 		}
 	}
-	_tankOne->updateBullets();
+	_tankOne->updateBullets();*/
 
-	dir = _hardwareManager->joystickTwo()->getDirection();
+	/*dir = _hardwareManager->joystickTwo()->getDirection();
 	threshold = _hardwareManager->joystickTwo()->getThreshold();
 	if (dir) {
 		uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
@@ -237,10 +236,14 @@ void GameManager::updatePlay() {
 	if (_hardwareManager->joystickTwo()->clickUp()) {
 		_tankTwo->fireBullet();
 	}
-	_tankTwo->updateBullets();
+	_tankTwo->updateBullets();*/
 
 
-	drawScreen();
+	drawObjects();
+}
+
+void GameManager::endPlay() {
+
 }
 
 void GameManager::drawLevel() {
@@ -252,16 +255,35 @@ void GameManager::drawLevel() {
 }
 
 
-void GameManager::drawScreen() {
+void GameManager::drawObjects() {
+	// Order of drawing is important!
+	if (_tankOne->isVisible()) {
+		_level->setTileAtIndex(TILE_TANK_ONE, _tankOne->getIndex());
+		_level->setTileAtIndex(TILE_TURRET_ONE, _tankOne->getTurretIndex());
+	}
 
+	if (_tankTwo->isVisible()) {
+		_level->setTileAtIndex(TILE_TANK_TWO, _tankTwo->getIndex());
+		_level->setTileAtIndex(TILE_TURRET_TWO, _tankTwo->getTurretIndex());
+	}
+
+	for (int i = 0; i < kMaxBulletsLive; i++) {
+		if (_tankOne->getBulletAtIndex(i)->getState() == BULLET_ACTIVE) {
+			_level->setTileAtIndex(TILE_BULLET, _tankOne->getBulletAtIndex(i)->getIndex());
+		}
+		if (_tankTwo->getBulletAtIndex(i)->getState() == BULLET_ACTIVE) {
+			_level->setTileAtIndex(TILE_BULLET, _tankTwo->getBulletAtIndex(i)->getIndex());
+		}
+	}
 }
 
-void GameManager::endPlay() {
-
+void GameManager::gameOver() {
+	_stateController->changeState(STATE_GAME_OVER);
 }
 
 void GameManager::updateGameOver(bool aWonGame) {
 }
+
 
 void GameManager::playLedTest() {
 	/*Animation a = Animation();
@@ -301,6 +323,15 @@ Tank* GameManager::getTankOne() {
 
 Tank* GameManager::getTankTwo() {
 	return _tankTwo;
+}
+
+Tank* GameManager::getOtherTank(TankNumber aTankNum) {
+	if (aTankNum == TANK_ONE) {
+		return _tankTwo;
+	} else if (aTankNum == TANK_TWO) {
+		return _tankOne;
+	}
+	return NULL;
 }
 
 /* Private Methods */
