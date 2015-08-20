@@ -170,12 +170,14 @@ void Level::setTheme(Theme aTheme) {
 }
 
 uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aCollision) {
-	uint16_t newIndex = aIndex;
+	int16_t newIndex = aIndex;
+
 	if (aDir == DIR_UP_LEFT) {
 		newIndex += kLedDiagUpLeft;
 		if (newIndex >= kLedCount) {
 			aCollision = TILE_BOUNDARY;
 			DEBUG("Upper left boundry.");
+			delay(10);
 			return aIndex;
 		}
 	} else if (aDir == DIR_UP_RIGHT) {
@@ -183,24 +185,31 @@ uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aColli
 		if (newIndex >= kLedCount) {
 			aCollision = TILE_BOUNDARY;
 			DEBUG("Upper Right boundry.");
+			delay(10);
 			return aIndex;
 		}
 	} else if (aDir == DIR_DOWN_LEFT) {
-		if (newIndex < kLedDiagDownLeft) {
+		if (newIndex < abs(kLedDiagDownLeft)) {
 			aCollision = TILE_BOUNDARY;
 			DEBUG("Lower left boundry.");
+			delay(10);
 			return aIndex;
 		}
 		newIndex += kLedDiagDownLeft;
 	} else if (aDir == DIR_DOWN_RIGHT) {
-		if (newIndex < kLedDiagDownRight) {
+		if (newIndex < abs(kLedDiagDownRight)) {
 			aCollision = TILE_BOUNDARY;
 			DEBUG("LowerRight boundry.");
+			delay(10);
 			return aIndex;
 		}
 		newIndex += kLedDiagDownRight;
 	}
+
 	aCollision = getTileAtIndex(newIndex);
+	if (aCollision == TILE_WALL) {
+		return aIndex;
+	}
 
 	return newIndex;
 }

@@ -56,9 +56,9 @@ namespace mwam
 	// Can you get hurt by your own bullets?
 	const bool kFriendlyFire = true;
 	// Number of blinks until effect is over.
-	const uint16_t kBlinkMax = 6;
+	const uint16_t kBlinkMax = 15;
 	// Blinking interval.
-	const uint16_t kBlinkIntervalMillis = 500;
+	const uint16_t kBlinkIntervalMillis = 200;
 
 	// Piezo Pins
 	const uint8_t kPiezoOnePin = A5;

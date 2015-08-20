@@ -27,6 +27,7 @@ class Bullet
 		/* Public Methods */
 		Bullet();
 		void initialize(uint32_t aMovementDelay);
+		const char* stateString();
 		void reset(uint16_t aIndex, Direction aDir);
 
 		BulletState getState();

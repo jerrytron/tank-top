@@ -191,6 +191,7 @@ void Tank::initState(TankState aState) {
 
 	} else if (aState == TANK_HIT) {
 		_health--;
+		LOG("Tank %d, -1 health, %d remaining", _tankNumber, _health);
 
 		_anim.endColor = kColorRed;
 		_anim.yoyo = true;
@@ -205,6 +206,7 @@ void Tank::initState(TankState aState) {
 		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownRight, _anim, false);
 	} else if (aState == TANK_DESTROYED) {
 		_lives--;
+		LOG("Tank %d, -1 life, %d remaining", _tankNumber, _lives);
 
 		_anim.endColor = kColorRed;
 		_anim.yoyo = true;
@@ -253,7 +255,7 @@ void Tank::loopState(TankState aState) {
 		JoystickThreshold threshold = _joystick->getThreshold();
 
 		if (dir) {
-			DEBUG("Dir: %d, Thresh: %d", dir, threshold);
+			//DEBUG("Dir: %d, Thresh: %d", dir, threshold);
 			uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
 			if (_joystick->clickDown()) {
 				movementDelay = 0;

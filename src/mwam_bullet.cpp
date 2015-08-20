@@ -4,6 +4,18 @@
 namespace mwam
 {
 
+struct BulletStateStr_t {
+	BulletState state;
+	const char *stateDesc;
+} BulletStateDesc[] = {
+	{ BULLET_INIT, "init" },
+	{ BULLET_AVAILABLE, "available" },
+	{ BULLET_BOUNCE, "bounce" },
+	{ BULLET_HIT, "hit" },
+	{ BULLET_EXPLODE, "explode" },
+	{ BULLET_EXPIRE, "expire" }
+};
+
 /* Public Methods */
 
 Bullet::Bullet() {
@@ -16,6 +28,10 @@ void Bullet::initialize(uint32_t aMovementDelay) {
 
 	_state = BULLET_INIT;
 	initState(BULLET_INIT);
+}
+
+const char* Bullet::stateString() {
+	return BulletStateDesc[_state].stateDesc;
 }
 
 void Bullet::reset(uint16_t aIndex, Direction aDir) {
@@ -54,13 +70,15 @@ uint16_t Bullet::getLastIndex() {
 /* Private Methods */
 
 void Bullet::initState(BulletState aState) {
+	LOG("Init State: %s", stateString());
+
 	if (aState == BULLET_INIT) {
 		reset(0, DIR_NONE);
 		changeState(BULLET_AVAILABLE);
 	} else if (aState == BULLET_AVAILABLE) {
 
 	} else if (aState == BULLET_ACTIVE) {
-		_timeElapsed = 0;
+
 	} else if (aState == BULLET_BOUNCE) {
 		if (!bounceBullet()) {
 			changeState(BULLET_EXPIRE);
@@ -77,6 +95,8 @@ void Bullet::initState(BulletState aState) {
 }
 
 void Bullet::loopState(BulletState aState) {
+	LOG("End State: %s", stateString());
+
 	if (aState == BULLET_INIT) {
 
 	} else if (aState == BULLET_AVAILABLE) {
