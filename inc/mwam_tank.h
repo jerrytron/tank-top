@@ -78,8 +78,6 @@ class Tank
 		ElapsedMillis _moveElapsed;
 		ElapsedMillis _resetElapsed;
 
-		Animation _anim;
-
 		// For resets, how many Tank Blinks have occurred.
 		uint8_t _blinks;
 		bool _visible;

@@ -10,6 +10,7 @@ struct BulletStateStr_t {
 } BulletStateDesc[] = {
 	{ BULLET_INIT, "init" },
 	{ BULLET_AVAILABLE, "available" },
+	{ BULLET_ACTIVE, "active" },
 	{ BULLET_BOUNCE, "bounce" },
 	{ BULLET_HIT, "hit" },
 	{ BULLET_EXPLODE, "explode" },
@@ -36,7 +37,6 @@ const char* Bullet::stateString() {
 
 void Bullet::reset(uint16_t aIndex, Direction aDir) {
 	_index = aIndex;
-	_lastIndex = aIndex;
 	_direction = aDir;
 	_bouncesLeft = kMaxBulletBounces;
 }
@@ -63,14 +63,10 @@ void Bullet::setIndex(uint16_t aIndex) {
 	_index = aIndex;
 }
 
-uint16_t Bullet::getLastIndex() {
-	return _lastIndex;
-}
-
 /* Private Methods */
 
 void Bullet::initState(BulletState aState) {
-	LOG("Init State: %s", stateString());
+	//LOG("Init State: %s", stateString());
 
 	if (aState == BULLET_INIT) {
 		reset(0, DIR_NONE);
@@ -90,7 +86,12 @@ void Bullet::initState(BulletState aState) {
 	} else if (aState == BULLET_EXPLODE) {
 		// Animation?
 	} else if (aState == BULLET_EXPIRE) {
-		// Animation?
+		Animation a;
+		a.endColor = kColorBlack;
+		a.repeats = 0;
+		a.ease = EASE_QUAD_IN_OUT;
+		a.tweenTime = 500;
+		Manager::getInstance().hardwareManager->ledSet()->animateLed(_index, a, true);
 	}
 }
 
@@ -120,7 +121,7 @@ void Bullet::loopState(BulletState aState) {
 }
 
 void Bullet::endState(BulletState aState) {
-	LOG("End State: %s", stateString());
+	//LOG("End State: %s", stateString());
 
 	if (aState == BULLET_INIT) {
 
@@ -142,7 +143,6 @@ void Bullet::endState(BulletState aState) {
 void Bullet::updateMovement() {
 	if (_timeElapsed >= _movementDelay) {
 		_timeElapsed = 0;
-		//_lastIndex = _index;
 
 		TileType tile = TILE_BACKGROUND;
 		uint16_t newIndex = _gameManager->getLevel()->getNewPosition(_index, _direction, tile);
@@ -163,12 +163,14 @@ void Bullet::updateMovement() {
 					changeState(BULLET_BOUNCE);
 				} else {
 					changeState(BULLET_HIT);
+					_gameManager->getTankOne()->changeState(TANK_HIT);
 				}
 			} else if (tile == TILE_TANK_TWO) {
 				if (_gameManager->getTankTwo()->isInvulnerable()) {
 					changeState(BULLET_BOUNCE);
 				} else {
 					changeState(BULLET_HIT);
+					_gameManager->getTankTwo()->changeState(TANK_HIT);
 				}
 			} else if (tile == TILE_BULLET) {
 				changeState(BULLET_BOUNCE);

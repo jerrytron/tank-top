@@ -2,7 +2,7 @@
 * @Author: jerrytron
 * @Date:   2015-08-17 13:19:41
 * @Last Modified by:   jerrytron
-* @Last Modified time: 2015-08-18 18:52:38
+* @Last Modified time: 2015-08-19 21:53:54
 */
 
 #include "mwam_text_renderer.h"
@@ -30,7 +30,12 @@ void TextRenderer::initialize(Level* aLevel, bool aMirrorText) {
 	_textPixels = kLedsPerRing * kRowsPerGlyph;
 	_cycles = 0;
 	_repeats = 0;
+	_animating = false;
 	_tile = TILE_BACKGROUND;
+}
+
+bool TextRenderer::isAnimating() {
+	return _animating;
 }
 
 int TextRenderer::hexToInt(char aHex) {
@@ -65,6 +70,7 @@ int TextRenderer::newMessage(const char *aText, uint16_t aLength, uint8_t aCycle
 
 	_cycles = aCycles;
 	_repeats = aRepeats;
+	_animating = true;
 	_indexOffset = aIndexOffset;
 	_offsetChange = aOffsetChange;
 	_text = new char[aLength];
@@ -269,6 +275,7 @@ void TextRenderer::renderText(TileType aTile) {
 					delete [] _text;
 					_text = NULL;
 					_textLength = 0;
+					_animating = false;
 				}
 			} else {
 				// show again

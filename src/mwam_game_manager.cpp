@@ -167,7 +167,6 @@ void GameManager::updateSelect() {
 }
 
 void GameManager::endSelect() {
-	DEBUG("endSelect");
 	_level->clearLevel();
 }
 
@@ -199,6 +198,9 @@ void GameManager::endPlay() {
 }
 
 void GameManager::initGameOver() {
+	_level->clearLevel();
+	_hardwareManager->ledSet()->updateLeds(_level);
+
 	uint8_t oneLives = _tankOne->getLives();
 	uint8_t twoLives = _tankTwo->getLives();
 
@@ -217,9 +219,13 @@ void GameManager::initGameOver() {
 }
 
 void GameManager::updateGameOver() {
-	if (_waitingElapsed >= 10) {
-		_waitingElapsed = 0;
-		_textRenderer->renderText(_textTile);
+	if (_textRenderer->isAnimating()) {
+		if (_waitingElapsed >= 10) {
+			_waitingElapsed = 0;
+			_textRenderer->renderText(_textTile);
+		}
+	} else {
+		_stateController->changeState(STATE_INIT);
 	}
 }
 
@@ -229,25 +235,32 @@ void GameManager::endGameOver() {
 
 
 void GameManager::drawLevel() {
-	_level->drawLine(DIR_DOWN, TILE_WALL, 178, 4);
-	_level->drawLine(DIR_DOWN, TILE_WALL, 184, 4);
+	_level->drawLine(DIR_DOWN, TILE_WALL, 178, 2);
+	_level->drawLine(DIR_DOWN, TILE_WALL, 123, 2);
 
-	_level->drawLine(DIR_DOWN, TILE_WALL, 190, 4);
-	_level->drawLine(DIR_DOWN, TILE_WALL, 196, 4);
+	_level->drawLine(DIR_DOWN, TILE_WALL, 190, 2);
+	_level->drawLine(DIR_DOWN, TILE_WALL, 135, 2);
 }
 
 
 void GameManager::drawObjects() {
 	// Order of drawing is important!
 	if (_tankOne->isVisible()) {
-		_level->setTileAtIndex(TILE_TANK_ONE, _tankOne->getIndex());
 		_level->setTileAtIndex(TILE_TURRET_ONE, _tankOne->getTurretIndex());
 	}
 
 	if (_tankTwo->isVisible()) {
-		_level->setTileAtIndex(TILE_TANK_TWO, _tankTwo->getIndex());
 		_level->setTileAtIndex(TILE_TURRET_TWO, _tankTwo->getTurretIndex());
 	}
+
+	if (_tankOne->isVisible()) {
+		_level->setTileAtIndex(TILE_TANK_ONE, _tankOne->getIndex());
+	}
+
+	if (_tankTwo->isVisible()) {
+		_level->setTileAtIndex(TILE_TANK_TWO, _tankTwo->getIndex());
+	}
+
 
 	for (int i = 0; i < kMaxBulletsLive; i++) {
 		if (_tankOne->getBulletAtIndex(i)->getState() == BULLET_ACTIVE) {

@@ -190,25 +190,29 @@ void Tank::initState(TankState aState) {
 	} else if (aState == TANK_ACTIVE) {
 
 	} else if (aState == TANK_HIT) {
+		_invulnerable = true;
 		_health--;
 		LOG("Tank %d, -1 health, %d remaining", _tankNumber, _health);
 
-		_anim.endColor = kColorRed;
-		_anim.yoyo = true;
-		_anim.repeats = 1;
-		_anim.ease = EASE_QUAD_IN_OUT;
-		_anim.tweenTime = 1000;
-		_hardwareManager->ledSet()->animateLed(_index, _anim, false);
-		_anim.delayTime = 250;
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpLeft, _anim, false);
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpRight, _anim, false);
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownLeft, _anim, false);
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownRight, _anim, false);
+		Animation a;
+		a.endColor = kColorOrange;
+		a.yoyo = true;
+		a.repeats = 1;
+		a.ease = EASE_QUAD_IN_OUT;
+		a.tweenTime = 1000;
+		_hardwareManager->ledSet()->animateLed(_index, a, false);
+		a.delayTime = 250;
+		a.endColor = kColorRed;
+		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpLeft, a, false);
+		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpRight, a, false);
+		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownLeft, a, false);
+		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownRight, a, false);
 	} else if (aState == TANK_DESTROYED) {
+		_invulnerable = true;
 		_lives--;
 		LOG("Tank %d, -1 life, %d remaining", _tankNumber, _lives);
 
-		_anim.endColor = kColorRed;
+		/*_anim.endColor = kColorRed;
 		_anim.yoyo = true;
 		_anim.repeats = 1;
 		_anim.ease = EASE_QUAD_IN_OUT;
@@ -218,7 +222,7 @@ void Tank::initState(TankState aState) {
 		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpLeft, _anim, false);
 		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpRight, _anim, false);
 		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownLeft, _anim, false);
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownRight, _anim, false);
+		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownRight, _anim, false);*/
 	} else if (aState == TANK_GAME_OVER) {
 
 	}
@@ -228,15 +232,6 @@ void Tank::loopState(TankState aState) {
 	if (aState == TANK_INIT) {
 		changeState(TANK_ACTIVE);
 	} else if (aState == TANK_RESETTING) {
-		/*if (_resetElapsed >= kBlinkIntervalMillis) {
-			_resetElapsed = 0;
-			_blinks++;
-			_visible = !_visible;
-			if (_blinks > kBlinkMax ) {
-				changeState(TANK_ACTIVE);
-			}
-		}*/
-
 		changeState(TANK_ACTIVE);
 	} else if (aState == TANK_ACTIVE) {
 		if (_invulnerable) {
@@ -255,10 +250,10 @@ void Tank::loopState(TankState aState) {
 		JoystickThreshold threshold = _joystick->getThreshold();
 
 		if (dir) {
-			//DEBUG("Dir: %d, Thresh: %d", dir, threshold);
 			uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
 			if (_joystick->clickDown()) {
-				movementDelay = 0;
+				// Makes you SUPER speedy when joystick is down!
+				//movementDelay = 0;
 			}
 			updateMovement(dir, movementDelay);
 		}
@@ -267,16 +262,18 @@ void Tank::loopState(TankState aState) {
 			fireBullet();
 		}
 	} else if (aState == TANK_HIT) {
+		updateBullets();
 		if (_hardwareManager->ledSet()->allAnimsDone()) {
 			if (_health == 0) {
 				changeState(TANK_DESTROYED);
 			} else {
-				_invulnerable = true;
+				_resetElapsed = 0;
+				_blinks = 0;
 				changeState(TANK_ACTIVE);
 			}
 		}
 	} else if (aState == TANK_DESTROYED) {
-		if (_hardwareManager->ledSet()->allAnimsDone()) {
+		//if (_hardwareManager->ledSet()->allAnimsDone()) {
 			if (_lives == 0) {
 				changeState(TANK_GAME_OVER);
 				_gameManager->getOtherTank(_tankNumber)->changeState(TANK_GAME_OVER);
@@ -285,7 +282,7 @@ void Tank::loopState(TankState aState) {
 				changeState(TANK_RESETTING);
 				_gameManager->getOtherTank(_tankNumber)->changeState(TANK_RESETTING);
 			}
-		}
+		//}
 	} else if (aState == TANK_GAME_OVER) {
 
 	}
@@ -387,13 +384,10 @@ uint16_t Tank::findTurretIndex() {
 }
 
 bool Tank::fireBullet() {
-	DEBUG("try to fire: %d", _bulletCount);
 	if (getBulletCount() < kMaxBulletsLive) {
-		DEBUG("can fire");
 		uint8_t i;
 		for (i = 0; i < kMaxBulletsLive; ++i) {
 			if (_bullets[i].getState() == BULLET_AVAILABLE) {
-				DEBUG("Fire!");
 				_bullets[i].reset(_turretIndex, _direction);
 				_bullets[i].changeState(BULLET_ACTIVE);
 				break;

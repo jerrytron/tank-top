@@ -48,7 +48,7 @@ namespace mwam
 	// Bullet speed, delay before movement.
 	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player
-	const uint8_t kHealthTotal = 3;
+	const uint8_t kHealthTotal = 2;
 	// Lives Total Per Player
 	const uint8_t kLivesTotal = 3;
 	// Do turrets count as obstacles.

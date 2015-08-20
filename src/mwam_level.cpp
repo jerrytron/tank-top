@@ -176,31 +176,27 @@ uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aColli
 		newIndex += kLedDiagUpLeft;
 		if (newIndex >= kLedCount) {
 			aCollision = TILE_BOUNDARY;
-			DEBUG("Upper left boundry.");
-			delay(10);
+			//DEBUG("Upper left boundry.");
 			return aIndex;
 		}
 	} else if (aDir == DIR_UP_RIGHT) {
 		newIndex += kLedDiagUpRight;
 		if (newIndex >= kLedCount) {
 			aCollision = TILE_BOUNDARY;
-			DEBUG("Upper Right boundry.");
-			delay(10);
+			//DEBUG("Upper Right boundry.");
 			return aIndex;
 		}
 	} else if (aDir == DIR_DOWN_LEFT) {
 		if (newIndex < abs(kLedDiagDownLeft)) {
 			aCollision = TILE_BOUNDARY;
-			DEBUG("Lower left boundry.");
-			delay(10);
+			//DEBUG("Lower left boundry.");
 			return aIndex;
 		}
 		newIndex += kLedDiagDownLeft;
 	} else if (aDir == DIR_DOWN_RIGHT) {
 		if (newIndex < abs(kLedDiagDownRight)) {
 			aCollision = TILE_BOUNDARY;
-			DEBUG("LowerRight boundry.");
-			delay(10);
+			//DEBUG("LowerRight boundry.");
 			return aIndex;
 		}
 		newIndex += kLedDiagDownRight;
