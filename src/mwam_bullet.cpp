@@ -95,8 +95,6 @@ void Bullet::initState(BulletState aState) {
 }
 
 void Bullet::loopState(BulletState aState) {
-	LOG("End State: %s", stateString());
-
 	if (aState == BULLET_INIT) {
 
 	} else if (aState == BULLET_AVAILABLE) {
@@ -122,6 +120,8 @@ void Bullet::loopState(BulletState aState) {
 }
 
 void Bullet::endState(BulletState aState) {
+	LOG("End State: %s", stateString());
+
 	if (aState == BULLET_INIT) {
 
 	} else if (aState == BULLET_AVAILABLE) {
