@@ -6,8 +6,12 @@ namespace mwam
 
 static const char kTankTop[] = "TANK-TOP";
 static const uint8_t kTankTopLen = 8;
-
-
+static const char kPlayerOneWins[] = "PLAYER ONE WINS";
+static const uint8_t kPlayerOneWinsLen = 15;
+static const char kPlayerTwoWins[] = "PLAYER TWO WINS";
+static const uint8_t kPlayerTwoWinsLen = 15;
+static const char kDrawGame[] = "DRAW GAME";
+static const uint8_t kDrawGameLen = 9;
 
 typedef struct Color_t {
 	uint8_t red;

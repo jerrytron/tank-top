@@ -39,34 +39,6 @@ void Bullet::updateState() {
 	loopState(_state);
 }
 
-/*void Bullet::updateState() {
-	if (_timeElapsed >= _movementDelay) {
-		_timeElapsed = 0;
-		_lastIndex = _index;
-		_lastOverlapTile = _overlapTile;
-		_index = _gameManager->getLevel()->getNewPosition(_index, _direction, _overlapTile);
-		if (_overlapTile == TILE_BULLET) {
-			_overlapTile = _lastOverlapTile;
-			if (_lastOverlapTile == TILE_BULLET) {
-				DEBUG("Old overlap is bullet");
-			}
-		} else if ((_overlapTile == TILE_BOUNDARY) || (_overlapTile == TILE_WALL)) {
-			_overlapTile = _lastOverlapTile;
-			_index = _lastIndex;
-			if (!bounceBullet()) {
-				//this->endOfLife = true;
-			}
-		} else if ((_overlapTile == TILE_TANK_ONE) || (_overlapTile == TILE_TANK_TWO)) {
-			DEBUG("Hit tank!");
-			//this->collided = true;
-			//this->endOfLife = true;
-		} else {
-			_gameManager->getLevel()->setTileAtIndex(_lastOverlapTile, _lastIndex);
-			_gameManager->getLevel()->setTileAtIndex(TILE_BULLET, _index);
-		}
-	}
-}*/
-
 uint16_t Bullet::getIndex() {
 	return _index;
 }
@@ -186,24 +158,6 @@ void Bullet::updateMovement() {
 				_index = newIndex;
 			}
 		}
-
-		/*if (_overlapTile == TILE_BULLET) {
-			_overlapTile = _lastOverlapTile;
-
-		} else if ((_overlapTile == TILE_BOUNDARY) || (_overlapTile == TILE_WALL)) {
-
-			_index = _lastIndex;
-			if (!bounceBullet()) {
-				//this->endOfLife = true;
-			}
-		} else if ((_overlapTile == TILE_TANK_ONE) || (_overlapTile == TILE_TANK_TWO)) {
-			DEBUG("Hit tank!");
-			//this->collided = true;
-			//this->endOfLife = true;
-		} else {
-			_gameManager->getLevel()->setTileAtIndex(_lastOverlapTile, _lastIndex);
-			_gameManager->getLevel()->setTileAtIndex(TILE_BULLET, _index);
-		}*/
 	}
 }
 

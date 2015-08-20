@@ -52,6 +52,7 @@ void GameManager::initWaiting() {
 	_textRenderer->newMessage(kTankTop, kTankTopLen, 5, 0, 100, -10);
 	_tileIndex = 1;
 	_timeElapsed = 0;
+	_waitingElapsed = 0;
 }
 
 void GameManager::updateWaiting() {
@@ -65,10 +66,8 @@ void GameManager::updateWaiting() {
 			if (_tileIndex > 6) {
 				_tileIndex = 1;
 			}
-			DEBUG("Tile Index: %d", _tileIndex);
 		}
 	}
-	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
 }
 
 void GameManager::endWaiting() {
@@ -147,7 +146,6 @@ void GameManager::initSelect() {
 }
 
 void GameManager::updateSelect() {
-	//_hardwareManager->ledSet()->setColor(random(0, 240), Color(random(0, 127), random(0, 127), random(0, 127)));
 	if (_selectElapsed >= 10) {
 		_selectElapsed = 0;
 		if (!_tankOneReady && _hardwareManager->joystickOne()->clickUp()) {
@@ -187,57 +185,11 @@ void GameManager::updatePlay() {
 	}*/
 
 	_level->clearLevel();
+
 	drawLevel(); // Place walls / obstacles.
 
 	_tankOne->updateState();
 	_tankTwo->updateState();
-
-	/*if (state == TANK_DESTROYED) {
-		DEBUG("DESTROYED!");
-		Animation a;
-		a.endColor = kColorRed;
-		a.yoyo = true;
-		a.repeats = 1;
-		a.ease = EASE_QUAD_IN_OUT;
-		a.tweenTime = 1000;
-		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex(), a, false);
-		a.delayTime = 250;
-		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagUpLeft, a, false);
-		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagUpRight, a, false);
-		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagDownLeft, a, false);
-		_hardwareManager->ledSet()->animateLed(_tankOne->getIndex() + kLedDiagDownRight, a, false);
-		_tankOne->setState(TANK_WAITING);
-	} else if (state == TANK_ACTIVE) {
-		dir = _hardwareManager->joystickOne()->getDirection();
-		threshold = _hardwareManager->joystickOne()->getThreshold();
-		if (dir) {
-			//DEBUG("Tank: %d", _tankOne->getIndex());
-			uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
-			if (_hardwareManager->joystickOne()->clickDown()) {
-				movementDelay = 0;
-			}
-			_tankOne->updateState(dir, movementDelay);
-		}
-		if (_hardwareManager->joystickOne()->clickUp()) {
-			_tankOne->fireBullet();
-		}
-	}
-	_tankOne->updateBullets();*/
-
-	/*dir = _hardwareManager->joystickTwo()->getDirection();
-	threshold = _hardwareManager->joystickTwo()->getThreshold();
-	if (dir) {
-		uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
-		if (_hardwareManager->joystickTwo()->clickDown()) {
-			movementDelay = 0;
-		}
-		_tankTwo->updateState(dir, movementDelay);
-	}
-	if (_hardwareManager->joystickTwo()->clickUp()) {
-		_tankTwo->fireBullet();
-	}
-	_tankTwo->updateBullets();*/
-
 
 	drawObjects();
 }
@@ -245,6 +197,36 @@ void GameManager::updatePlay() {
 void GameManager::endPlay() {
 
 }
+
+void GameManager::initGameOver() {
+	uint8_t oneLives = _tankOne->getLives();
+	uint8_t twoLives = _tankTwo->getLives();
+
+	if (!oneLives && !oneLives) { // A Draw
+		_textRenderer->newMessage(kDrawGame, kDrawGameLen, 5, 1, 61);
+		_textTile = TILE_BULLET;
+	} else if (!oneLives) { // Player One Loses
+		_textRenderer->newMessage(kPlayerTwoWins, kPlayerTwoWinsLen, 5, 1, 61);
+		_textTile = TILE_TANK_TWO;
+	} else if (!twoLives) { // Player Two Loses
+		_textRenderer->newMessage(kPlayerOneWins, kPlayerOneWinsLen, 5, 1, 61);
+		_textTile = TILE_TANK_ONE;
+	}
+
+	_waitingElapsed = 0;
+}
+
+void GameManager::updateGameOver() {
+	if (_waitingElapsed >= 10) {
+		_waitingElapsed = 0;
+		_textRenderer->renderText(_textTile);
+	}
+}
+
+void GameManager::endGameOver() {
+
+}
+
 
 void GameManager::drawLevel() {
 	_level->drawLine(DIR_DOWN, TILE_WALL, 178, 4);
@@ -280,10 +262,6 @@ void GameManager::drawObjects() {
 void GameManager::gameOver() {
 	_stateController->changeState(STATE_GAME_OVER);
 }
-
-void GameManager::updateGameOver(bool aWonGame) {
-}
-
 
 void GameManager::playLedTest() {
 	/*Animation a = Animation();

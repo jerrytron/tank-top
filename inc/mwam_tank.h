@@ -48,17 +48,13 @@ class Tank
 		TankNumber getTankNumber();
 		uint16_t getIndex();
 		void setIndex(uint16_t aIndex);
-		//uint16_t getLastIndex();
-		//TileType getLastOverlapTile();
+		uint8_t getLives();
 		uint8_t getBulletCount();
 		Bullet* getBulletAtIndex(uint8_t aIndex);
 		uint16_t getTurretIndex();
 		uint16_t getLastTurretIndex();
 		bool isVisible();
 		bool isInvulnerable();
-
-		//TileType getTurretOverlapTile();
-		//TileType getLastTurretOverlapTile();
 
 		/* Public Variables */
 		bool active;
@@ -97,13 +93,8 @@ class Tank
 		TileType _turretTile;
 		uint16_t _startIndex;
 		uint16_t _index;
-		//uint16_t _lastIndex;
-		//TileType _overlap;
-		//TileType _lastOverlap;
 		uint16_t _turretIndex;
 		uint16_t _lastTurretIndex;
-		//TileType _turretOverlap;
-		//TileType _lastTurretOverlap;
 		uint8_t _health;
 		uint8_t _lives;
 		uint8_t _bulletCount;

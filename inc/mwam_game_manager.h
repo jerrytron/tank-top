@@ -26,8 +26,6 @@ class GameManager
 		void updateIntro();
 		void updateTutorial();
 
-		void updateGameOver(bool aWonGame);
-
 		void playLedTest();
 		void playFireStormAnim();
 
@@ -42,6 +40,10 @@ class GameManager
 		void initPlay();
 		void updatePlay();
 		void endPlay();
+
+		void initGameOver();
+		void updateGameOver();
+		void endGameOver();
 
 		void drawLevel();
 		void drawObjects();
@@ -76,6 +78,8 @@ class GameManager
 		bool _tankOneReady;
 		Tank* _tankTwo;
 		bool _tankTwoReady;
+
+		TileType _textTile;
 
 		bool _playerOneActive;
 		bool _playerTwoActive;

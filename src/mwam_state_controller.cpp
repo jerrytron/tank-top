@@ -79,9 +79,7 @@ void StateController::initState(GameState aState) {
 	} else if (aState == STATE_PLAY) {
 		_gameManager->initPlay();
 	} else if (aState == STATE_GAME_OVER) {
-
-	} else if (aState == STATE_GAME_WON) {
-
+		_gameManager->initGameOver();
 	} else if (aState == STATE_ERROR) {
 		ERROR("*** ERROR STATE ***");
 	}
@@ -132,9 +130,7 @@ void StateController::loopState(GameState aState) {
 	} else if (aState == STATE_PLAY) {
 		_gameManager->updatePlay();
 	} else if (aState == STATE_GAME_OVER) {
-
-	} else if (aState == STATE_GAME_WON) {
-
+		_gameManager->updateGameOver();
 	} else if (aState == STATE_ERROR) {
 
 	}
@@ -144,9 +140,7 @@ void StateController::loopState(GameState aState) {
 void StateController::endState(GameState aState) {
 	LOG("End State: %s", stateString());
 
-	if (aState == STATE_ERROR) {
-
-	} else if (aState == STATE_BOOTING) {
+	if (aState == STATE_BOOTING) {
 
 	} else if (aState == STATE_INIT) {
 
@@ -159,8 +153,8 @@ void StateController::endState(GameState aState) {
 	} else if (aState == STATE_PLAY) {
 		_gameManager->endPlay();
 	} else if (aState == STATE_GAME_OVER) {
-
-	} else if (aState == STATE_GAME_WON) {
+		_gameManager->endGameOver();
+	} else if (aState == STATE_ERROR) {
 
 	}
 }

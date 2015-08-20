@@ -127,13 +127,9 @@ void Tank::setIndex(uint16_t aIndex) {
 	_index = aIndex;
 }
 
-/*uint16_t Tank::getLastIndex() {
-	return _lastIndex;
-}*/
-
-/*TileType Tank::getLastOverlapTile() {
-	return _lastOverlap;
-}*/
+uint8_t Tank::getLives() {
+	return _lives;
+}
 
 uint8_t Tank::getBulletCount() {
 	uint8_t total = 0;
@@ -248,6 +244,7 @@ void Tank::loopState(TankState aState) {
 				_visible = !_visible;
 				if (_blinks > kBlinkMax ) {
 					_invulnerable = false;
+					_visible = true;
 				}
 			}
 		}
@@ -256,6 +253,7 @@ void Tank::loopState(TankState aState) {
 		JoystickThreshold threshold = _joystick->getThreshold();
 
 		if (dir) {
+			DEBUG("Dir: %d, Thresh: %d", dir, threshold);
 			uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
 			if (_joystick->clickDown()) {
 				movementDelay = 0;
@@ -292,7 +290,7 @@ void Tank::loopState(TankState aState) {
 }
 
 void Tank::endState(TankState aState) {
-	LOG("Init State: %s", stateString());
+	LOG("End State: %s", stateString());
 
 	if (aState == TANK_INIT) {
 
@@ -331,7 +329,6 @@ void Tank::updateMovement(Direction aDirection, uint16_t aMovementFreq) {
 
 		// Get new position index while checking for screen boundaries and walls.
 		uint16_t newIndex = _gameManager->getLevel()->getNewPosition(_index, _direction, tile);
-
 		if ((tile == TILE_BOUNDARY) || (tile == TILE_WALL)) {
 			// Barrier, don't do anything.
 		} else if (_gameManager->getOtherTank(_tankNumber)->checkCollisionAtIndex(_tankTile, newIndex, tile, _invulnerable)) {
@@ -357,14 +354,12 @@ void Tank::updateMovement(Direction aDirection, uint16_t aMovementFreq) {
 		} else {
 			_index = newIndex;
 		}
-
 		_turretIndex = findTurretIndex();
 	}
 }
 
 uint16_t Tank::findTurretIndex() {
 	TileType collisionTile = TILE_BOUNDARY;
-	//uint16_t index = _level->getNewPosition(_index, _direction, collisionTile);
 	uint16_t index = _index;
 	Direction tryDir = _direction;
 	bool searching = true;

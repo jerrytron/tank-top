@@ -39,24 +39,6 @@ void Level::clearLevel() {
 	memset(_levelTiles, 0, kLedCount);
 }
 
-/*void Level::setTankAtIndex(Tank* aTank) {
-	if (aTank->getTankNumber() == TANK_ONE) {
-		//setTileAtIndex(aTank->getLastOverlapTile(), aTank->getLastIndex());
-		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
-		setTileAtIndex(aTank->getLastTurretOverlapTile(), aTank->getLastTurretIndex());
-		//DEBUG("Cleanup indexes: %d & %d", aTank->getLastIndex(), aTank->getLastTurretIndex());
-		setTileAtIndex(TILE_TANK_ONE, aTank->getIndex());
-		setTileAtIndex(TILE_TURRET_ONE, aTank->getTurretIndex());
-		//DEBUG("New indexes: %d & %d", aTank->getIndex(), aTank->getTurretIndex());
-	} else if (aTank->getTankNumber() == TANK_TWO) {
-		//setTileAtIndex(aTank->getLastOverlapTile(), aTank->getLastIndex());
-		setTileAtIndex(TILE_BACKGROUND, aTank->getLastIndex());
-		setTileAtIndex(aTank->getLastTurretOverlapTile(), aTank->getLastTurretIndex());
-		setTileAtIndex(TILE_TANK_TWO, aTank->getIndex());
-		setTileAtIndex(TILE_TURRET_TWO, aTank->getTurretIndex());
-	}
-}*/
-
 void Level::setTileAtIndex(TileType aTile, uint16_t aIndex) {
 	_levelTiles[aIndex] = aTile;
 }
@@ -218,9 +200,7 @@ uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aColli
 		}
 		newIndex += kLedDiagDownRight;
 	}
-	if (getTileAtIndex(newIndex) == TILE_WALL) {
-		aCollision = TILE_WALL;
-	}
+	aCollision = getTileAtIndex(newIndex);
 
 	return newIndex;
 }
