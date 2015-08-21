@@ -11,8 +11,9 @@ namespace mwam
 class Tank;
 
 typedef enum Theme_t {
-	THEME_DEFAULT = 0,
-	THEME_SPOOKY
+	THEME_ONE = 0,
+	THEME_TWO,
+	THEME_THREE
 } Theme;
 
 typedef enum ThemeElement_t {
@@ -37,19 +38,19 @@ typedef enum TileType_t {
 	TILE_KEEP_COLOR
 } TileType;
 
-/*typedef enum Collision_t {
-	COL_NONE = 0,
-	COL_BOUNDS,
-	COL_WALL,
-	COL_BULLET,
-} Collision;*/
+typedef enum DimLevel_t {
+	DIM_THREE_QUARTER = 0,
+	DIM_HALF,
+	DIM_QUARTER,
+	DIM_NONE
+} DimLevel;
 
 class Level
 {
 	public:
 		/* Public Methods */
 		Level();
-		void initialize(Theme aTheme, uint32_t aUpdateFreq = 0);
+		void initialize(Theme aTheme, DimLevel aDimLevel, uint32_t aUpdateFreq = 0);
 		void updateState();
 		void clearLevel();
 		void setTileAtIndex(TileType aTile, uint16_t aIndex);
@@ -61,6 +62,8 @@ class Level
 
 		void nextTheme();
 		void setTheme(Theme aTheme);
+		void nextDimLevel();
+		void setDimLevel(DimLevel aDimLevel);
 		uint16_t getNewPosition(uint16_t aIndex, Direction aDir, TileType &aCollision);
 
 		uint32_t getColorAtIndex(uint16_t aIndex);
@@ -77,6 +80,7 @@ class Level
 		const Color* _activeTheme;
 		//Color _activeTheme[7];
 		Theme _currentTheme;
+		DimLevel _dimLevel;
 		TileType _levelTiles[kLedCount];
 
 };

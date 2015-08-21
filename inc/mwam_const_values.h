@@ -55,6 +55,13 @@ const Color kColorBlack = Color(0, 0, 0);
 const Color kColorWhite = Color(255, 255, 255);
 const Color kColorBlue = Color(0, 0, 255);
 const Color kColorPurple = Color(255, 0, 255);
+const Color kColorDarkGreen = Color(0, 127, 0);
+const Color kColorDarkYellow = Color(127, 127, 0);
+const Color kColorDarkOrange = Color(127, 70, 0);
+const Color kColorDarkRed = Color(127, 0, 0);
+const Color kColorGray = Color(127, 127, 127);
+const Color kColorDarkBlue = Color(0, 0, 127);
+const Color kColorDarkPurple = Color(127, 0, 127);
 
 // Serial Communication Commands
 const uint8_t kSerialCmdMode = 'c';

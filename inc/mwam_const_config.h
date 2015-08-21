@@ -48,9 +48,9 @@ namespace mwam
 	// Bullet speed, delay before movement.
 	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player
-	const uint8_t kHealthTotal = 2;
+	const uint8_t kHealthTotal = 3;
 	// Lives Total Per Player
-	const uint8_t kLivesTotal = 3;
+	const uint8_t kLivesTotal = 1;
 	// Do turrets count as obstacles.
 	const bool kTurretCollision = true;
 	// Can you get hurt by your own bullets?
@@ -58,7 +58,7 @@ namespace mwam
 	// Number of blinks until effect is over.
 	const uint16_t kBlinkMax = 15;
 	// Blinking interval.
-	const uint16_t kBlinkIntervalMillis = 200;
+	const uint16_t kBlinkIntervalMillis = 150;
 
 	// Piezo Pins
 	const uint8_t kPiezoOnePin = A5;

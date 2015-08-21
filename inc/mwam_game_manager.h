@@ -81,9 +81,6 @@ class GameManager
 
 		TileType _textTile;
 
-		bool _playerOneActive;
-		bool _playerTwoActive;
-
 		//uint8_t _fireStormAnimStep;
 
 		//Animation _testAnim[5];

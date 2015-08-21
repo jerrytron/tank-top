@@ -12,20 +12,22 @@ namespace mwam
 };*/
 
 // Themes: Background, P1 Color, P1 Turret, P2 Color, P2 Turret, Bullets, Walls
-const Color themeDefault[] = { kColorBlack, kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorPurple };
-
-const Color themeTwo[] = { kColorBlack, kColorBlue, kColorYellow, kColorRed, kColorYellow, kColorOrange, kColorWhite };
-
+const Color themes[][7] = {
+	{ kColorBlack, kColorGreen, kColorRed, kColorBlue, kColorRed, kColorYellow, kColorPurple },
+	{ kColorBlack, kColorBlue, kColorYellow, kColorRed, kColorYellow, kColorOrange, kColorWhite },
+	{ kColorBlack, kColorPurple, kColorWhite, kColorOrange, kColorWhite, kColorGreen, kColorBlue }
+};
 
 /* Public Methods */
 
 Level::Level() {
 }
 
-void Level::initialize(Theme aTheme, uint32_t aUpdateFreq) {
+void Level::initialize(Theme aTheme, DimLevel aDimLevel, uint32_t aUpdateFreq) {
 	_updateFreq = aUpdateFreq;
 	_timeElapsed = 0;
 	setTheme(aTheme);
+	setDimLevel(aDimLevel);
 	clearLevel();
 }
 
@@ -151,22 +153,31 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 }
 
 void Level::nextTheme() {
-	if (_currentTheme == THEME_SPOOKY) {
-		_currentTheme = THEME_DEFAULT;
+	if (_currentTheme == THEME_THREE) {
+		_currentTheme = THEME_ONE;
 	} else {
 		_currentTheme = (Theme)(_currentTheme + 1);
 	}
+	setTheme(_currentTheme);
 }
+
 void Level::setTheme(Theme aTheme) {
 	_currentTheme = aTheme;
-	if (_currentTheme == THEME_DEFAULT) {
-		//memcpy(_activeTheme, themeDefault, sizeof(themeDefault));
-		_activeTheme = themeDefault;
-	} else if (_currentTheme == THEME_SPOOKY) {
-		//memcpy(_activeTheme, themeBright, sizeof(themeDefault));
-		_activeTheme = themeTwo;
-	}
+	_activeTheme = themes[_currentTheme];
 	Manager::getInstance().hardwareManager->ledSet()->updateLeds(this);
+}
+
+void Level::nextDimLevel() {
+	if (_dimLevel == DIM_NONE) {
+		_dimLevel = DIM_THREE_QUARTER;
+	} else {
+		_dimLevel = (DimLevel)(_dimLevel + 1);
+	}
+	setDimLevel(_dimLevel);
+}
+
+void Level::setDimLevel(DimLevel aDimLevel) {
+	_dimLevel = aDimLevel;
 }
 
 uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aCollision) {
@@ -212,6 +223,19 @@ uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aColli
 
 uint32_t Level::getColorAtIndex(uint16_t aIndex) {
 	Color color = _activeTheme[getTileAtIndex(aIndex)];
+	if (_dimLevel == DIM_QUARTER) {
+		color.red *= 0.75;
+		color.blue *= 0.75;
+		color.green *= 0.75;
+	} else if (_dimLevel == DIM_HALF) {
+		color.red *= 0.5;
+		color.blue *= 0.5;
+		color.green *= 0.5;
+	} else if (_dimLevel == DIM_THREE_QUARTER) {
+		color.red *= 0.25;
+		color.blue *= 0.25;
+		color.green *= 0.25;
+	}
 	return ((uint32_t)color.red << 16) | ((uint32_t)color.green <<  8) | color.blue;
 }
 

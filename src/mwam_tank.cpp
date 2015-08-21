@@ -199,9 +199,9 @@ void Tank::initState(TankState aState) {
 		a.yoyo = true;
 		a.repeats = 1;
 		a.ease = EASE_QUAD_IN_OUT;
-		a.tweenTime = 1000;
+		a.tweenTime = 500;
 		_hardwareManager->ledSet()->animateLed(_index, a, false);
-		a.delayTime = 250;
+		a.delayTime = 125;
 		a.endColor = kColorRed;
 		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpLeft, a, false);
 		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpRight, a, false);
