@@ -161,14 +161,6 @@ bool Tank::isInvulnerable() {
 	return _invulnerable;
 }
 
-/*TileType Tank::getTurretOverlapTile() {
-	return _turretOverlap;
-}
-
-TileType Tank::getLastTurretOverlapTile() {
-	return _lastTurretOverlap;
-}*/
-
 /* Private Methods */
 
 void Tank::initState(TankState aState) {
@@ -211,18 +203,6 @@ void Tank::initState(TankState aState) {
 		_invulnerable = true;
 		_lives--;
 		LOG("Tank %d, -1 life, %d remaining", _tankNumber, _lives);
-
-		/*_anim.endColor = kColorRed;
-		_anim.yoyo = true;
-		_anim.repeats = 1;
-		_anim.ease = EASE_QUAD_IN_OUT;
-		_anim.tweenTime = 1000;
-		_hardwareManager->ledSet()->animateLed(_index, _anim, false);
-		_anim.delayTime = 250;
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpLeft, _anim, false);
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagUpRight, _anim, false);
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownLeft, _anim, false);
-		_hardwareManager->ledSet()->animateLed(_index + kLedDiagDownRight, _anim, false);*/
 	} else if (aState == TANK_GAME_OVER) {
 
 	}
@@ -261,7 +241,7 @@ void Tank::loopState(TankState aState) {
 			updateMovement(dir, movementDelay);
 		}
 		updateBullets();
-		if (_joystick->clickUp()) {
+		if (!_invulnerable && _joystick->clickUp()) {
 			fireBullet();
 		}
 	} else if (aState == TANK_HIT) {
