@@ -122,7 +122,9 @@ void StateController::loopState(GameState aState) {
 		    _hardwareManager->joystickTwo()->clickUp()) {
 			changeState(STATE_SELECT);
 		}
-		//if (_hardwareManager->button()->wasClicked()) {
+		if (_hardwareManager->button()->wasClicked()) {
+			changeState(STATE_SELECT);
+		}
 	} else if (aState == STATE_TUTORIAL) {
 
 	} else if (aState == STATE_SELECT) {

@@ -194,17 +194,16 @@ void GameManager::updatePlay() {
 }
 
 void GameManager::endPlay() {
-
+	_level->clearLevel();
+	_hardwareManager->ledSet()->updateLeds(_level);
 }
 
 void GameManager::initGameOver() {
-	_level->clearLevel();
-	_hardwareManager->ledSet()->updateLeds(_level);
-
 	uint8_t oneLives = _tankOne->getLives();
 	uint8_t twoLives = _tankTwo->getLives();
 
-	if (!oneLives && !oneLives) { // A Draw
+	//DEBUG("P1 Lives: %d, P2 Lives: %d", oneLives, twoLives);
+	if (!oneLives && !twoLives) { // A Draw
 		_textRenderer->newMessage(kDrawGame, kDrawGameLen, 5, 1, 61);
 		_textTile = TILE_BULLET;
 	} else if (!oneLives) { // Player One Loses
@@ -273,6 +272,8 @@ void GameManager::drawObjects() {
 }
 
 void GameManager::gameOver() {
+	//_level->clearLevel();
+	//_hardwareManager->ledSet()->updateLeds(_level);
 	_stateController->changeState(STATE_GAME_OVER);
 }
 
