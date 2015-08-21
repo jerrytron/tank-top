@@ -261,6 +261,11 @@ bool Bullet::bounceBullet() {
 					break;
 				}
 			}
+			collisionTile = TILE_BACKGROUND;
+			_gameManager->getLevel()->getNewPosition(_index, _direction, collisionTile);
+			if ((collisionTile == TILE_BOUNDARY) || (collisionTile == TILE_WALL)) {
+				return false;
+			}
 		}
 
 		_bouncesLeft--;
