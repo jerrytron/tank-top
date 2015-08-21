@@ -13,7 +13,7 @@ struct GameStateStr_t {
 	{ STATE_INIT, "init" },
 	{ STATE_WAITING, "waiting" },
 	{ STATE_TUTORIAL, "tutorial" },
-	{ STATE_INTRO, "intro" },
+	{ STATE_SELECT, "select" },
 	{ STATE_PLAY, "play" },
 	{ STATE_GAME_OVER, "game_over" },
 	{ STATE_GAME_WON, "game_won" }
@@ -68,20 +68,18 @@ void StateController::initState(GameState aState) {
 			Spark.syncTime();
 		}
 	} else if (aState == STATE_WAITING) {
-		//_toneTests->startTestMario();
-		//_gameManager->playLedTest();
-		//_gameManager->playFireStormAnim();
+		_gameManager->initWaiting();
+		//_hardwareManager->ledSet()->updateLeds(_gameManager->getLevel());
 	} else if (aState == STATE_TUTORIAL) {
 
-	} else if (aState == STATE_INTRO) {
+	} else if (aState == STATE_SELECT) {
 		_seed = millis();
 		randomSeed(_seed);
+		_gameManager->initSelect();
 	} else if (aState == STATE_PLAY) {
-
+		_gameManager->initPlay();
 	} else if (aState == STATE_GAME_OVER) {
-
-	} else if (aState == STATE_GAME_WON) {
-
+		_gameManager->initGameOver();
 	} else if (aState == STATE_ERROR) {
 		ERROR("*** ERROR STATE ***");
 	}
@@ -118,23 +116,23 @@ void StateController::loopState(GameState aState) {
 	} else if (aState == STATE_INIT) {
 		changeState(STATE_WAITING);
 	} else if (aState == STATE_WAITING) {
-		_gameManager->updateAnimations();
-		//if (_hardwareManager->joystickOne()->clickUp()) {
-		//if (_hardwareManager->button()->wasClicked()) {
-			_hardwareManager->ledSet()->updateLeds(_gameManager->getLevel());
-			changeState(STATE_PLAY);
-		//}
-		//changeState(STATE_PLAY);
+		_gameManager->updateWaiting();
+
+		if (_hardwareManager->joystickOne()->clickUp() ||
+		    _hardwareManager->joystickTwo()->clickUp()) {
+			changeState(STATE_SELECT);
+		}
+		if (_hardwareManager->button()->wasClicked()) {
+			changeState(STATE_SELECT);
+		}
 	} else if (aState == STATE_TUTORIAL) {
 
-	} else if (aState == STATE_INTRO) {
-
+	} else if (aState == STATE_SELECT) {
+		_gameManager->updateSelect();
 	} else if (aState == STATE_PLAY) {
 		_gameManager->updatePlay();
 	} else if (aState == STATE_GAME_OVER) {
-
-	} else if (aState == STATE_GAME_WON) {
-
+		_gameManager->updateGameOver();
 	} else if (aState == STATE_ERROR) {
 
 	}
@@ -144,25 +142,23 @@ void StateController::loopState(GameState aState) {
 void StateController::endState(GameState aState) {
 	LOG("End State: %s", stateString());
 
-	/*if (aState == STATE_ERROR) {
-
-	} else if (aState == STATE_BOOTING) {
+	if (aState == STATE_BOOTING) {
 
 	} else if (aState == STATE_INIT) {
 
 	} else if (aState == STATE_WAITING) {
-
+		_gameManager->endWaiting();
 	} else if (aState == STATE_TUTORIAL) {
 
-	} else if (aState == STATE_INTRO) {
-
+	} else if (aState == STATE_SELECT) {
+		_gameManager->endSelect();
 	} else if (aState == STATE_PLAY) {
-
+		_gameManager->endPlay();
 	} else if (aState == STATE_GAME_OVER) {
+		_gameManager->endGameOver();
+	} else if (aState == STATE_ERROR) {
 
-	} else if (aState == STATE_GAME_WON) {
-
-	}*/
+	}
 }
 
 }

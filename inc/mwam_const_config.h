@@ -7,14 +7,26 @@ namespace mwam
 	// Total count of LEDs.
 	const uint16_t kLedCount = 240;
 	// LEDs per ring in the spiral.
-	const uint8_t kLedsPerRing = 21;
+	const uint8_t kLedsPerRing = 20;
 	// LED indexes to add/subtract for diagnal positions.
 	const int8_t kLedDiagUpLeft = 20;
 	const int8_t kLedDiagUpRight = 21;
-	const int8_t kLedDiagDownLeft = 21;
-	const int8_t kLedDiagDownRight = 20;
+	const int8_t kLedDiagDownLeft = -21;
+	const int8_t kLedDiagDownRight = -20;
+
+	const uint8_t kLedVertRollover = 34;
+	const uint8_t kLedDiagRightLowThresh = 219;
+	const uint8_t kLedDiagRightHighThresh = 226;
+	const uint8_t kLedDiagRightRollover = 15;
+	const uint8_t kLedDiagLeftLowThresh = 220;
+	const uint8_t kLedDiagLeftHighThresh = 225;
+	const uint8_t kLedDiagLeftRollover = 13;
+
+	const uint8_t kTextLedIndexMax = 225;
+	const bool kMirrorText = false;
+
 	// LED pin.
-	const uint8_t kLedPin = A7;
+	const uint8_t kLedPin = A4;
 	// LED type.
 	const uint8_t kLedType = 0x02; // WS2812B
 	// LED default brightness.
@@ -26,9 +38,9 @@ namespace mwam
 	const uint16_t kIntervalPlayerSpeedMillis = 125;
 
 	// Player One Start Index
-	const uint8_t kPlayerOneStartIndex = 123;
+	const uint8_t kPlayerOneStartIndex = 141;
 	// Player One Start Index
-	const uint8_t kPlayerTwoStartIndex = 134;
+	const uint8_t kPlayerTwoStartIndex = 152;
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
 	// Max Bullet Bounces
@@ -37,25 +49,37 @@ namespace mwam
 	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player
 	const uint8_t kHealthTotal = 3;
+	// Lives Total Per Player
+	const uint8_t kLivesTotal = 1;
+	// Do turrets count as obstacles.
+	const bool kTurretCollision = true;
+	// Can you get hurt by your own bullets?
+	const bool kFriendlyFire = true;
+	// Number of blinks until effect is over.
+	const uint16_t kBlinkMax = 15;
+	// Blinking interval.
+	const uint16_t kBlinkIntervalMillis = 150;
 
 	// Piezo Pins
-	const uint8_t kPiezoOnePin = A0;
-	const uint8_t kPiezoTwoPin = A1;
+	const uint8_t kPiezoOnePin = A5;
+	const uint8_t kPiezoTwoPin = A6;
 
 	// Button Pins
-	const uint8_t kButtonPin = D3;
-	const uint8_t kButtonLedPin = D2;
+	const uint8_t kButtonPin = D2;
+
+	const uint8_t kJoystickOneBtnPin = D0;
+	const uint8_t kJoystickTwoBtnPin = D1;
 
 	// Joystick Pins
-	const uint8_t kJoystickOneX = A3;
-	const uint8_t kJoystickOneY = A2;
-	const uint8_t kJoystickTwoX = A5;
-	const uint8_t kJoystickTwoY = A4;
+	const uint8_t kJoystickOneXPin = A1;
+	const uint8_t kJoystickOneYPin = A0;
+	const uint8_t kJoystickTwoXPin = A3;
+	const uint8_t kJoystickTwoYPin = A2;
 
 	const uint16_t kJoystickOffset = 2045;
-	const uint16_t kJoystickThreshOne = 100;
-	const uint16_t kJoystickThreshTwo = 450;
-	const uint16_t kJoystickThreshThree = 850;
+	const uint16_t kJoystickThreshOne = 200;
+	const uint16_t kJoystickThreshTwo = 800;
+	const uint16_t kJoystickThreshThree = 1600;
 
 	// Timeout to input a serial command.
 	const uint16_t kTimeoutSerialMillis = 8000;

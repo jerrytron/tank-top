@@ -5,12 +5,15 @@
 #include "mwam_bullet.h"
 #include "mwam_joystick.h"
 #include "mwam_level.h"
+#include "mwam_led_set.h"
 #include "ElapsedTime.h"
 
 namespace mwam
 {
 
-class Level;
+class GameManager;
+class HardwareManager;
+class Joystick;
 
 typedef enum TankNumber_t {
 	TANK_ONE = 1,
@@ -18,13 +21,12 @@ typedef enum TankNumber_t {
 } TankNumber;
 
 typedef enum TankState_t {
-	TANK_WAITING = 0,
-	TANK_READY,
+	TANK_INIT = 0,
+	TANK_RESETTING,
 	TANK_ACTIVE,
-	TANK_INVULNERABLE,
 	TANK_HIT,
 	TANK_DESTROYED,
-	TANK_BURNING
+	TANK_GAME_OVER
 } TankState;
 
 class Tank
@@ -32,50 +34,67 @@ class Tank
 	public:
 		/* Public Methods */
 		Tank();
-		void initialize(TankNumber aTankNum, Level* aLevel, uint8_t aStartIndex, uint32_t aMovementFreq);
+		void initialize(TankNumber aTankNum, uint8_t aStartIndex);
+		const char* stateString();
 		void reset();
-		void updateState(Direction aDirection, uint16_t aDelayReduction);
-		void updateBullets();
-		bool fireBullet();
 
 		TankState getState();
-		void setState(TankState aState);
+		void changeState(TankState aState);
+		void updateState();
+
+		bool checkCollisionAtIndex(TileType aSource, uint16_t aIndex, TileType &aTile, bool aInvulnerable = false);
+		bool checkBulletCollision(TileType aSource, uint16_t aIndex, bool aInvulnerable = false);
+
 		TankNumber getTankNumber();
 		uint16_t getIndex();
 		void setIndex(uint16_t aIndex);
-		uint16_t getLastIndex();
-		TileType getLastOverlapTile();
+		uint8_t getLives();
 		uint8_t getBulletCount();
 		Bullet* getBulletAtIndex(uint8_t aIndex);
 		uint16_t getTurretIndex();
 		uint16_t getLastTurretIndex();
-		uint16_t findTurretIndex();
-		TileType getTurretOverlapTile();
-		TileType getLastTurretOverlapTile();
+		bool isVisible();
+		bool isInvulnerable();
 
 		/* Public Variables */
 		bool active;
 
 	private:
 		/* Private Methods */
+		void initState(TankState aState);
+		void loopState(TankState aState);
+		void endState(TankState aState);
+		void updateMovement(Direction aDirection, uint16_t aMovementFreq);
+		uint16_t findTurretIndex();
+		void updateBullets();
+		bool fireBullet();
 
 		/* Private Variables */
-		ElapsedMillis _timeElapsed;
-		Level* _level;
+		GameManager* _gameManager;
+		HardwareManager* _hardwareManager;
+
+		Joystick* _joystick;
+
+		ElapsedMillis _moveElapsed;
+		ElapsedMillis _resetElapsed;
+
+		// For resets, how many Tank Blinks have occurred.
+		uint8_t _blinks;
+		bool _visible;
+		bool _invulnerable;
+
 		Direction _direction;
-		uint32_t _movementFreq;
-		TankState _tankState;
+		uint16_t _movementFreq;
+		TankState _state;
 		TankNumber _tankNumber;
+		TileType _tankTile;
+		TileType _turretTile;
 		uint16_t _startIndex;
 		uint16_t _index;
-		uint16_t _lastIndex;
-		TileType _overlap;
-		TileType _lastOverlap;
 		uint16_t _turretIndex;
 		uint16_t _lastTurretIndex;
-		TileType _turretOverlap;
-		TileType _lastTurretOverlap;
 		uint8_t _health;
+		uint8_t _lives;
 		uint8_t _bulletCount;
 		Bullet _bullets[kMaxBulletsLive];
 

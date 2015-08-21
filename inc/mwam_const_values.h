@@ -4,6 +4,15 @@
 namespace mwam
 {
 
+static const char kTankTop[] = "TANK-TOP";
+static const uint8_t kTankTopLen = 8;
+static const char kPlayerOneWins[] = "PLAYER ONE WINS";
+static const uint8_t kPlayerOneWinsLen = 15;
+static const char kPlayerTwoWins[] = "PLAYER TWO WINS";
+static const uint8_t kPlayerTwoWinsLen = 15;
+static const char kDrawGame[] = "DRAW GAME";
+static const uint8_t kDrawGameLen = 9;
+
 typedef struct Color_t {
 	uint8_t red;
 	uint8_t green;
@@ -46,21 +55,21 @@ const Color kColorBlack = Color(0, 0, 0);
 const Color kColorWhite = Color(255, 255, 255);
 const Color kColorBlue = Color(0, 0, 255);
 const Color kColorPurple = Color(255, 0, 255);
+const Color kColorDarkGreen = Color(0, 127, 0);
+const Color kColorDarkYellow = Color(127, 127, 0);
+const Color kColorDarkOrange = Color(127, 70, 0);
+const Color kColorDarkRed = Color(127, 0, 0);
+const Color kColorGray = Color(127, 127, 127);
+const Color kColorDarkBlue = Color(0, 0, 127);
+const Color kColorDarkPurple = Color(127, 0, 127);
 
 // Serial Communication Commands
 const uint8_t kSerialCmdMode = 'c';
 const uint8_t kSerialCmdListeningMode = 'w';
 const uint8_t kSerialCmdClearWiFi = 'x';
-const uint8_t kSerialCmdSetFlag = 0x01;
-const uint8_t kSerialCmdSetValue = 0x02;
-const uint8_t kSerialCmdResetMetadata = 'm';
-const uint8_t kSerialCmdEraseFlash = 'e';
 const uint8_t kSerialCmdRebootUnit = 'r';
 const uint8_t kSerialCmdDfuMode = 'd';
-
 const uint8_t kSerialCmdGetVersion = 0x03;
-const uint8_t kSerialCmdGetFlag = 0x04;
-const uint8_t kSerialCmdGetValue = 0x05;
 
 }
 

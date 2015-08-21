@@ -12,14 +12,12 @@ class MomentaryButton
 	public:
 		/* Public Methods */
 		MomentaryButton();
-		void initialize(uint8_t aBtnPin, uint8_t aLedPin, uint32_t aUpdateFreq);
+		void initialize(uint8_t aBtnPin, uint32_t aUpdateFreq);
 		void reset();
 		void updateState();
 		bool pressed();
 		bool wasClicked();
 		bool wasHeld();
-		void turnLedOn();
-		void turnLedOff();
 
 		/* Public Variables */
 		bool active;
@@ -30,7 +28,6 @@ class MomentaryButton
 
 		/* Private Variables */
 		uint8_t _btnPin;
-		uint8_t _ledPin;
 		uint32_t _updateFreq;
 		ElapsedMillis _timeElapsed;
 		uint32_t _closeTimeMillis;

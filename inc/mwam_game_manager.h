@@ -2,7 +2,6 @@
 #define MWAM_GAME_MANAGER_H
 
 #include "mwam_constants.h"
-#include "mwam_led_set.h"
 #include "mwam_level.h"
 #include "mwam_tank.h"
 #include "ElapsedTime.h"
@@ -13,7 +12,7 @@ namespace mwam
 class StateController;
 class DataManager;
 class HardwareManager;
-
+class TextRenderer;
 
 class GameManager
 {
@@ -26,16 +25,35 @@ class GameManager
 		void generateWalls();
 		void updateIntro();
 		void updateTutorial();
-		void updatePlay();
-		void updateGameOver(bool aWonGame);
 
 		void playLedTest();
 		void playFireStormAnim();
 
-		void updateAnimations();
-		//void updateFireStormAnim();
+		void initWaiting();
+		void updateWaiting();
+		void endWaiting();
+
+		void initSelect();
+		void updateSelect();
+		void endSelect();
+
+		void initPlay();
+		void updatePlay();
+		void endPlay();
+
+		void initGameOver();
+		void updateGameOver();
+		void endGameOver();
+
+		void drawLevel();
+		void drawObjects();
+
+		void gameOver();
 
 		Level* getLevel();
+		Tank* getTankOne();
+		Tank* getTankTwo();
+		Tank* getOtherTank(TankNumber aTankNum);
 
 		/* Animation Accessors */
 
@@ -48,10 +66,20 @@ class GameManager
 		StateController* _stateController;
 		DataManager* _dataManager;
 		HardwareManager* _hardwareManager;
+		TextRenderer* _textRenderer;
+
+		ElapsedMillis _waitingElapsed;
+		ElapsedMillis _selectElapsed;
+		ElapsedMillis _timeElapsed;
+		uint8_t _tileIndex;
 
 		Level* _level;
 		Tank* _tankOne;
+		bool _tankOneReady;
 		Tank* _tankTwo;
+		bool _tankTwoReady;
+
+		TileType _textTile;
 
 		//uint8_t _fireStormAnimStep;
 

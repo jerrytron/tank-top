@@ -26,8 +26,8 @@ void HardwareManager::resetHardware() {
 	_button->reset();
 	_joystickOne->reset();
 	_joystickTwo->reset();
-	_piezoOne->reset();
-	_piezoTwo->reset();
+	//_piezoOne->reset();
+	//_piezoTwo->reset();
 }
 
 // Calls each setup interval timer.
@@ -36,8 +36,8 @@ void HardwareManager::updateIntervalTimers() {
 	_button->updateState();
 	_joystickOne->updateState();
 	_joystickTwo->updateState();
-	_piezoOne->updateState();
-	_piezoTwo->updateState();
+	//_piezoOne->updateState();
+	//_piezoTwo->updateState();
 }
 
 /* Accessors */
@@ -75,24 +75,25 @@ void HardwareManager::initHardware() {
 
 	// Setup Button
 	_button = new MomentaryButton();
-	_button->initialize(kButtonPin, kButtonLedPin, kIntervalButtonMillis);
+	_button->initialize(kButtonPin, kIntervalButtonMillis);
 
 	// Setup Joystick One
 	_joystickOne = new Joystick();
-	_joystickOne->initialize(kJoystickOneX, kJoystickOneY, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
+	_joystickOne->initialize(kJoystickOneXPin, kJoystickOneYPin, kJoystickOneBtnPin, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
 	//_joystickOne->active = false;
 
 	// Setup Joystick Two
 	_joystickTwo = new Joystick();
-	_joystickTwo->initialize(kJoystickTwoX, kJoystickTwoY, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
+	_joystickTwo->initialize(kJoystickTwoXPin, kJoystickTwoYPin, kJoystickTwoBtnPin, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
+	//_joystickTwo->active = false;
 
 	// Setup Piezo One
-	_piezoOne = new Piezo();
-	_piezoOne->initialize(kPiezoOnePin, kIntervalPiezoMillis);
+	//_piezoOne = new Piezo();
+	//_piezoOne->initialize(kPiezoOnePin, kIntervalPiezoMillis);
 
 	// Setup Piezo Two
-	_piezoTwo = new Piezo();
-	_piezoTwo->initialize(kPiezoTwoPin, kIntervalPiezoMillis);
+	//_piezoTwo = new Piezo();
+	//_piezoTwo->initialize(kPiezoTwoPin, kIntervalPiezoMillis);
 }
 
 }

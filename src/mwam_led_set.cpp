@@ -36,11 +36,12 @@ void LedSet::initialize(uint16_t aLedCount, uint8_t aLedPin, uint8_t aLedType, u
 void LedSet::updateState(Level* aLevel) {
 	if (this->active && (_timeElapsed >= _updateFreq)) {
 		_timeElapsed = 0;
-		if (_fastUpdates) {
-			updateLedsFast(aLevel);
-		} else {
+		//if (_fastUpdates) {
+		//	updateLedsFast(aLevel);
+		//} else {
+			clearEvents();
 			updateLeds(aLevel);
-		}
+		//}
 	}
 }
 
@@ -53,7 +54,9 @@ void LedSet::updateState(Level* aLevel) {
 
 void LedSet::updateLeds(Level* aLevel) {
 	for (int i = 0; i < _ledCount; ++i) {
-		_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+		//if (aLevel->getTileAtIndex(i) != TILE_KEEP_COLOR) {
+			_ledSet->setPixelColor(i, aLevel->getColorAtIndex(i));
+		//}
 		if (_leds[i].state == LED_DELAY) {
 			if (_leds[i].elapsedTime >= _leds[i].anim.delayTime) {
 				_leds[i].elapsedTime = 0;
@@ -231,21 +234,15 @@ bool LedSet::allLedsIdle() {
 }
 
 bool LedSet::allAnimsDone() {
-	AnimEvent event = _doneEvent;
-	_doneEvent = EVENT_NONE;
-	return (event == EVENT_ALL_DONE);
-	/*for (int i = 0; i < _ledCount; ++i) {
-		if (_leds[i].state != LED_IDLE) {
-			return false;
-		}
-	}*/
+	return (_doneEvent == EVENT_ALL_DONE);
 }
 
-/*void LedSet::clearEvents() {
+void LedSet::clearEvents() {
 	for (int i = 0; i < _ledCount; ++i) {
 		_leds[i].doneEvent = EVENT_NONE;
 	}
-}*/
+	_doneEvent = EVENT_NONE;
+}
 
 /*void LedSet::pauseAnim(uint16_t aLedIndex) {
 	if (aLedIndex < _ledCount) {
@@ -529,7 +526,7 @@ float LedSet::easeCircularInOut(float aCurrentFrame, float aEndFrame, float aSta
 /* Private Methods */
 
 // TODO
-void LedSet::updateLedsFast(Level* aLevel) {
+/*void LedSet::updateLedsFast(Level* aLevel) {
 	//DEBUG("Old index: %d, Index: %d", _tankOne->getLastIndex(), _tankOne->getIndex());
 	if (_tankOne->getLastIndex() != _tankOne->getIndex()) {
 		_ledSet->setPixelColor(_tankOne->getLastIndex(), aLevel->getColorAtIndex(_tankOne->getLastIndex()));
@@ -564,7 +561,7 @@ void LedSet::updateLedsFast(Level* aLevel) {
 	}
 
 	_ledSet->show();
-}
+}*/
 
 void LedSet::checkIfAllAnimsDone() {
 	for (uint16_t i = 0; i < _ledCount; ++i) {

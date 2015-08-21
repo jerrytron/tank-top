@@ -148,6 +148,7 @@ class LedSet
 		LedState getLedState(uint16_t aLedIndex);
 		bool allLedsIdle();
 		bool allAnimsDone();
+		void clearEvents();
 		//void pauseAnim(uint16_t aLedIndex);
 		//void pauseAllAnims();
 		//void resumeAnim(uint16_t aLedIndex);
@@ -190,7 +191,7 @@ class LedSet
 
 	private:
 		/* Private Methods */
-		void updateLedsFast(Level* aLevel);
+		//void updateLedsFast(Level* aLevel);
 		void checkIfAllAnimsDone();
 
 		Color calculateEase(EaseType aEase, float aCurrentFrame, float aEndFrame, Color aStart, Color aEnd, bool &aError);

@@ -11,8 +11,9 @@ namespace mwam
 class Tank;
 
 typedef enum Theme_t {
-	THEME_DEFAULT = 0,
-	THEME_BRIGHT
+	THEME_ONE = 0,
+	THEME_TWO,
+	THEME_THREE
 } Theme;
 
 typedef enum ThemeElement_t {
@@ -33,29 +34,36 @@ typedef enum TileType_t {
 	TILE_TURRET_TWO,
 	TILE_BULLET,
 	TILE_WALL,
-	TILE_BOUNDARY
+	TILE_BOUNDARY,
+	TILE_KEEP_COLOR
 } TileType;
 
-/*typedef enum Collision_t {
-	COL_NONE = 0,
-	COL_BOUNDS,
-	COL_WALL,
-	COL_BULLET,
-} Collision;*/
+typedef enum DimLevel_t {
+	DIM_THREE_QUARTER = 0,
+	DIM_HALF,
+	DIM_QUARTER,
+	DIM_NONE
+} DimLevel;
 
 class Level
 {
 	public:
 		/* Public Methods */
 		Level();
-		void initialize(Theme aTheme, uint32_t aUpdateFreq = 0);
+		void initialize(Theme aTheme, DimLevel aDimLevel, uint32_t aUpdateFreq = 0);
 		void updateState();
-		void setTankAtIndex(Tank* aTank);
+		void clearLevel();
 		void setTileAtIndex(TileType aTile, uint16_t aIndex);
 		TileType getTileAtIndex(uint16_t aIndex);
 
+		int16_t glyphIndexForChar(const char aChar);
+		void drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t aWidth, uint8_t aHeight);
+		void drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aLength);
+
 		void nextTheme();
 		void setTheme(Theme aTheme);
+		void nextDimLevel();
+		void setDimLevel(DimLevel aDimLevel);
 		uint16_t getNewPosition(uint16_t aIndex, Direction aDir, TileType &aCollision);
 
 		uint32_t getColorAtIndex(uint16_t aIndex);
@@ -65,7 +73,6 @@ class Level
 
 	private:
 		/* Private Methods */
-		TileType checkForCollision(uint16_t aIndex);
 
 		/* Private Variables */
 		ElapsedMillis _timeElapsed;
@@ -73,6 +80,7 @@ class Level
 		const Color* _activeTheme;
 		//Color _activeTheme[7];
 		Theme _currentTheme;
+		DimLevel _dimLevel;
 		TileType _levelTiles[kLedCount];
 
 };

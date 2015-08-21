@@ -7,6 +7,7 @@
 #include "mwam_const_config.h"
 #include "mwam_const_values.h"
 #include "mwam_const_structs.h"
+#include "mwam_const_font.h"
 #include "mwam_utilities.h"
 
 namespace mwam
