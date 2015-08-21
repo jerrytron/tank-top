@@ -226,8 +226,9 @@ void GameManager::updatePlay() {
 }
 
 void GameManager::endPlay() {
-	//_level->clearLevel();
-	//_hardwareManager->ledSet()->updateLeds(_level);
+	_level->clearLevel();
+	_hardwareManager->ledSet()->setAllOff();
+	_hardwareManager->ledSet()->updateLeds(_level);
 }
 
 void GameManager::initGameOver() {
@@ -305,10 +306,6 @@ void GameManager::drawObjects() {
 }
 
 void GameManager::gameOver() {
-	_level->clearLevel();
-	_hardwareManager->ledSet()->setAllOff();
-	_hardwareManager->ledSet()->clearEvents();
-	_hardwareManager->ledSet()->updateLeds(_level);
 	_stateController->changeState(STATE_GAME_OVER);
 }
 

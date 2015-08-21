@@ -251,6 +251,9 @@ void Tank::loopState(TankState aState) {
 
 		if (dir) {
 			uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
+			/*if (_tankNumber == TANK_ONE) {
+				DEBUG("MD: %d - thresh: %d", movementDelay, threshold);
+			}*/
 			if (_joystick->clickDown()) {
 				// Makes you SUPER speedy when joystick is down!
 				//movementDelay = 0;

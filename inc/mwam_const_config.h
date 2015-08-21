@@ -33,7 +33,7 @@ namespace mwam
 	const uint8_t kLedBrightness = 200;
 
 	// Base delay for player movement.
-	const uint16_t kIntervalPlayerDelayMillis = 400;
+	const uint16_t kIntervalPlayerDelayMillis = 325;
 	// Amount to reduce player speed delay for increased speed levels.
 	const uint16_t kIntervalPlayerSpeedMillis = 125;
 
@@ -44,7 +44,7 @@ namespace mwam
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
 	// Max Bullet Bounces
-	const uint8_t kMaxBulletBounces = 5;
+	const uint8_t kMaxBulletBounces = 3;
 	// Bullet speed, delay before movement.
 	const uint8_t kBulletMovementDelay = 100;
 	// Health Total Per Player
@@ -77,9 +77,9 @@ namespace mwam
 	const uint8_t kJoystickTwoYPin = A2;
 
 	const uint16_t kJoystickOffset = 2045;
-	const uint16_t kJoystickThreshOne = 200;
-	const uint16_t kJoystickThreshTwo = 800;
-	const uint16_t kJoystickThreshThree = 1600;
+	const uint16_t kJoystickThreshOne = 400;
+	const uint16_t kJoystickThreshTwo = 1600;
+	const uint16_t kJoystickThreshThree = 2000;
 
 	// Timeout to input a serial command.
 	const uint16_t kTimeoutSerialMillis = 8000;

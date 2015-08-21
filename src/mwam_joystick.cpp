@@ -94,6 +94,7 @@ void Joystick::updateDirections(int16_t aXValue, int16_t aYValue) {
 	uint8_t dir = 0;
 
 	uint16_t value = max(abs(aXValue), abs(aYValue));
+	//DEBUG("JVal: %d", value);
 	JoystickThreshold threshold = JOY_IDLE;
 	if (value >= kJoystickThreshThree) {
 		threshold = JOY_THREE;
