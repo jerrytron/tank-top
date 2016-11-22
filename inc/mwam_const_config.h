@@ -77,7 +77,7 @@ namespace mwam
 	const uint8_t kJoystickTwoYPin = A2;
 
 	const uint16_t kJoystickOffset = 2045;
-	const uint16_t kJoystickThreshOne = 400;
+	const uint16_t kJoystickThreshOne = 40;
 	const uint16_t kJoystickThreshTwo = 1600;
 	const uint16_t kJoystickThreshThree = 2000;
 
