@@ -39,7 +39,7 @@
  *	(http://todbot.com/blog/bionicarduino/)
  *
  * (c) 2012 by Tim Teatro
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -53,12 +53,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#if (ARDUINO >= 100)
-#include <Arduino.h>
-#else
-#include <WProgram.h>
-#endif
 
 //
 // These are suitable defaults for most nunchuks, including knockoffs.
@@ -90,15 +84,14 @@ int joy_x, joy_y, joy_zerox, joy_zeroy;
 //
 // Uses port C (analog in) pins as power & ground for nunchuk
 //
-void nunchuk_setpowerpins()
-	{
-	#define pwrpin PORTC3
+void nunchuk_setpowerpins() {
+	/*#define pwrpin PORTC3
 	#define gndpin PORTC2
 	DDRC |= _BV(pwrpin) | _BV(gndpin);
 	PORTC &=~ _BV(gndpin);
 	PORTC |=  _BV(pwrpin);
-	delay(100); // wait for things to stabilize
-	}
+	delay(100);*/ // wait for things to stabilize
+}
 
 //
 //
@@ -108,28 +101,17 @@ void nunchuk_setpowerpins()
 //
 // See http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1264805255
 //
-void nunchuk_init()
-	{
+void nunchuk_init() {
 	Wire.begin();
 	delay(1);
 	Wire.beginTransmission(0x52);  // device address
-	#if (ARDUINO >= 100)
-		Wire.write((uint8_t)0xF0);  // 1st initialisation register
-		Wire.write((uint8_t)0x55);  // 1st initialisation value
-		Wire.endTransmission();
-		delay(1);
-		Wire.beginTransmission(0x52);
-		Wire.write((uint8_t)0xFB);  // 2nd initialisation register
-		Wire.write((uint8_t)0x00);  // 2nd initialisation value
-	#else
-		Wire.send((uint8_t)0xF0);   // 1st initialisation register
-		Wire.send((uint8_t)0x55);   // 1st initialisation value
-		Wire.endTransmission();
-		delay(1);
-		Wire.beginTransmission(0x52);
-		Wire.send((uint8_t)0xFB);   // 2nd initialisation register
-		Wire.send((uint8_t)0x00);   // 2nd initialisation value
-	#endif
+	Wire.write((uint8_t)0xF0);  // 1st initialisation register
+	Wire.write((uint8_t)0x55);  // 1st initialisation value
+	Wire.endTransmission();
+	delay(1);
+	Wire.beginTransmission(0x52);
+	Wire.write((uint8_t)0xFB);  // 2nd initialisation register
+	Wire.write((uint8_t)0x00);  // 2nd initialisation value
 	Wire.endTransmission();
 	delay(1);
 	//
@@ -140,7 +122,7 @@ void nunchuk_init()
 	accel_zerox = ACCEL_ZEROX;
 	accel_zeroy = ACCEL_ZEROY;
 	accel_zeroz = ACCEL_ZEROZ;
-	}
+}
 
 //
 //
@@ -157,14 +139,9 @@ void nunchuk_init()
 //	return x;
 //	}
 
-static void nunchuk_send_request()
-{
+static void nunchuk_send_request() {
 	Wire.beginTransmission(0x52);// transmit to device 0x52
-	#if (ARDUINO >= 100)
-		Wire.write((uint8_t)0x00);// sends one byte
-	#else
-		Wire.send((uint8_t)0x00);// sends one byte
-	#endif
+	Wire.write((uint8_t)0x00);// sends one byte
 	Wire.endTransmission();// stop transmitting
 }
 
@@ -174,36 +151,25 @@ static void nunchuk_send_request()
 // aray. That array will be processed by other functions to extract
 // the data from the sensors and analyse.
 //
-int nunchuk_get_data()
-	{
+int nunchuk_get_data() {
 	int cnt=0;
-	  // Request six bytes from the chuck.
+	// Request six bytes from the chuck.
 	Wire.requestFrom (0x52, 6);
-	while (Wire.available ())
-		{
-	  // receive byte as an integer
-		#if (ARDUINO >= 100)
-			nunchuk_buf[cnt] = Wire.read();
-		#else
-			nunchuk_buf[cnt] = Wire.receive();
-		#endif
+	while (Wire.available()) {
+		// receive byte as an integer
+		nunchuk_buf[cnt] = Wire.read();
 		cnt++;
-		}
+	}
 
 	Wire.beginTransmission(0x52);// transmit to device 0x52
-	#if (ARDUINO >= 100)
-		Wire.write((uint8_t)0x00);// sends one byte
-	#else
-		Wire.send((uint8_t)0x00);// sends one byte
-	#endif
+	Wire.write((uint8_t)0x00);// sends one byte
 	Wire.endTransmission();// stop transmitting
 
-	if (cnt >= 5)
-		{
+	if (cnt >= 5) {
 		return 1;   // success
-		}
-	return 0; // failure
 	}
+	return 0; // failure
+}
 
 //
 //
@@ -211,11 +177,10 @@ int nunchuk_get_data()
 // Calibrate joystick so that we read the centre position as (0,0).
 // Otherwise, we use the default values from the header.
 //
-void nunchuk_calibrate_joy()
-	{
+void nunchuk_calibrate_joy() {
 	joy_zerox = joy_x;
 	joy_zeroy = joy_y;
-	}
+}
 
 // Returns c and z button states: 1=pressed, 0=not
 // The state is in the two least significant bits of the 6th byte.
@@ -224,43 +189,37 @@ void nunchuk_calibrate_joy()
 // and then the () ? true : false; conditional structure to pass out
 // the appropriate state.
 //
-static inline unsigned int nunchuk_zbutton()
-	{
+static inline unsigned int nunchuk_zbutton() {
 	return ((nunchuk_buf[5] >> 0) & 1) ? 0 : 1;
-	}
+}
 
-static inline unsigned int nunchuk_cbutton()
-	{
+static inline unsigned int nunchuk_cbutton() {
 	return ((nunchuk_buf[5] >> 1) & 1) ? 0 : 1;
-	}
+}
 
 //
 //
 // Returns the raw x and y values of the the joystick, cast as ints.
 //
-static inline int nunchuk_joy_x()
-	{
+static inline int nunchuk_joy_x() {
 	return (int) nunchuk_buf[0];
-	}
+}
 
-static inline int nunchuk_joy_y()
-	{
+static inline int nunchuk_joy_y() {
 	return (int) nunchuk_buf[1];
-	}
+}
 
 //
 //
 // Return calibrated x and y values of the joystick.
 //
-static inline int nunchuk_cjoy_x()
-	{
+static inline int nunchuk_cjoy_x() {
 	return (int)nunchuk_buf[0] - joy_zerox;
-	}
+}
 
-static inline int nunchuk_cjoy_y()
-	{
+static inline int nunchuk_cjoy_y() {
 	return (int)nunchuk_buf[1] - joy_zeroy;
-	}
+}
 
 //
 //
@@ -272,7 +231,7 @@ static inline int nunchuk_cjoy_y()
 // 8-bits and stacks it into a 16 bit unsigned integer, and then tacks
 // on the least significant bits from the 6th byte of the data
 // payload.
-// 
+//
 // Load the most sig digits into a blank 16-bit unsigned int leaving
 // two bits in the bottom ( via a 2-bit shift, << 2) for the least sig
 // bits:
@@ -283,43 +242,37 @@ static inline int nunchuk_cjoy_y()
 // payload to be concatinated with nunchuk_buff[2] to complete the 10-
 // bit datum for a given axis.
 //
-static inline uint16_t nunchuk_accelx()
-	{
-	return (  0x0000 | ( nunchuk_buf[2] << 2 ) +
-		( ( nunchuk_buf[5] & B00001100 ) >> 2 )  );
-	}
+static inline uint16_t nunchuk_accelx() {
+	return ( 0x0000 | ( nunchuk_buf[2] << 2 ) +
+		( ( nunchuk_buf[5] & B00001100 ) >> 2 ) );
+}
 
-static inline uint16_t nunchuk_accely()
-	{
-	return (  0x0000 ^ ( nunchuk_buf[3] << 2 ) +
-		( ( nunchuk_buf[5] & B00110000 ) >> 4 )  );
-	}
+static inline uint16_t nunchuk_accely() {
+	return ( 0x0000 ^ ( nunchuk_buf[3] << 2 ) +
+		( ( nunchuk_buf[5] & B00110000 ) >> 4 ) );
+}
 
-static inline uint16_t nunchuk_accelz()
-	{
-	return (  0x0000 ^ ( nunchuk_buf[4] << 2 ) +
-		( ( nunchuk_buf[5] & B11000000 ) >> 6 )  );
-	}
+static inline uint16_t nunchuk_accelz() {
+	return ( 0x0000 ^ ( nunchuk_buf[4] << 2 ) +
+		( ( nunchuk_buf[5] & B11000000 ) >> 6 ) );
+}
 
 //
 //
 // Returns the x,y and z accelerometer values with calibration values
 // subtracted.
 //
-static inline int nunchuk_caccelx()
-	{
-		return (int)(nunchuk_accelx() - accel_zerox);
-	}
+static inline int nunchuk_caccelx() {
+		return (int) (nunchuk_accelx() - accel_zerox);
+}
 
-static inline int nunchuk_caccely()
-	{
-		return (int)(nunchuk_accely() - accel_zeroy);
-	}
+static inline int nunchuk_caccely() {
+		return (int) (nunchuk_accely() - accel_zeroy);
+}
 
-static inline int nunchuk_caccelz()
-	{
-		return (int)(nunchuk_accelz() - accel_zeroz);
-	}
+static inline int nunchuk_caccelz() {
+		return (int) (nunchuk_accelz() - accel_zeroz);
+}
 
 //
 //
@@ -332,13 +285,14 @@ static inline int nunchuk_caccelz()
 // is a more inteligent atan function which quadrant the vector <x,y>
 // is in, and returns the appropriate angle.
 //
-static inline int nunchuk_joyangle()
-	{
+static inline int nunchuk_joyangle() {
 	double theta;
-	theta = atan2( nunchuk_cjoy_y(), nunchuk_cjoy_x() );
-	while (theta < 0) theta += 2*M_PI;
-	return (int)(theta * 180/M_PI);
+	theta = atan2(nunchuk_cjoy_y(), nunchuk_cjoy_x());
+	while (theta < 0) {
+		theta += 2 * M_PI;
 	}
+	return (int) (theta * 180 / M_PI);
+}
 
 //
 //
@@ -349,11 +303,10 @@ static inline int nunchuk_joyangle()
 // nunchuk is being held still or at constant velocity with zero ext-
 // ernal force.
 //
-static inline int nunchuk_rollangle()
-	{
-	return (int) (  atan2( (double) nunchuk_caccelx(),
-		(double) nunchuk_caccelz() ) * 180 / M_PI  );
-	}
+static inline int nunchuk_rollangle() {
+	return (int) (atan2((double) nunchuk_caccelx(),
+		(double) nunchuk_caccelz() ) * 180 / M_PI);
+}
 
 //
 //
@@ -364,33 +317,30 @@ static inline int nunchuk_rollangle()
 // nunchuk is being held still or at constant velocity with zero ext-
 // ernal force.
 //
-static inline int nunchuk_pitchangle()
-	{
-	return (int) (  atan2( (double) nunchuk_caccely(),
-		(double)nunchuk_caccelz() ) * 180 / M_PI  );
-	}
+static inline int nunchuk_pitchangle() {
+	return (int) (atan2( (double) nunchuk_caccely(),
+		(double) nunchuk_caccelz() ) * 180 / M_PI);
+}
 
 //
 //
 // Because gravity pulls down on the z-accelerometer while the nunchuk
 // is upright, we need to calibrate {x,y} and {z} separately. Execute
-// this function while the nunchuk is known to be upright and then 
+// this function while the nunchuk is known to be upright and then
 // execute nunchuk_calibrate_accelz() when the nunchuk is on its side.
 //
-void nunchuk_calibrate_accelxy()
-	{
+void nunchuk_calibrate_accelxy() {
 	accel_zerox = nunchuk_accelx();
 	accel_zeroy = nunchuk_accely();
-	}
+}
 
 //
 //
 // See documentation for nunchuk_calibrate_xy()
 //
-void nunchuk_calibrate_accelz()
-	{
+void nunchuk_calibrate_accelz() {
 	accel_zeroz = nunchuk_accelz();
-	}
+}
 //
 //
 // EOF
