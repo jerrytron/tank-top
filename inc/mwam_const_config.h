@@ -3,17 +3,39 @@
 
 namespace mwam
 {
+//#define CYLINDRUS
 
 	// Total count of LEDs.
-	const uint16_t kLedCount = 240;
+#ifdef CYLINDRUS
+const uint16_t kLedCount = 600; // Cylindrus
+#else
+const uint16_t kLedCount = 240; // Original
+#endif
+
 	// LEDs per ring in the spiral.
+#ifdef CYLINDRUS
+	const uint8_t kLedsPerRing = 31;
+#else
 	const uint8_t kLedsPerRing = 20;
+#endif
 	// LED indexes to add/subtract for diagnal positions.
+#ifdef CYLINDRUS
+	const int8_t kLedDiagUpLeft = 31;
+	const int8_t kLedDiagUp = 32;
+	const int8_t kLedDiagUpRight = 33;
+	const int8_t kLedDiagRight = 1;
+	const int8_t kLedDiagDownRight = -31;
+	const int8_t kLedDiagDown = -32;
+	const int8_t kLedDiagDownLeft = -33;
+	const int8_t kLedDiagLeft = -1;
+#else
 	const int8_t kLedDiagUpLeft = 20;
 	const int8_t kLedDiagUpRight = 21;
 	const int8_t kLedDiagDownLeft = -21;
 	const int8_t kLedDiagDownRight = -20;
+#endif
 
+	// *** NEED TO UPDATE THESE VALUES FOR NEW LEDS *** //
 	const uint8_t kLedVertRollover = 34;
 	const uint8_t kLedDiagRightLowThresh = 219;
 	const uint8_t kLedDiagRightHighThresh = 226;

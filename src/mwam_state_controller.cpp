@@ -64,8 +64,8 @@ void StateController::initState(GameState aState) {
 		}
 	} else if (aState == STATE_INIT) {
 		_gameManager->reset();
-		if (Spark.connected()) {
-			Spark.syncTime();
+		if (Particle.connected()) {
+			Particle.syncTime();
 		}
 	} else if (aState == STATE_WAITING) {
 		_gameManager->initWaiting();

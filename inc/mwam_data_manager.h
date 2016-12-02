@@ -3,7 +3,7 @@
 
 #include "mwam_constants.h"
 #include "mwam_state_controller.h"
-#include "flashee-eeprom.h"
+//#include "flashee-eeprom.h"
 #include "ElapsedTime.h"
 
 namespace mwam

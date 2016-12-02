@@ -53,11 +53,11 @@ void DataManager::handleSerialData() {
 						break;
 					}
 					case kSerialCmdDfuMode: {
-						FLASH_OTA_Update_SysFlag = 0x0000;
+						/*FLASH_OTA_Update_SysFlag = 0x0000;
 						Save_SystemFlags();
 						BKP_WriteBackupRegister(BKP_DR10, 0x0000);
 						USB_Cable_Config(DISABLE);
-						NVIC_SystemReset();
+						NVIC_SystemReset();*/
 						break;
 					}
 				}

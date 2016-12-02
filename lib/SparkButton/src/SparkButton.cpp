@@ -1,5 +1,6 @@
 #include "SparkButton.h"
 #include "Adafruit_NeoPixel.h"
+#include "math.h"
 
 //----------------- Button ----------------//
 

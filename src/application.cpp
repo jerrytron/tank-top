@@ -9,6 +9,7 @@ SYSTEM_MODE(MANUAL);
 /* Function prototypes -------------------------------------------------------*/
 
 /* Variables -----------------------------------------------------------------*/
+//SerialLogHandler logHandler;
 mwam::StateController *_stateController;
 
 /* This function is called once at start up ----------------------------------*/
