@@ -54,6 +54,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Particle.h"
+
 //
 // These are suitable defaults for most nunchuks, including knockoffs.
 // If you intend to use the same nunchuk all the time and demand accu-
@@ -82,47 +84,49 @@ int joy_x, joy_y, joy_zerox, joy_zeroy;
 
 //
 //
-// Uses port C (analog in) pins as power & ground for nunchuk
-//
-void nunchuk_setpowerpins() {
-	/*#define pwrpin PORTC3
-	#define gndpin PORTC2
-	DDRC |= _BV(pwrpin) | _BV(gndpin);
-	PORTC &=~ _BV(gndpin);
-	PORTC |=  _BV(pwrpin);
-	delay(100);*/ // wait for things to stabilize
-}
-
-//
-//
 // Initialize and join the I2C bus, and tell the nunchuk we're
 // talking to it. This function will work both with Nintendo
 // nunchuks, or knockoffs.
 //
 // See http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1264805255
 //
-void nunchuk_init() {
-	Wire.begin();
-	delay(1);
+bool nunchuk_init() {
+	bool error = true;
+ 	//unsigned long time = millis();
+	uint8_t status = 0;
+
 	Wire.beginTransmission(0x52);  // device address
 	Wire.write((uint8_t)0xF0);  // 1st initialisation register
 	Wire.write((uint8_t)0x55);  // 1st initialisation value
-	Wire.endTransmission();
-	delay(1);
-	Wire.beginTransmission(0x52);
-	Wire.write((uint8_t)0xFB);  // 2nd initialisation register
-	Wire.write((uint8_t)0x00);  // 2nd initialisation value
-	Wire.endTransmission();
-	delay(1);
-	//
-	// Set default calibration centres:
-	//
-	joy_zerox = DEFAULT_CENTRE_JOY_X;
-	joy_zeroy = DEFAULT_CENTRE_JOY_Y;
-	accel_zerox = ACCEL_ZEROX;
-	accel_zeroy = ACCEL_ZEROY;
-	accel_zeroz = ACCEL_ZEROZ;
-}
+	status = Wire.endTransmission();
+	Serial.print("Status: ");
+	Serial.println(status);
+	if (status == 0) {
+		delay(15);
+		Wire.beginTransmission(0x52);      // transmit to device 0x52
+		Wire.write(0xFB);       // sends memory address
+		Wire.write(0x00);
+		status = Wire.endTransmission();
+		Serial.print("Status: ");
+		Serial.println(status);
+		if (status == 0) {
+			delay(15);
+			error = false;
+			Serial.println("OK");
+
+			//
+			// Set default calibration centres:
+			//
+			joy_zerox = DEFAULT_CENTRE_JOY_X;
+			joy_zeroy = DEFAULT_CENTRE_JOY_Y;
+			accel_zerox = ACCEL_ZEROX;
+			accel_zeroy = ACCEL_ZEROY;
+			accel_zeroz = ACCEL_ZEROZ;
+		}
+	}
+
+	return error;
+	}
 
 //
 //
@@ -152,7 +156,7 @@ static void nunchuk_send_request() {
 // the data from the sensors and analyse.
 //
 int nunchuk_get_data() {
-	int cnt=0;
+	int cnt = 0;
 	// Request six bytes from the chuck.
 	Wire.requestFrom (0x52, 6);
 	while (Wire.available()) {
@@ -161,12 +165,12 @@ int nunchuk_get_data() {
 		cnt++;
 	}
 
-	Wire.beginTransmission(0x52);// transmit to device 0x52
-	Wire.write((uint8_t)0x00);// sends one byte
-	Wire.endTransmission();// stop transmitting
-
+	Wire.beginTransmission(0x52); // transmit to device 0x52
+	Wire.write((uint8_t)0x00); // sends one byte
+	Wire.endTransmission(); // stop transmitting
+	delay(15);
 	if (cnt >= 5) {
-		return 1;   // success
+		return 1; // success
 	}
 	return 0; // failure
 }
@@ -243,18 +247,18 @@ static inline int nunchuk_cjoy_y() {
 // bit datum for a given axis.
 //
 static inline uint16_t nunchuk_accelx() {
-	return ( 0x0000 | ( nunchuk_buf[2] << 2 ) +
-		( ( nunchuk_buf[5] & B00001100 ) >> 2 ) );
+	return (  (0x0000 | ( nunchuk_buf[2]) << 2 ) +
+		( ( nunchuk_buf[5] & 0b00001100 ) >> 2 )  );
 }
 
 static inline uint16_t nunchuk_accely() {
-	return ( 0x0000 ^ ( nunchuk_buf[3] << 2 ) +
-		( ( nunchuk_buf[5] & B00110000 ) >> 4 ) );
+	return (  (0x0000 ^ ( nunchuk_buf[3]) << 2 ) +
+		( ( nunchuk_buf[5] & 0b00110000 ) >> 4 )  );
 }
 
 static inline uint16_t nunchuk_accelz() {
-	return ( 0x0000 ^ ( nunchuk_buf[4] << 2 ) +
-		( ( nunchuk_buf[5] & B11000000 ) >> 6 ) );
+	return (  (0x0000 ^ ( nunchuk_buf[4]) << 2 ) +
+		( ( nunchuk_buf[5] & 0b11000000 ) >> 6 )  );
 }
 
 //
@@ -263,15 +267,15 @@ static inline uint16_t nunchuk_accelz() {
 // subtracted.
 //
 static inline int nunchuk_caccelx() {
-		return (int) (nunchuk_accelx() - accel_zerox);
+		return (int)(nunchuk_accelx() - accel_zerox);
 }
 
 static inline int nunchuk_caccely() {
-		return (int) (nunchuk_accely() - accel_zeroy);
+		return (int)(nunchuk_accely() - accel_zeroy);
 }
 
 static inline int nunchuk_caccelz() {
-		return (int) (nunchuk_accelz() - accel_zeroz);
+		return (int)(nunchuk_accelz() - accel_zeroz);
 }
 
 //
@@ -287,11 +291,9 @@ static inline int nunchuk_caccelz() {
 //
 static inline int nunchuk_joyangle() {
 	double theta;
-	theta = atan2(nunchuk_cjoy_y(), nunchuk_cjoy_x());
-	while (theta < 0) {
-		theta += 2 * M_PI;
-	}
-	return (int) (theta * 180 / M_PI);
+	theta = atan2( nunchuk_cjoy_y(), nunchuk_cjoy_x() );
+	while (theta < 0) theta += 2*M_PI;
+	return (int)(theta * 180/M_PI);
 }
 
 //
@@ -304,8 +306,8 @@ static inline int nunchuk_joyangle() {
 // ernal force.
 //
 static inline int nunchuk_rollangle() {
-	return (int) (atan2((double) nunchuk_caccelx(),
-		(double) nunchuk_caccelz() ) * 180 / M_PI);
+	return (int) (  atan2( (double) nunchuk_caccelx(),
+		(double) nunchuk_caccelz() ) * 180 / M_PI  );
 }
 
 //
@@ -318,8 +320,8 @@ static inline int nunchuk_rollangle() {
 // ernal force.
 //
 static inline int nunchuk_pitchangle() {
-	return (int) (atan2( (double) nunchuk_caccely(),
-		(double) nunchuk_caccelz() ) * 180 / M_PI);
+	return (int) (  atan2( (double) nunchuk_caccely(),
+		(double)nunchuk_caccelz() ) * 180 / M_PI  );
 }
 
 //

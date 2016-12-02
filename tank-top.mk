@@ -9,6 +9,7 @@ INCLUDE_DIRS += applications/tank-top/lib/Flashee/inc
 INCLUDE_DIRS += applications/tank-top/lib/SparkButton/inc
 INCLUDE_DIRS += applications/tank-top/lib/Tone/inc
 INCLUDE_DIRS += applications/tank-top/lib/FiniteStateMachine/inc
+INCLUDE_DIRS += applications/tank-top/lib/Nunchuk/inc
 
 # C source files included in this build.
 CSRC +=
