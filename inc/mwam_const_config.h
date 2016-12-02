@@ -3,7 +3,7 @@
 
 namespace mwam
 {
-//#define CYLINDRUS
+#define CYLINDRUS
 
 	// Total count of LEDs.
 #ifdef CYLINDRUS
@@ -20,22 +20,43 @@ const uint16_t kLedCount = 240; // Original
 #endif
 	// LED indexes to add/subtract for diagnal positions.
 #ifdef CYLINDRUS
-	const int8_t kLedDiagUpLeft = 31;
-	const int8_t kLedDiagUp = 32;
-	const int8_t kLedDiagUpRight = 33;
-	const int8_t kLedDiagRight = 1;
-	const int8_t kLedDiagDownRight = -31;
-	const int8_t kLedDiagDown = -32;
-	const int8_t kLedDiagDownLeft = -33;
-	const int8_t kLedDiagLeft = -1;
+	/*const int16_t kLedDiagUpLeft = 31;
+	const int16_t kLedDiagUp = 32;
+	const int16_t kLedDiagUpRight = 33;
+	const int16_t kLedDiagRight = 1;
+	const int16_t kLedDiagDownRight = -31;
+	const int16_t kLedDiagDown = -32;
+	const int16_t kLedDiagDownLeft = -33;
+	const int16_t kLedDiagLeft = -1;*/
+
+	const int16_t kLedDiagUpLeft = 31;
+	const int16_t kLedDiagUpRight = 1;
+	const int16_t kLedDiagDownLeft = -1;
+	const int16_t kLedDiagDownRight = -31;
 #else
-	const int8_t kLedDiagUpLeft = 20;
-	const int8_t kLedDiagUpRight = 21;
-	const int8_t kLedDiagDownLeft = -21;
-	const int8_t kLedDiagDownRight = -20;
+	const int16_t kLedDiagUpLeft = 20;
+	const int16_t kLedDiagUpRight = 21;
+	const int16_t kLedDiagDownLeft = -21;
+	const int16_t kLedDiagDownRight = -20;
 #endif
 
-	// *** NEED TO UPDATE THESE VALUES FOR NEW LEDS *** //
+#ifdef CYLINDRUS
+	// 20 between top and bottom rows 'connecting'
+	/*const uint16_t kLedVertRollover = 12;
+	const uint16_t kLedLowThresh = 569;
+	const uint16_t kLedHighThresh = 588;
+	const uint16_t kLedRollover = 12;*/
+
+	const uint16_t kLedVertRollover = 12;
+	const uint16_t kLedDiagRightLowThresh = 569;
+	const uint16_t kLedDiagRightHighThresh = 588;
+	const uint16_t kLedDiagRightRollover = 12;
+	const uint16_t kLedDiagLeftLowThresh = 569;
+	const uint16_t kLedDiagLeftHighThresh = 588;
+	const uint16_t kLedDiagLeftRollover = 12;
+
+	const uint16_t kTextLedIndexMax = 588;
+#else
 	const uint8_t kLedVertRollover = 34;
 	const uint8_t kLedDiagRightLowThresh = 219;
 	const uint8_t kLedDiagRightHighThresh = 226;
@@ -45,6 +66,7 @@ const uint16_t kLedCount = 240; // Original
 	const uint8_t kLedDiagLeftRollover = 13;
 
 	const uint8_t kTextLedIndexMax = 225;
+#endif
 	const bool kMirrorText = false;
 
 	// LED pin.
