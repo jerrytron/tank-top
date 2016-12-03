@@ -86,7 +86,7 @@ void HardwareManager::initHardware() {
 	// Setup Joystick One
 #ifdef CYLINDRUS
 	_joystickOne = new Nunchuk();
-	_joystickOne->initialize(DIR_SET_FOUR_DIAG, kIntervalNunchukMillis);
+	_joystickOne->initialize(DIR_SET_EIGHT, kIntervalNunchukMillis);
 #else
 	_joystickOne = new Joystick();
 	_joystickOne->initialize(kJoystickOneXPin, kJoystickOneYPin, kJoystickOneBtnPin, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
@@ -95,7 +95,11 @@ void HardwareManager::initHardware() {
 
 	// Setup Joystick Two
 	_joystickTwo = new Joystick();
+#ifdef CYLINDRUS
+	_joystickTwo->initialize(kJoystickTwoXPin, kJoystickTwoYPin, kJoystickTwoBtnPin, DIR_SET_EIGHT, kIntervalJoystickMillis);
+#else
 	_joystickTwo->initialize(kJoystickTwoXPin, kJoystickTwoYPin, kJoystickTwoBtnPin, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
+#endif
 	//_joystickTwo->active = false;
 
 	// Setup Piezo One

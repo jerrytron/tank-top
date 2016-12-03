@@ -68,7 +68,7 @@ void Level::drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t 
 		for (uint8_t i = 0; i < aHeight; i++) {
 			drawLine(DIR_RIGHT, aTile, aIndex, aWidth);
 #ifdef CYLINDRUS
-			index += kLedDiagDownRight;
+			index += kLedDown;
 #else
 			index += (kLedDiagDownLeft + kLedDiagDownRight);
 #endif
@@ -105,7 +105,7 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 			}
 		} else if (aDir == DIR_UP) {
 #ifdef CYLINDRUS
-			index += kLedDiagUpLeft;
+			index += kLedUp;
 #else
 			index += (kLedDiagUpLeft + kLedDiagUpRight);
 #endif
@@ -137,7 +137,7 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 			}
 		} else if (aDir == DIR_DOWN) {
 #ifdef CYLINDRUS
-			index += kLedDiagDownRight;
+			index += kLedDown;
 #else
 			index += (kLedDiagDownLeft + kLedDiagDownRight);
 #endif
@@ -223,6 +223,34 @@ uint16_t Level::getNewPosition(uint16_t aIndex, Direction aDir, TileType &aColli
 			return aIndex;
 		}
 		newIndex += kLedDiagDownRight;
+	} else if (aDir == DIR_LEFT) {
+		if (newIndex < abs(kLedLeft)) {
+			aCollision = TILE_BOUNDARY;
+			//DEBUG("Lower left boundry.");
+			return aIndex;
+		}
+		newIndex += kLedLeft;
+	} else if (aDir == DIR_UP) {
+		newIndex += kLedUp;
+		if (newIndex >= kLedCount) {
+			aCollision = TILE_BOUNDARY;
+			//DEBUG("Upper left boundry.");
+			return aIndex;
+		}
+	} else if (aDir == DIR_RIGHT) {
+		newIndex += kLedRight;
+		if (newIndex >= kLedCount) {
+			aCollision = TILE_BOUNDARY;
+			//DEBUG("Upper Right boundry.");
+			return aIndex;
+		}
+	} else if (aDir == DIR_DOWN) {
+		if (newIndex < abs(kLedDiagDownRight)) {
+			aCollision = TILE_BOUNDARY;
+			//DEBUG("LowerRight boundry.");
+			return aIndex;
+		}
+		newIndex += kLedDown;
 	}
 
 	aCollision = getTileAtIndex(newIndex);

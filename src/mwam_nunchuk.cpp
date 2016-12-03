@@ -41,10 +41,10 @@ void Nunchuk::updateState() {
 			if (_connected) {
 				delay(100);
 				nunchuk_get_data();
-				nunchuk_calibrate_joy();
-				Serial.println("CONNECTED");
+				//nunchuk_calibrate_joy();
+				Log.info("CONNECTED");
 			} else {
-				Serial.println("failed");
+				Log.info("failed");
 			}
 		} else {
 			updateJoystick();
@@ -87,10 +87,11 @@ bool Nunchuk::clickUp() {
 /* Private Methods */
 
 void Nunchuk::updateJoystick() {
-	_lastX = nunchuk_cjoy_x();
-	_lastY = nunchuk_cjoy_y();
+	nunchuk_get_data();
+	_lastX = nunchuk_joy_x() - kNunchukOffsetX;
+	_lastY = nunchuk_joy_y() - kNunchukOffsetY;
 	_lastBtn = nunchuk_zbutton() || nunchuk_cbutton();
-	DEBUG("X: %d, Y: %d, Btn: %d", _lastX, _lastY, _lastBtn);
+	//Log.info("X: %d, Y: %d, Btn: %d", _lastX, _lastY, _lastBtn);
 	if (_lastBtn) {
 		_clickDown = true;
 	} else {
@@ -124,28 +125,28 @@ void Nunchuk::updateDirections(int16_t aXValue, int16_t aYValue) {
 	if (aXValue <= -kNunchukThreshOne) {
 		dir = DIR_LEFT;
 		if (aYValue <= -kNunchukThreshOne) {
-			dir--;
-		} else if (aYValue >= kNunchukThreshOne) {
 			dir++;
+		} else if (aYValue >= kNunchukThreshOne) {
+			dir--;
 		}
 	} else if (aXValue >= kNunchukThreshOne) {
 		dir = DIR_RIGHT;
 		if (aYValue <= -kNunchukThreshOne) {
-			dir--;
-		} else if (aYValue >= kNunchukThreshOne) {
 			dir++;
+		} else if (aYValue >= kNunchukThreshOne) {
+			dir--;
 		}
 	} else {
 		if (aYValue <= -kNunchukThreshOne) {
-			dir = DIR_UP;
-		} else if (aYValue >= kNunchukThreshOne) {
 			dir = DIR_DOWN;
+		} else if (aYValue >= kNunchukThreshOne) {
+			dir = DIR_UP;
 		}
 	}
 
 	_direction = (Direction)dir;
 	_threshold = (JoystickThreshold)threshold;
-	//DEBUG("Dir: %d, thresh: %d", dir, threshold);
+	//Log.info("Dir: %d, thresh: %d", dir, threshold);
 }
 
 }

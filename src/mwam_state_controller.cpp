@@ -52,7 +52,7 @@ void StateController::updateState() {
 /* Private Methods */
 
 void StateController::initState(GameState aState) {
-	LOG("Init State: %s", stateString());
+	Log.info("Init State: %s", stateString());
 
 	if (aState == STATE_BOOTING) {
 		if (!Manager::getInstance().initialize(this)) {
@@ -81,7 +81,7 @@ void StateController::initState(GameState aState) {
 	} else if (aState == STATE_GAME_OVER) {
 		_gameManager->initGameOver();
 	} else if (aState == STATE_ERROR) {
-		ERROR("*** ERROR STATE ***");
+		Log.error("*** ERROR STATE ***");
 	}
 }
 
@@ -140,7 +140,7 @@ void StateController::loopState(GameState aState) {
 
 
 void StateController::endState(GameState aState) {
-	LOG("End State: %s", stateString());
+	Log.info("End State: %s", stateString());
 
 	if (aState == STATE_BOOTING) {
 

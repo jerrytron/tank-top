@@ -20,19 +20,19 @@ const uint16_t kLedCount = 240; // Original
 #endif
 	// LED indexes to add/subtract for diagnal positions.
 #ifdef CYLINDRUS
-	/*const int16_t kLedDiagUpLeft = 31;
-	const int16_t kLedDiagUp = 32;
-	const int16_t kLedDiagUpRight = 33;
-	const int16_t kLedDiagRight = 1;
-	const int16_t kLedDiagDownRight = -31;
-	const int16_t kLedDiagDown = -32;
-	const int16_t kLedDiagDownLeft = -33;
-	const int16_t kLedDiagLeft = -1;*/
+	const int16_t kLedDiagUpLeft = 30;
+	const int16_t kLedUp = 31;
+	const int16_t kLedDiagUpRight = 32;
+	const int16_t kLedRight = 1;
+	const int16_t kLedDiagDownRight = -30;
+	const int16_t kLedDown = -31;
+	const int16_t kLedDiagDownLeft = -32;
+	const int16_t kLedLeft = -1;
 
-	const int16_t kLedDiagUpLeft = 31;
+	/*const int16_t kLedDiagUpLeft = 31;
 	const int16_t kLedDiagUpRight = 1;
 	const int16_t kLedDiagDownLeft = -1;
-	const int16_t kLedDiagDownRight = -31;
+	const int16_t kLedDiagDownRight = -31;*/
 #else
 	const int16_t kLedDiagUpLeft = 20;
 	const int16_t kLedDiagUpRight = 21;
@@ -132,9 +132,11 @@ const uint16_t kLedCount = 240; // Original
 	const uint8_t kJoystickTwoXPin = A3;
 	const uint8_t kJoystickTwoYPin = A2;
 
+	const uint16_t kNunchukOffsetX = 120;
+	const uint16_t kNunchukOffsetY = 129;
 	const uint16_t kNunchukThreshOne = 20;
-	const uint16_t kNunchukThreshTwo = 60;
-	const uint16_t kNunchukThreshThree = 100;
+	const uint16_t kNunchukThreshTwo = 50;
+	const uint16_t kNunchukThreshThree = 90;
 
 	const uint16_t kJoystickOffset = 2045;
 	const uint16_t kJoystickThreshOne = 40;

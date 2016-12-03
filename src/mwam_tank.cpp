@@ -165,7 +165,7 @@ bool Tank::isInvulnerable() {
 /* Private Methods */
 
 void Tank::initState(TankState aState) {
-	LOG("Init State: %s", stateString());
+	Log.info("Init State: %s", stateString());
 
 	if (aState == TANK_INIT) {
 		reset();
@@ -185,7 +185,7 @@ void Tank::initState(TankState aState) {
 	} else if (aState == TANK_HIT) {
 		_invulnerable = true;
 		_health--;
-		LOG("Tank %d, -1 health, %d remaining", _tankNumber, _health);
+		Log.info("Tank %d, -1 health, %d remaining", _tankNumber, _health);
 
 		Animation a;
 		a.endColor = kColorOrange;
@@ -203,7 +203,7 @@ void Tank::initState(TankState aState) {
 	} else if (aState == TANK_DESTROYED) {
 		_invulnerable = true;
 		_lives--;
-		LOG("Tank %d, -1 life, %d remaining", _tankNumber, _lives);
+		Log.info("Tank %d, -1 life, %d remaining", _tankNumber, _lives);
 	} else if (aState == TANK_GAME_OVER) {
 
 	}
@@ -296,7 +296,7 @@ void Tank::loopState(TankState aState) {
 }
 
 void Tank::endState(TankState aState) {
-	LOG("End State: %s", stateString());
+	Log.info("End State: %s", stateString());
 
 	if (aState == TANK_INIT) {
 

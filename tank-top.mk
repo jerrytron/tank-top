@@ -15,7 +15,7 @@ INCLUDE_DIRS += applications/tank-top/lib/Nunchuk/inc
 CSRC +=
 
 # C++ source files included in this build.
-CPPSRC += $(call target_files,./applications/tank-top/,*.cpp)
+#CPPSRC += $(call target_files,./applications/tank-top/,*.cpp)
 
 # ASM source files included in this build.
 ASRC +=

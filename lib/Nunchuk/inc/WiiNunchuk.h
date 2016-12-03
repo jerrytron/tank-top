@@ -207,11 +207,11 @@ static inline unsigned int nunchuk_cbutton() {
 // Returns the raw x and y values of the the joystick, cast as ints.
 //
 static inline int nunchuk_joy_x() {
-	return (int) nunchuk_buf[0];
+	return (int)nunchuk_buf[0];
 }
 
 static inline int nunchuk_joy_y() {
-	return (int) nunchuk_buf[1];
+	return (int)nunchuk_buf[1];
 }
 
 //

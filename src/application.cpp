@@ -9,15 +9,15 @@ SYSTEM_MODE(MANUAL);
 /* Function prototypes -------------------------------------------------------*/
 
 /* Variables -----------------------------------------------------------------*/
-//SerialLogHandler logHandler;
+SerialLogHandler logHandler;
 mwam::StateController *_stateController;
 
 /* This function is called once at start up ----------------------------------*/
 void setup()
 {
-#ifndef DEBUG_BUILD
+//#ifndef DEBUG_BUILD
 	Serial.begin(9600);
-#endif
+//#endif
 	//while(!Serial.available()) SPARK_WLAN_Loop();
 	_stateController = new mwam::StateController();
 	_stateController->initialize();
@@ -33,7 +33,7 @@ void loop()
 	}
 }
 
-#ifdef DEBUG_BUILD
+/*#ifdef DEBUG_BUILD
 void debug_output_(const char *p)
 {
     static boolean once = false;
@@ -43,4 +43,4 @@ void debug_output_(const char *p)
     }
     Serial.print(p);
 }
-#endif
+#endif*/
