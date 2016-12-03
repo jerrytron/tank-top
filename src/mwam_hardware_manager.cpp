@@ -50,9 +50,15 @@ MomentaryButton* HardwareManager::button() {
 	return _button;
 }
 
+#ifdef CYLINDRUS
+Nunchuk* HardwareManager::joystickOne() {
+	return _joystickOne;
+}
+#else
 Joystick* HardwareManager::joystickOne() {
 	return _joystickOne;
 }
+#endif
 
 Joystick* HardwareManager::joystickTwo() {
 	return _joystickTwo;
@@ -78,8 +84,13 @@ void HardwareManager::initHardware() {
 	_button->initialize(kButtonPin, kIntervalButtonMillis);
 
 	// Setup Joystick One
+#ifdef CYLINDRUS
+	_joystickOne = new Nunchuk();
+	_joystickOne->initialize(DIR_SET_FOUR_DIAG, kIntervalNunchukMillis);
+#else
 	_joystickOne = new Joystick();
 	_joystickOne->initialize(kJoystickOneXPin, kJoystickOneYPin, kJoystickOneBtnPin, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
+#endif
 	//_joystickOne->active = false;
 
 	// Setup Joystick Two

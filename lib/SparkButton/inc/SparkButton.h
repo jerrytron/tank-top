@@ -16,7 +16,7 @@
 
  */
 
-#include "application.h"
+#include "Particle.h"
 
 #ifndef SparkButton_h
 #define SparkButton_h

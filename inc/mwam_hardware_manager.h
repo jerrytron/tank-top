@@ -4,6 +4,7 @@
 #include "mwam_constants.h"
 #include "mwam_led_set.h"
 #include "mwam_momentary_button.h"
+#include "mwam_nunchuk.h"
 #include "mwam_joystick.h"
 #include "mwam_piezo.h"
 #include "ElapsedTime.h"
@@ -27,7 +28,11 @@ class HardwareManager
 		// Accessors
 		LedSet* ledSet();
 		MomentaryButton* button();
+#ifdef CYLINDRUS
+		Nunchuk* joystickOne();
+#else
 		Joystick* joystickOne();
+#endif
 		Joystick* joystickTwo();
 		Piezo* piezoOne();
 		Piezo* piezoTwo();
@@ -44,7 +49,11 @@ class HardwareManager
 		StateController* _stateController;
 		LedSet* _ledSet;
 		MomentaryButton* _button;
+#ifdef CYLINDRUS
+		Nunchuk* _joystickOne;
+#else
 		Joystick* _joystickOne;
+#endif
 		Joystick* _joystickTwo;
 		Piezo* _piezoOne;
 		Piezo* _piezoTwo;

@@ -55,6 +55,7 @@
  */
 
 #include "Particle.h"
+#include "math.h"
 
 //
 // These are suitable defaults for most nunchuks, including knockoffs.
@@ -91,7 +92,7 @@ int joy_x, joy_y, joy_zerox, joy_zeroy;
 // See http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1264805255
 //
 bool nunchuk_init() {
-	bool error = true;
+	bool connected = false;
  	//unsigned long time = millis();
 	uint8_t status = 0;
 
@@ -111,7 +112,7 @@ bool nunchuk_init() {
 		//Serial.println(status);
 		if (status == 0) {
 			delay(15);
-			error = false;
+			connected = true;
 			//Serial.println("OK");
 
 			//
@@ -125,8 +126,8 @@ bool nunchuk_init() {
 		}
 	}
 
-	return error;
-	}
+	return connected;
+}
 
 //
 //

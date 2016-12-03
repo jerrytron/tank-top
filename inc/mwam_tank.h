@@ -4,6 +4,7 @@
 #include "mwam_constants.h"
 #include "mwam_bullet.h"
 #include "mwam_joystick.h"
+#include "mwam_nunchuk.h"
 #include "mwam_level.h"
 #include "mwam_led_set.h"
 #include "ElapsedTime.h"
@@ -73,6 +74,7 @@ class Tank
 		GameManager* _gameManager;
 		HardwareManager* _hardwareManager;
 
+		Nunchuk* _nunchuk;
 		Joystick* _joystick;
 
 		ElapsedMillis _moveElapsed;
