@@ -18,8 +18,8 @@
 #ifndef _FLASHEE_EEPROM_H_
 #define _FLASHEE_EEPROM_H_
 
-#ifdef SPARK
-#include "application.h"
+#ifdef PARTICLE
+#include "Particle.h"
 #endif
 
 #include <stdint.h>
