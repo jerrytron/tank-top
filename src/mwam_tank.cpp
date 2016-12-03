@@ -1,6 +1,7 @@
 #include "mwam_tank.h"
 #include "mwam_manager.h"
 #include "mwam_joystick.h"
+#include "mwam_nunchuk.h"
 
 namespace mwam
 {
@@ -29,7 +30,7 @@ void Tank::initialize(TankNumber aTankNum, uint16_t aStartIndex) {
 	_hardwareManager = Manager::getInstance().hardwareManager;
 
 	if (_tankNumber == TANK_ONE) {
-		_joystick = Manager::getInstance().hardwareManager->joystickOne();
+		_nunchuk = Manager::getInstance().hardwareManager->joystickOne();
 		_tankTile = TILE_TANK_ONE;
 		_turretTile = TILE_TURRET_ONE;
 	} else if (_tankNumber == TANK_TWO) {
@@ -225,25 +226,48 @@ void Tank::loopState(TankState aState) {
 				}
 			}
 		}
-
+#ifdef CYLINDRUS
+		Direction dir;
+		JoystickThreshold threshold;
+		if (_tankNumber == TANK_ONE) {
+			dir = _nunchuk->getDirection();
+			threshold = _nunchuk->getThreshold();
+		} else {
+			dir = _joystick->getDirection();
+			threshold = _joystick->getThreshold();
+		}
+#else
 		Direction dir = _joystick->getDirection();
 		JoystickThreshold threshold = _joystick->getThreshold();
+#endif
 
 		if (dir) {
 			uint16_t movementDelay = kIntervalPlayerDelayMillis - (threshold * kIntervalPlayerSpeedMillis);
 			/*if (_tankNumber == TANK_ONE) {
 				DEBUG("MD: %d - thresh: %d", movementDelay, threshold);
 			}*/
-			if (_joystick->clickDown()) {
+			//if (_joystick->clickDown()) {
 				// Makes you SUPER speedy when joystick is down!
 				//movementDelay = 0;
-			}
+			//}
 			updateMovement(dir, movementDelay);
 		}
 		updateBullets();
+#ifdef CYLINDRUS
+		if (_tankNumber == TANK_ONE) {
+			if (!_invulnerable && _nunchuk->clickUp()) {
+				fireBullet();
+			}
+		} else {
+			if (!_invulnerable && _joystick->clickUp()) {
+				fireBullet();
+			}
+		}
+#else
 		if (!_invulnerable && _joystick->clickUp()) {
 			fireBullet();
 		}
+#endif
 	} else if (aState == TANK_HIT) {
 		updateBullets();
 		if (_hardwareManager->ledSet()->allAnimsDone()) {

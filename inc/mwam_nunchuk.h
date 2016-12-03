@@ -3,12 +3,13 @@
 
 #include "mwam_constants.h"
 #include "ElapsedTime.h"
+#include "mwam_joystick.h"
 
 namespace mwam
 {
 
 // Joystick Directions
-typedef enum Direction_t {
+/*typedef enum Direction_t {
 	DIR_NONE = 0,
 	DIR_UP_LEFT,
 	DIR_LEFT,
@@ -33,7 +34,7 @@ typedef enum DirectionSet_t {
 	DIR_SET_EIGHT = 0,
 	DIR_SET_FOUR,
 	DIR_SET_FOUR_DIAG
-} DirectionSet;
+} DirectionSet;*/
 
 class Nunchuk
 {

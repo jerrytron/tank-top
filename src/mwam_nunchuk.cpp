@@ -1,4 +1,4 @@
-#include "mwam_Nunchuk.h"
+#include "mwam_nunchuk.h"
 
 namespace mwam
 {
