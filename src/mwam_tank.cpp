@@ -22,7 +22,7 @@ struct TankStateStr_t {
 Tank::Tank() {
 }
 
-void Tank::initialize(TankNumber aTankNum, uint8_t aStartIndex) {
+void Tank::initialize(TankNumber aTankNum, uint16_t aStartIndex) {
 	_tankNumber = aTankNum;
 	_startIndex = aStartIndex;
 	_gameManager = Manager::getInstance().gameManager;
@@ -141,7 +141,7 @@ uint8_t Tank::getBulletCount() {
 	return total;
 }
 
-Bullet* Tank::getBulletAtIndex(uint8_t aIndex) {
+Bullet* Tank::getBulletAtIndex(uint16_t aIndex) {
 	return &_bullets[aIndex];
 }
 

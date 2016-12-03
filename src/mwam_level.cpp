@@ -67,7 +67,11 @@ void Level::drawSquare(bool aDiagonal, TileType aTile, uint16_t aIndex, uint8_t 
 	} else {
 		for (uint8_t i = 0; i < aHeight; i++) {
 			drawLine(DIR_RIGHT, aTile, aIndex, aWidth);
+#ifdef CYLINDRUS
+			index += kLedDiagDownRight;
+#else
 			index += (kLedDiagDownLeft + kLedDiagDownRight);
+#endif
 			if (index < 0) {
 				index = aIndex + ((kLedCount - 1) - kLedVertRollover);
 			}
@@ -100,7 +104,11 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 				}
 			}
 		} else if (aDir == DIR_UP) {
+#ifdef CYLINDRUS
+			index += kLedDiagUpLeft;
+#else
 			index += (kLedDiagUpLeft + kLedDiagUpRight);
+#endif
 			if (index >= kLedCount) {
 				index = kLedVertRollover - ((kLedCount - 1) - newIndex);
 			}
@@ -128,7 +136,11 @@ void Level::drawLine(Direction aDir, TileType aTile, uint16_t aIndex, uint8_t aL
 				}
 			}
 		} else if (aDir == DIR_DOWN) {
+#ifdef CYLINDRUS
+			index += kLedDiagDownRight;
+#else
 			index += (kLedDiagDownLeft + kLedDiagDownRight);
+#endif
 			if (index < 0) {
 				index = newIndex + ((kLedCount - 1) - kLedVertRollover);
 			}

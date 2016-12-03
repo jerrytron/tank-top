@@ -34,7 +34,7 @@ class Tank
 	public:
 		/* Public Methods */
 		Tank();
-		void initialize(TankNumber aTankNum, uint8_t aStartIndex);
+		void initialize(TankNumber aTankNum, uint16_t aStartIndex);
 		const char* stateString();
 		void reset();
 
@@ -50,7 +50,7 @@ class Tank
 		void setIndex(uint16_t aIndex);
 		uint8_t getLives();
 		uint8_t getBulletCount();
-		Bullet* getBulletAtIndex(uint8_t aIndex);
+		Bullet* getBulletAtIndex(uint16_t aIndex);
 		uint16_t getTurretIndex();
 		uint16_t getLastTurretIndex();
 		bool isVisible();

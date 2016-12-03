@@ -81,10 +81,17 @@ const uint16_t kLedCount = 240; // Original
 	// Amount to reduce player speed delay for increased speed levels.
 	const uint16_t kIntervalPlayerSpeedMillis = 125;
 
+#ifdef CYLINDRUS
+	// Player One Start Index
+	const uint16_t kPlayerOneStartIndex = 312; // Ten rows up from index 0
+	// Player One Start Index
+	const uint16_t kPlayerTwoStartIndex = 297;
+#else
 	// Player One Start Index
 	const uint8_t kPlayerOneStartIndex = 141;
 	// Player One Start Index
 	const uint8_t kPlayerTwoStartIndex = 152;
+#endif
 	// Max Bullets Live
 	const uint8_t kMaxBulletsLive = 3;
 	// Max Bullet Bounces

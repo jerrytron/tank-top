@@ -99,20 +99,20 @@ bool nunchuk_init() {
 	Wire.write((uint8_t)0xF0);  // 1st initialisation register
 	Wire.write((uint8_t)0x55);  // 1st initialisation value
 	status = Wire.endTransmission();
-	Serial.print("Status: ");
-	Serial.println(status);
+	//Serial.print("Status: ");
+	//Serial.println(status);
 	if (status == 0) {
 		delay(15);
 		Wire.beginTransmission(0x52);      // transmit to device 0x52
 		Wire.write(0xFB);       // sends memory address
 		Wire.write(0x00);
 		status = Wire.endTransmission();
-		Serial.print("Status: ");
-		Serial.println(status);
+		//Serial.print("Status: ");
+		//Serial.println(status);
 		if (status == 0) {
 			delay(15);
 			error = false;
-			Serial.println("OK");
+			//Serial.println("OK");
 
 			//
 			// Set default calibration centres:

@@ -4,8 +4,13 @@
 namespace mwam
 {
 
+#ifdef CYLINDRUS
+static const char kTankTop[] = "CYLINDRUS";
+static const uint8_t kTankTopLen = 9;
+#else
 static const char kTankTop[] = "TANK-TOP";
 static const uint8_t kTankTopLen = 8;
+#endif
 static const char kPlayerOneWins[] = "PLAYER ONE WINS";
 static const uint8_t kPlayerOneWinsLen = 15;
 static const char kPlayerTwoWins[] = "PLAYER TWO WINS";
