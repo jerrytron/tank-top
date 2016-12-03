@@ -118,8 +118,13 @@ const uint16_t kLedCount = 240; // Original
 	// Button Pins
 	const uint8_t kButtonPin = D2;
 
+#ifdef CYLINDRUS
+	const uint8_t kJoystickOneBtnPin = D3;
+	const uint8_t kJoystickTwoBtnPin = D4;
+#else
 	const uint8_t kJoystickOneBtnPin = D0;
 	const uint8_t kJoystickTwoBtnPin = D1;
+#endif
 
 	// Joystick Pins
 	const uint8_t kJoystickOneXPin = A1;
