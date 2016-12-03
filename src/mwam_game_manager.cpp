@@ -51,7 +51,7 @@ void GameManager::initWaiting() {
 }
 
 void GameManager::updateWaiting() {
-	if (_waitingElapsed >= 10) {
+	if (_waitingElapsed >= 5) {
 		_waitingElapsed = 0;
 		_textRenderer->renderText((TileType)_tileIndex);
 

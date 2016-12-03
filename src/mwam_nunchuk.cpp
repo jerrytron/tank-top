@@ -109,7 +109,8 @@ void Nunchuk::updateJoystick() {
 void Nunchuk::updateDirections(int16_t aXValue, int16_t aYValue) {
 	uint8_t dir = 0;
 
-	uint16_t value = max(abs(aXValue), abs(aYValue));
+	//uint16_t value = max(abs(aXValue), abs(aYValue));
+	uint16_t value = abs(aXValue) + abs(aYValue);
 	//DEBUG("JVal: %d", value);
 	JoystickThreshold threshold = JOY_IDLE;
 	if (value >= kNunchukThreshThree) {
@@ -125,16 +126,20 @@ void Nunchuk::updateDirections(int16_t aXValue, int16_t aYValue) {
 	if (aXValue <= -kNunchukThreshOne) {
 		dir = DIR_LEFT;
 		if (aYValue <= -kNunchukThreshOne) {
-			dir++;
+			//dir++;
+			dir = DIR_DOWN_LEFT;
 		} else if (aYValue >= kNunchukThreshOne) {
-			dir--;
+			//dir--;
+			dir = DIR_UP_LEFT;
 		}
 	} else if (aXValue >= kNunchukThreshOne) {
 		dir = DIR_RIGHT;
 		if (aYValue <= -kNunchukThreshOne) {
-			dir++;
+			//dir++;
+			dir = DIR_DOWN_RIGHT;
 		} else if (aYValue >= kNunchukThreshOne) {
-			dir--;
+			//dir--;
+			dir = DIR_UP_RIGHT;
 		}
 	} else {
 		if (aYValue <= -kNunchukThreshOne) {
