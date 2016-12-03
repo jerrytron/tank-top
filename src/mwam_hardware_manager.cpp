@@ -86,7 +86,7 @@ void HardwareManager::initHardware() {
 	// Setup Joystick One
 #ifdef CYLINDRUS
 	_joystickOne = new Nunchuk();
-	//_joystickOne->initialize(kJoystickOneXPin, kJoystickOneYPin, kJoystickOneBtnPin, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);
+	_joystickOne->initialize(DIR_SET_FOUR_DIAG, kIntervalNunchukMillis);
 #else
 	_joystickOne = new Joystick();
 	_joystickOne->initialize(kJoystickOneXPin, kJoystickOneYPin, kJoystickOneBtnPin, DIR_SET_FOUR_DIAG, kIntervalJoystickMillis);

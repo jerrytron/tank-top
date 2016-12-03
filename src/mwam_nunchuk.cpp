@@ -1,4 +1,5 @@
 #include "mwam_nunchuk.h"
+#include "WiiNunchuk.h"
 
 namespace mwam
 {
@@ -8,17 +9,18 @@ namespace mwam
 Nunchuk::Nunchuk() {
 }
 
-void Nunchuk::initialize(uint8_t aPinX, uint8_t aPinY, uint8_t aPinBtn, DirectionSet aDirSet, uint32_t aUpdateFreq) {
-	_pinX = aPinX;
-	_pinY = aPinY;
-	_pinBtn = aPinBtn;
-	pinMode(_pinX, INPUT);
-	pinMode(_pinY, INPUT);
-	pinMode(_pinBtn, INPUT);
+void Nunchuk::initialize(DirectionSet aDirSet, uint32_t aUpdateFreq) {
+	Serial.println("HE");
 	_dirSet = aDirSet;
 	_updateFreq = aUpdateFreq;
 	this->active = true;
 	reset();
+
+	Wire.begin();
+}
+
+bool Nunchuk::connect() {
+	return nunchuk_init();
 }
 
 void Nunchuk::reset() {
@@ -29,11 +31,24 @@ void Nunchuk::reset() {
 	_clickUp = false;
 	_direction = DIR_NONE;
 	_threshold = JOY_IDLE;
+	_connected = false;
 }
 
 void Nunchuk::updateState() {
 	if (this->active && (_timeElapsed >= _updateFreq)) {
-		updateJoystick();
+		if (!_connected) {
+			_connected = connect();
+			if (_connected) {
+				delay(100);
+				nunchuk_get_data();
+				nunchuk_calibrate_joy();
+				Serial.println("CONNECTED");
+			} else {
+				Serial.println("failed");
+			}
+		} else {
+			updateJoystick();
+		}
 		_timeElapsed = 0;
 	}
 }
@@ -72,10 +87,10 @@ bool Nunchuk::clickUp() {
 /* Private Methods */
 
 void Nunchuk::updateJoystick() {
-	_lastX = analogRead(_pinX) - kJoystickOffset;
-	_lastY = analogRead(_pinY) - kJoystickOffset;
-	_lastBtn = digitalRead(_pinBtn);
-	//DEBUG("X: %d, Y: %d, Btn: %d", _lastX, _lastY, _lastBtn);
+	_lastX = nunchuk_cjoy_x();
+	_lastY = nunchuk_cjoy_y();
+	_lastBtn = nunchuk_zbutton() || nunchuk_cbutton();
+	DEBUG("X: %d, Y: %d, Btn: %d", _lastX, _lastY, _lastBtn);
 	if (_lastBtn) {
 		_clickDown = true;
 	} else {
@@ -96,34 +111,34 @@ void Nunchuk::updateDirections(int16_t aXValue, int16_t aYValue) {
 	uint16_t value = max(abs(aXValue), abs(aYValue));
 	//DEBUG("JVal: %d", value);
 	JoystickThreshold threshold = JOY_IDLE;
-	if (value >= kJoystickThreshThree) {
+	if (value >= kNunchukThreshThree) {
 		threshold = JOY_THREE;
-	} else if (value >= kJoystickThreshTwo) {
+	} else if (value >= kNunchukThreshTwo) {
 		threshold = JOY_TWO;
-	} else if (value >= kJoystickThreshOne) {
+	} else if (value >= kNunchukThreshOne) {
 		threshold = JOY_ONE;
 	} else {
 		return;
 	}
 
-	if (aXValue <= -kJoystickThreshOne) {
+	if (aXValue <= -kNunchukThreshOne) {
 		dir = DIR_LEFT;
-		if (aYValue <= -kJoystickThreshOne) {
+		if (aYValue <= -kNunchukThreshOne) {
 			dir--;
-		} else if (aYValue >= kJoystickThreshOne) {
+		} else if (aYValue >= kNunchukThreshOne) {
 			dir++;
 		}
-	} else if (aXValue >= kJoystickThreshOne) {
+	} else if (aXValue >= kNunchukThreshOne) {
 		dir = DIR_RIGHT;
-		if (aYValue <= -kJoystickThreshOne) {
+		if (aYValue <= -kNunchukThreshOne) {
 			dir--;
-		} else if (aYValue >= kJoystickThreshOne) {
+		} else if (aYValue >= kNunchukThreshOne) {
 			dir++;
 		}
 	} else {
-		if (aYValue <= -kJoystickThreshOne) {
+		if (aYValue <= -kNunchukThreshOne) {
 			dir = DIR_UP;
-		} else if (aYValue >= kJoystickThreshOne) {
+		} else if (aYValue >= kNunchukThreshOne) {
 			dir = DIR_DOWN;
 		}
 	}

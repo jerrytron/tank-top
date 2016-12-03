@@ -41,7 +41,8 @@ class Nunchuk
 	public:
 		/* Public Methods */
 		Nunchuk();
-		void initialize(uint8_t aPinX, uint8_t aPinY, uint8_t aPinBtn, DirectionSet aDirSet, uint32_t aUpdateFreq = 0);
+		void initialize(DirectionSet aDirSet, uint32_t aUpdateFreq = 0);
+		bool connect();
 		void reset();
 		void updateState();
 		Direction getDirection();
@@ -72,6 +73,7 @@ class Nunchuk
 		Direction _direction;
 		JoystickThreshold _threshold;
 
+		bool _connected = false;
 };
 
 }

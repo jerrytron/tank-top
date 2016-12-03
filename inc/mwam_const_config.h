@@ -132,6 +132,10 @@ const uint16_t kLedCount = 240; // Original
 	const uint8_t kJoystickTwoXPin = A3;
 	const uint8_t kJoystickTwoYPin = A2;
 
+	const uint16_t kNunchukThreshOne = 20;
+	const uint16_t kNunchukThreshTwo = 60;
+	const uint16_t kNunchukThreshThree = 100;
+
 	const uint16_t kJoystickOffset = 2045;
 	const uint16_t kJoystickThreshOne = 40;
 	const uint16_t kJoystickThreshTwo = 1600;
@@ -143,6 +147,8 @@ const uint16_t kLedCount = 240; // Original
 	const uint16_t kIntervalSerialMillis = 500;
 	// How often to update the Led set state.
 	const uint16_t kIntervalLedSetMillis = 10;
+	// How often to update the nunchuk set state.
+	const uint16_t kIntervalNunchukMillis = 15;
 	// How often to update the joystick set state.
 	const uint16_t kIntervalJoystickMillis = 10;
 	// How often to update the button state.
