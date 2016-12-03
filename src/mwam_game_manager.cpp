@@ -300,11 +300,19 @@ void GameManager::endGameOver() {
 
 
 void GameManager::drawLevel() {
+#ifdef CYLINDRUS
+	_level->drawLine(DIR_RIGHT, TILE_WALL, 569, 31);
+	_level->drawLine(DIR_RIGHT, TILE_WALL, 0, 31);
+	_level->drawLine(DIR_DOWN, TILE_WALL, 568, 5);
+	_level->drawLine(DIR_DOWN, TILE_WALL, 409, 5);
+	_level->drawLine(DIR_DOWN, TILE_WALL, 229, 4);
+#else
 	_level->drawLine(DIR_DOWN, TILE_WALL, 178, 2);
 	_level->drawLine(DIR_DOWN, TILE_WALL, 123, 2);
 
 	_level->drawLine(DIR_DOWN, TILE_WALL, 190, 2);
 	_level->drawLine(DIR_DOWN, TILE_WALL, 135, 2);
+#endif
 }
 
 
