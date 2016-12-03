@@ -191,8 +191,8 @@ void GameManager::updateSelect() {
 			_level->drawLine(DIR_DOWN, TILE_WALL, 596, 19);
 
 			_level->setTileAtIndex(TILE_TANK_ONE, kPlayerOneStartIndex);
-			_level->setTileAtIndex(TILE_TURRET_ONE, kPlayerOneStartIndex + kLedDiagDownLeft);
-			_level->setTileAtIndex(TILE_BULLET, kPlayerOneStartIndex + (kLedDiagDownLeft * 3));
+			_level->setTileAtIndex(TILE_TURRET_ONE, kPlayerOneStartIndex + kLedLeft);
+			_level->setTileAtIndex(TILE_BULLET, kPlayerOneStartIndex + (kLedLeft * 3));
 #else
 			_level->drawSquare(false, TILE_TANK_ONE, 198, 10, 5);
 			_level->drawSquare(false, TILE_TANK_ONE, 178, 9, 4);
@@ -222,8 +222,8 @@ void GameManager::updateSelect() {
 			_level->drawLine(DIR_DOWN, TILE_WALL, 581, 19);
 
 			_level->setTileAtIndex(TILE_TANK_TWO, kPlayerTwoStartIndex);
-			_level->setTileAtIndex(TILE_TURRET_TWO, kPlayerTwoStartIndex + kLedDiagDownLeft);
-			_level->setTileAtIndex(TILE_BULLET, kPlayerTwoStartIndex + (kLedDiagDownLeft * 3));
+			_level->setTileAtIndex(TILE_TURRET_TWO, kPlayerTwoStartIndex + kLedLeft);
+			_level->setTileAtIndex(TILE_BULLET, kPlayerTwoStartIndex + (kLedLeft * 3));
 #else
 			_level->drawSquare(false, TILE_TANK_TWO, 209, 9, 5);
 			_level->drawSquare(false, TILE_TANK_TWO, 189, 8, 4);
